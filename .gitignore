@@ -1,0 +1,16 @@
+# Python environment (recreated by `make setup`)
+.venv/
+__pycache__/
+*.py[cod]
+
+# Scratch material
+/examples
+
+# Assistant-local files
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Editor / OS noise
+.DS_Store
+*.swp
+.vscode/

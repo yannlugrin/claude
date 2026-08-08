@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Grep",
+      "Bash(grep *)",
+      "Bash(git status*)",
+      "Bash(git diff)",
+      "Bash(git diff *)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git describe*)"
+    ],
+    "ask": [
+      "Bash(git push*)"
+    ],
+    "deny": []
+  }
+}

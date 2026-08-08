@@ -1,0 +1,21 @@
+# All hooks run the tools installed in .venv by `make setup`, so the git hook
+# and `make check` share one toolchain and one set of versions.
+repos:
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff (Python lint)
+        entry: .venv/bin/ruff check
+        language: system
+        types: [python]
+      - id: pymarkdown
+        name: pymarkdown (Markdown lint)
+        entry: .venv/bin/pymarkdown scan
+        language: system
+        types: [markdown]
+        exclude: ^LICENSE\.md$
+      - id: lint-assets
+        name: Claude asset frontmatter
+        entry: .venv/bin/python scripts/lint-assets.py
+        language: system
+        files: ^(skills|agents|commands)/.*\.md$

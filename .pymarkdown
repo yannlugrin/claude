@@ -1,0 +1,15 @@
+{
+  "ignores": [
+    "LICENSE.md"
+  ],
+  "extensions": {
+    "front-matter": {
+      "enabled": true
+    }
+  },
+  "plugins": {
+    "md013": {
+      "enabled": false
+    }
+  }
+}
