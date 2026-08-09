@@ -243,8 +243,9 @@ and every section matters.
    pre-handover review — belongs in a subagent, which spends its own
    context and returns a summary (a cheaper model where the work is
    mechanical). **Starter templates proven by an
-   earlier project live in `.claude/spec-work/handoff/assets/`** — three
-   skills (`orient`, `handover-step`, `approve-step`) and five agents
+   earlier project live in `.claude/spec-work/handoff/assets/`** — four
+   skills (`orient`, `resume-step`, `handover-step`, `approve-step`)
+   and five agents
    (`step-reviewer`, `optimize-memory`, `state-reviewer`,
    `code-reviewer`, `test-reviewer`). Instantiate only the ones that fit
    this project, adapted (fill their placeholders with this repository's
@@ -385,8 +386,10 @@ Produce four files, then stop for my review:
      pattern cannot express the rule — instructions shape your behaviour,
      but only settings and hooks enforce it; and **your workflow tooling
      instantiated from `.claude/spec-work/handoff/assets/`** per rule 3 —
-     `orient`, `handover-step`, `approve-step` and the `step-reviewer`
-     agent almost always earn their place from the start; propose the
+     `orient`, `resume-step`, `handover-step`, `approve-step` and the
+     `step-reviewer` agent almost always earn their place from the
+     start (a recovery ritual created during the crisis it is needed
+     for is too late); propose the
      rest only when their trigger exists — and an instantiated file must
      never name a skill or agent you did not adopt: trim the reference
      or adopt it, because a dangling name is a ritual that silently
@@ -424,7 +427,10 @@ Produce four files, then stop for my review:
    it will emerge, a section headed exactly **`Current state`** holding
    the pointer to the current step (that wording — your tooling
    templates reference the section by name), and the session-start
-   routine. For as long as any tooling template remains un-instantiated
+   routine — including the standing instruction that a session resumed
+   after an interruption, or told the work was interrupted, runs
+   `/resume-step` before touching anything, never trusting the
+   transcript. For as long as any tooling template remains un-instantiated
    it also carries the pointer to `.claude/spec-work/handoff/assets/`,
    rule 1's standing exception for that one directory, and the list of
    templates not yet adopted — a block deleted, together with the
@@ -484,7 +490,7 @@ Step `000` begins only after I approve the plan.
 
 ## Tooling assets
 
-The eight templates beside this file (`handoff-assets/`) are copied verbatim
+The nine templates beside this file (`handoff-assets/`) are copied verbatim
 to `.claude/spec-work/handoff/assets/` when the prompt is written — the
 *implementer* instantiates and adapts them, not the spec session, because
 the real adaptation (the harness commands' names, what the guard must
@@ -499,6 +505,7 @@ its target path and placeholders in a header comment.
 | Template            | Becomes                                | Adoption default                              |
 | ------------------- | -------------------------------------- | --------------------------------------------- |
 | `orient.md`         | `.claude/skills/orient/SKILL.md`       | step 000 — session-start ritual               |
+| `resume-step.md`    | `.claude/skills/resume-step/SKILL.md`  | step 000 — post-interruption verification     |
 | `handover-step.md`  | `.claude/skills/handover-step/SKILL.md`| step 000 — pre-test handover ritual           |
 | `approve-step.md`   | `.claude/skills/approve-step/SKILL.md` | step 000 — post-approval close ritual         |
 | `step-reviewer.md`  | `.claude/agents/step-reviewer.md`      | step 000 — runs before every handover         |
