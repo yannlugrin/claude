@@ -3,7 +3,8 @@
 Prompts for cold review spawns. Assemble each spawn prompt as: the role block,
 exactly one lens block, and the context block filled in. The reviewer gets the
 specification only — not the decision log, not this conversation. That is
-deliberate: its value is the cold read.
+deliberate: its value is the cold read. (Exception: the handoff lens also
+names the handoff prompt and assets, which are its actual subject.)
 
 ## Role block
 
@@ -101,6 +102,31 @@ length against content, clarity of structure, whether the preamble's promises
 and Future Considerations are honest and complete. End with a plain
 statement: would you hand this to the implementer as-is — yes or no, and if
 no, what is missing.
+```
+
+### Handoff prompt (phase 7)
+
+```text
+Lens: handoff prompt. Besides the specification, read
+`.claude/spec-work/handoff/PROMPT.md` — the initial prompt that hands this
+specification to the implementing agent — and the tooling templates under
+`.claude/spec-work/handoff/assets/`. The prompt, not the specification, is
+under review; the specification is your reference, and a problem in the
+specification itself is a question for the operator, never a finding here.
+Report as findings: every project-specific claim in the prompt the
+specification does not support (a cited section that does not say what the
+prompt claims, check families that do not match the stack, external
+prerequisites missing or invented, an action boundary that misses a paid,
+destructive or shared-state action the spec implies); contradictions between
+the prompt's rules, or between a rule and the first-task instructions; any
+instruction a cold-started implementer could not follow (references to
+files, tags or conventions that will not exist yet at bootstrap); any
+instruction sending the implementer into `.claude/spec-work/` beyond this
+prompt and its assets (the specification must be its only input); and asset
+templates whose placeholders or adoption guidance conflict with what the
+prompt says about them. For the summary-back, describe what the implementer
+would do in its first session, step by step — mismatches with the intended
+bootstrap are findings.
 ```
 
 ## Context block

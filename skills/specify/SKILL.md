@@ -9,7 +9,10 @@ description: >-
   is the specification document itself — creating, extending, reviewing,
   challenging or finalizing requirements for a project an AI (Claude or
   another) will implement — whether the user says "specification", "specs",
-  "requirements document" or "cahier des charges". A "plan" qualifies only
+  "requirements document" or "cahier des charges". Also covers the
+  implementation handoff: generating the initial prompt (bootstrap prompt)
+  and workflow tooling that hand a finished SPECIFICATIONS.md to the
+  implementing agent. A "plan" qualifies only
   when it means a plan of what to build; planning how to build
   (implementation, refactoring or integration plans for a coding task) is
   out of scope.
@@ -47,6 +50,13 @@ Work inside a git repository (offer `git init` if there is none):
 - `.claude/spec-work/decisions.md` — the decision log (format below).
 - `.claude/spec-work/reviews/` — archived review reports, `NNN-<lens>.md` in
   chronological order.
+- `.claude/settings.json` — written and committed at workspace setup with
+  `"autoMemoryEnabled": false` (merged in, never overwriting other keys, if
+  the file exists). Auto memory is machine-local and unversioned — an
+  ungoverned second memory outside git and outside review; neither the spec
+  sessions nor the future bootstrap session may accumulate or load it. The
+  implementation workflow keeps it off (its step 000 extends this same
+  file).
 
 `.claude/spec-work/` is process scaffolding, not part of the deliverable — it
 lives under `.claude/` so the project root stays clean — but it is committed:
@@ -57,9 +67,11 @@ round boundary (a drafting batch applied, a review round triaged and applied),
 and **always commit before spawning a review** — reviewers read from a
 worktree copy of the repository and must see the current state.
 
-If a `SPECIFICATIONS.md` already exists when the skill is invoked, read it and
-the decision log, then ask the user which phase to enter: extend, review
-round, challenge, or finalization. Otherwise start at phase 1.
+If a `SPECIFICATIONS.md` already exists when the skill is invoked, read it,
+then ask the user which phase to enter: extend, review round, challenge,
+finalization, or handoff. Every phase but handoff also reads the decision
+log; handoff reads the specification only (phase 7 says why). Otherwise
+start at phase 1.
 
 ## The decision log
 
@@ -222,6 +234,65 @@ In order, each gated by the user:
    tier classification.
 4. **Final audit** — a cold review with the final-audit lens on the strongest
    available model. Quiet means done.
+
+### 7. Implementation handoff
+
+Entered after finalization — or directly, on request, when the specification
+is already final. The deliverable is `.claude/spec-work/handoff/PROMPT.md`:
+the initial prompt a fresh Claude Code session reads to bootstrap the
+implementation, plus the workflow tooling templates beside it. Read
+[references/handoff.md](references/handoff.md) first — it holds the doctrine,
+the proven prompt template with its adaptation points, and the asset table.
+
+**Prefer entering this phase in a fresh session** (`/clear`, then ask for the
+handoff): this phase works from the **specification plus the user's rulings
+during the phase itself** — never from the spec-phase decision log, and never
+from what an earlier conversation remembers — and a cold start proves the
+specification suffices. It must be self-sufficient for the implementer, so a
+slot a fresh session cannot fill from it is a finding against the document —
+fix the spec through the normal process, or put the choice to the user in
+the batch — never a gap to fill from remembered discussion or the log.
+On entry, confirm `.claude/settings.json` carries
+`autoMemoryEnabled: false` — a repository whose spec work predates the
+Workspace rule may lack it; create or merge it (commit, per Workspace)
+before anything else, since this setting, not step 4's residue check, is
+what keeps old memory out of the session doing this work.
+
+1. **Adapt.** Fill the template's `{{SLOT}}`s from the specification —
+   never invented — and present them as a numbered batch with
+   recommendations. The implementer's action boundary (what it may never run
+   on its own initiative) is the one pure policy call: flag it as such. The
+   user rules; only then write.
+2. **Write and commit.** `PROMPT.md`, and the
+   [references/handoff-assets/](references/handoff-assets/) templates copied
+   verbatim to `.claude/spec-work/handoff/assets/` — the implementer
+   instantiates them later, not this session.
+3. **Cold review.** Spawn per "Spawning reviews" with the **handoff** lens
+   from [references/reviewer.md](references/reviewer.md); triage, apply,
+   repeat until quiet — phase 4 rules apply unchanged. Propose at least
+   one round on a strong model *different from the session's*: measured
+   on identical inputs, each model shipped defects past its own reviews
+   that the other model's review caught, and "quiet" arrives earlier on
+   a lenient reviewer — the divergence-proposal rule from "Spawning
+   reviews" applies.
+4. **Auto-memory residue check.** The setting has been off since workspace
+   setup, but memory may predate it: look under
+   `~/.claude/projects/<project-path-with-slashes-as-dashes>/memory/`. If
+   anything is there, report it for the user's review — deleting is their
+   call (it is machine-local and may hold things they want), but it must not
+   reach the bootstrap session unreviewed.
+5. **History squash — gated, clean cut.** Propose collapsing the whole
+   history into a single `initial commit` so the implementer's "before the
+   first step tag, the range is the whole history" re-orientation sees only
+   bootstrap work. Preconditions: the history is purely spec work (the skill
+   created or first used this repository — if anything predates spec work,
+   skip the squash and say why); warn if a pushed remote exists, since the
+   squash then implies a force-push on the user's side. Only on the user's
+   explicit confirmation in that exchange: squash, no archive branch,
+   history rewriting is never within latitude.
+6. **Hand over the one-liner:** open a fresh Claude Code session at the
+   repository root and say *"Read `.claude/spec-work/handoff/PROMPT.md` in
+   full and do what it says."*
 
 ## Spawning reviews
 
