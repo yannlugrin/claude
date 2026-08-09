@@ -204,7 +204,9 @@ Spawn a cold review (see "Spawning reviews") with the **cold read** lens from
    report under `.claude/spec-work/reviews/`.
 
 Repeat with a fresh spawn until a round is **quiet**: no finding the user
-accepts as substantive. One round equals one spawn plus one full triage —
+accepts as substantive — and never declared quiet on same-model rounds
+alone; at least one round runs on a different strong model (see "Spawning
+reviews"). One round equals one spawn plus one full triage —
 never a fix-per-finding loop.
 
 On request, prepare an **external review packet** (see
@@ -226,7 +228,9 @@ decision usually means returning to phase 3 for the affected sections.
 In order, each gated by the user:
 
 1. **Implementer probe** — a cold review with the probe lens: the reviewer
-   plans the implementation and reports every place it had to guess.
+   plans the implementation and reports every place it had to guess. The
+   natural cross-model slot — the real implementer may not be this model;
+   propose a different strong one (see "Spawning reviews").
 2. **Compression pass** — shorten wording, merge redundancy; the floor is
    comprehension: nothing is removed that a requirement needs to be
    understood.
@@ -311,7 +315,15 @@ what keeps old memory out of the session doing this work.
   is a cost-and-quality trade-off, and those calls are the arbiter's like
   every other. What to propose: the challenger and the final audit deserve
   the strongest available model, so propose an upgrade whenever the session
-  runs on less; quick re-checks after fixes may go cheaper, knowing what
+  runs on less. Cold context removes conversation bias, not model bias — a
+  reviewer on the session's own model shares its blind spots (measured in
+  this skill's phase-7 testing: each of two strong models shipped defects
+  past its own reviews that the other caught, and "quiet" arrives earlier
+  on a lenient reviewer) — so before a phase-4 sequence is declared quiet,
+  and for the implementer probe, propose at least one round on a strong
+  model *different* from the session's; the challenger and final audit stay
+  on the strongest available regardless — diversity never weakens the last
+  gate. Quick re-checks after fixes may go cheaper, knowing what
   that trades away: small models keep the report format but lose calibration
   (severity inflation, doctrine drift, the occasional false finding), so
   their output gets extra-skeptical triage. The final audit is never
