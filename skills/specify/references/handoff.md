@@ -515,8 +515,11 @@ its target path and placeholders in a header comment.
 | `test-reviewer.md`  | `.claude/agents/test-reviewer.md`      | on request only — offer it, don't install it  |
 
 Shared conventions the templates carry, worth preserving at instantiation:
-skills declare turn-scoped `allowed-tools` (and `disallowed-tools` where
-read-only matters); reviewer agents are read-only except for their own
+skills declare turn-scoped `allowed-tools`, but never `disallowed-tools`
+— a deny rule binds for the whole turn that invoked the skill and never
+prompts, so a read-only skill invoked mid-turn silently strands the rest
+of that turn with no way to write; read-only skills carry "report and
+stop" as prose instead; reviewer agents are read-only except for their own
 report under the untracked `.claude/reviews/`; review reports **become a
 plan of decisions for the user's approval — nothing is fixed straight from
 a report**; `handover-step` (pre-test) and `approve-step` (post-approval)

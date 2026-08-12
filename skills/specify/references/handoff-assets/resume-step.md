@@ -19,7 +19,6 @@ allowed-tools:
   - Bash(git status*)
   - Bash(git tag -n99*)
   - Bash({{CHECK_COMMAND}}*)
-disallowed-tools: Edit, Write, NotebookEdit
 ---
 
 # Template: resume-step (skill)

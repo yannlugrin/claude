@@ -15,7 +15,6 @@ allowed-tools:
   - Bash(git log*)
   - Bash(git diff*)
   - Bash(git status*)
-disallowed-tools: Edit, Write, NotebookEdit
 ---
 
 # Template: orient (skill)
