@@ -25,8 +25,10 @@ allowed-tools:
 # Template: approve-step (skill)
 
 > Instantiate as `.claude/skills/approve-step/SKILL.md`. Placeholders:
-> the governance set (`{{PLAN}}`, `{{STEP_ID}}` — see the glossary in
-> `handoff.md`), plus
+> `{{PLAN}}` — the plan governing the work this file performs;
+> `{{STEP_ID}}` — the step identifier form used in commit subjects and
+> tag names (`step-NNN`, unless this repository qualifies it per
+> track); plus
 > `{{CHECK_COMMAND}}` (twice: `allowed-tools` and step 2) — the
 > repository's rule-2 check entry point in its **full** form, never a
 > narrowed fast pass: the close commit receives the step tag and

@@ -6,9 +6,10 @@ tools: Read, Glob, Grep, Bash
 
 # Template: step-reviewer (agent)
 
-> Instantiate as `.claude/agents/step-reviewer.md`. Placeholders: the
-> governance set (`{{PLAN}}`, `{{DECISIONS}}`, `{{SPEC}}` — see the
-> glossary in `handoff.md`), plus
+> Instantiate as `.claude/agents/step-reviewer.md`. Placeholders:
+> `{{PLAN}}`, `{{DECISIONS}}` and `{{SPEC}}` — the plan, decision log
+> and specification document governing the work this file performs;
+> plus
 > `{{NEVER_RUN}}` — the commands this agent must never run. It takes
 > rule 9's **entire gated set**, not the deny list: a subagent cannot
 > obtain the operator's authorisation mid-run, so everything rule 9

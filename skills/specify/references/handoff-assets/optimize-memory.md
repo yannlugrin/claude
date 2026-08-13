@@ -14,10 +14,10 @@ model: fable
 
 # Template: optimize-memory (agent)
 
-> Instantiate as `.claude/agents/optimize-memory.md`. Placeholders: the
-> governance set (`{{PLAN}}`, `{{DECISIONS}}` — see the glossary in
-> `handoff.md`; in a multi-track repository this agent is invoked for
-> one track and edits that track's files),
+> Instantiate as `.claude/agents/optimize-memory.md`. Placeholders:
+> `{{PLAN}}` and `{{DECISIONS}}` — the plan and decision log governing
+> the work this file performs (in a multi-track repository this agent
+> is invoked for one track and edits that track's files);
 > `{{CHECK_COMMAND}}` in the verification section, and
 > `{{ADOPTING_DECISION}}` — the decision entry that adopted this pass.
 > Set `model:` to the strongest model available and confirm the id

@@ -15,9 +15,10 @@ model: fable
 
 # Template: state-reviewer (agent)
 
-> Instantiate as `.claude/agents/state-reviewer.md`. Placeholders: the
-> governance set (`{{PLAN}}`, `{{DECISIONS}}`, `{{SPEC}}` — see the
-> glossary in `handoff.md`), plus
+> Instantiate as `.claude/agents/state-reviewer.md`. Placeholders:
+> `{{PLAN}}`, `{{DECISIONS}}` and `{{SPEC}}` — the plan, decision log
+> and specification document governing the work this file performs;
+> plus
 > `{{ARCHITECTURE_VOCABULARY}}` — this project's own component
 > vocabulary once it exists; `{{INSPECTION_COMMANDS}}` — the read-only
 > introspection commands the stack offers; `{{NEVER_RUN}}` — what must

@@ -19,9 +19,9 @@ allowed-tools:
 
 # Template: orient (skill)
 
-> Instantiate as `.claude/skills/orient/SKILL.md`. Placeholders: the
-> governance set (`{{PLAN}}`, `{{DECISIONS}}` — see the glossary in
-> `handoff.md`). Steps 1–2 restate the session-start routine in its
+> Instantiate as `.claude/skills/orient/SKILL.md`. Placeholders:
+> `{{PLAN}}` and `{{DECISIONS}}` — the plan and decision log governing
+> the work this file performs. Steps 1–2 restate the session-start routine in its
 > single-track shape: where `CLAUDE.md`'s routine is broader (a
 > multi-track repository loads the root files as well as the active
 > track's), that routine wins and this enumeration is rewritten to

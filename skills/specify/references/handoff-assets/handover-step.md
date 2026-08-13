@@ -26,8 +26,10 @@ allowed-tools:
 # Template: handover-step (skill)
 
 > Instantiate as `.claude/skills/handover-step/SKILL.md`. Placeholders:
-> the governance set (`{{PLAN}}`, `{{DECISIONS}}`, `{{STEP_ID}}` — see
-> the glossary in `handoff.md`);
+> `{{PLAN}}` and `{{DECISIONS}}` — the plan and decision log governing
+> the work this file performs; `{{STEP_ID}}` — the step identifier form
+> used in commit subjects and tag names (`step-NNN`, unless this
+> repository qualifies it per track);
 > `{{VERIFY_COMMAND}}`, `{{CHECK_COMMAND}}`, `{{TEST_COMMAND}}` — the
 > repository's rule-2 harness entry points (e.g. `make verify`,
 > `npm run check`, `rake test`), here and in `allowed-tools`. Step 3

@@ -689,6 +689,16 @@ by contrast, is visible on sight.
 The tag *glob* is not one of them: `step-*` matches every form, so
 `git describe --match 'step-*'` stays literal in every project.
 
+This table is for the session writing the prompt. **The templates never
+point at it, or at anything else on this side:** a template is copied into
+the project and read there, at step 000, by a session that has no access to
+the skill and that rule 1 forbids from going hunting through
+`.claude/spec-work/`. Every template header therefore states its
+placeholders' meaning inline, however much that repeats. Pointing at
+`PROMPT.md` instead is no better — the prompt is consumed once at
+bootstrap, while the templates are read later — so the only correct
+target for a template's own explanation is the template.
+
 | Template            | Becomes                                | Adoption default                              |
 | ------------------- | -------------------------------------- | --------------------------------------------- |
 | `orient.md`         | `.claude/skills/orient/SKILL.md`       | step 000 — session-start ritual               |

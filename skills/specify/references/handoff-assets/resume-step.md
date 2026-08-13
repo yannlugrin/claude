@@ -24,8 +24,8 @@ allowed-tools:
 # Template: resume-step (skill)
 
 > Instantiate as `.claude/skills/resume-step/SKILL.md`. Placeholders:
-> the governance set (`{{PLAN}}`, `{{DECISIONS}}` — see the glossary
-> in `handoff.md`);
+> `{{PLAN}}` and `{{DECISIONS}}` — the plan and decision log governing
+> the work this file performs;
 > `{{CHECK_COMMAND}}` — the rule-2 check entry point (also in
 > `allowed-tools`); `{{STATE_CHECKS}}` — the project's read-only
 > world-state commands (service status, container lists, mounted
