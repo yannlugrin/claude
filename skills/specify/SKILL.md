@@ -58,8 +58,11 @@ Work inside a git repository (offer `git init` if there is none):
   deliverable, an inventory, a document from elsewhere). Committed, and
   kept out of `.claude/docs/`: the implementation phase sweeps that
   directory as its own memory and would eventually fold or delete
-  whatever sits there. Named in the handoff, never in the specification —
-  the spec states requirements, not where to read background.
+  whatever sits there. Read-only in every phase, this one included —
+  only the user changes what they supplied; a reference that looks wrong
+  is reported, never corrected. Named in the handoff, never in the
+  specification — the spec states requirements, not where to read
+  background.
 - `.gitignore` — carries `.claude/worktrees/` from setup, before the first
   review is ever spawned. Worktree isolation materializes the reviewer's
   checkout inside the repository; a commit made while one exists otherwise

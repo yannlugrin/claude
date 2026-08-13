@@ -97,10 +97,12 @@ For every file under `.claude/docs/`, ask three questions:
 Two directories are out of scope, for opposite reasons. `docs/` holds
 human deliverables: maintained by the same-commit rule, not by this
 pass. `.claude/refs/` holds operator-supplied reference material —
-contracts, inventories, documents produced elsewhere. It is not your
-memory: you never compact it, never fold it into another file, and
-never delete it, however consumed it looks. A reference whose pointer
-went stale is a pointer to fix, never a file to remove.
+contracts, inventories, documents produced elsewhere. It is read-only,
+like the specification: you never edit, annotate, compact, fold or
+delete a file there, however consumed it looks — its authority is the
+source it came from, not this repository. A reference whose pointer
+went stale is a pointer to fix, never a file to remove; a reference
+that looks wrong is reported to the operator, never corrected.
 
 ## CLAUDE.md
 

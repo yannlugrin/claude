@@ -142,7 +142,14 @@ batch.
     for the user, not a constraint. `.claude/refs/` is deliberately
     not `.claude/docs/`: the memory sweep owns the latter and would
     eventually fold or delete anything in it, and an operator-supplied
-    reference is not the implementer's memory to compact. Drop the
+    reference is not the implementer's memory to compact. It carries
+    the specification's read-only protection for the same reason the
+    specification carries it — a document silently diverging from what
+    was agreed, or from the source that owns it, is undetectable — with
+    one difference: no amendment channel. The specification can be
+    amended by agreement because it is this project's own contract; a
+    reference cannot, because its authority lives elsewhere. It is
+    reported and replaced by the user, never edited. Drop the
     slot when there are none.
 
 ## Monorepo and multi-track projects
@@ -326,10 +333,18 @@ and every section matters.
    **`.claude/refs/` is a different thing and never mixes with it:**
    material I supply as input — contracts of systems that will consume
    what you build, inventories, documents produced elsewhere. Read each
-   at its trigger, treat it as information and never as a requirement
-   source (a conflict between a reference and the specification is a
-   question for me), and never sweep, compact, fold or delete one: it
-   is not your memory. {{REFERENCES}}
+   at its trigger, and treat it as information, never as a requirement
+   source: a conflict between a reference and the specification is a
+   question for me. **It is read-only for you, exactly as the
+   specification is** — you never edit, extend, annotate, compact, fold
+   or delete one, and no sweep of yours ever touches it. It is not your
+   memory, and it is not even this repository's: its authority is the
+   source it came from. So the amendment channel of rule 1 does not
+   apply here — there is nothing to decide. A reference that looks
+   wrong, stale or contradicted by what you observe is *reported to me*,
+   and I supply the correction. What you learned that made you doubt it
+   belongs in `.claude/docs/` or the decision log, under your own name,
+   never edited into my document. {{REFERENCES}}
    *Instructions* tied to one part of the tree may instead be path-scoped
    rules in `.claude/rules/` with a `paths` frontmatter, which load
    themselves exactly when you work on matching files — but never an

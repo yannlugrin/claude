@@ -67,6 +67,15 @@ first entry of a revision. Each entry states:
   first" is a test; "the project's amendment flow is outdated" is not.
 - **Remedy** — what to change, and where the user's approval is required.
 
+An entry is **corrected in place**, with a dated note saying what was
+added, when it misstates or under-states the doctrine it already
+describes — a project reading it must get the doctrine as it stands, not
+as it was first drafted. A **new id** is for a later change *of* the
+doctrine. The distinction is whether the earlier entry was wrong or has
+been superseded; where both readings fit, prefer the new id, since a
+project that has already adopted the old entry will otherwise never see
+the difference.
+
 ## The update pass (phase 8)
 
 Entered on request, from the project's own repository: the user opens a
