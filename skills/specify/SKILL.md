@@ -12,7 +12,10 @@ description: >-
   "requirements document" or "cahier des charges". Also covers the
   implementation handoff: generating the initial prompt (bootstrap prompt)
   and workflow tooling that hand a finished SPECIFICATIONS.md to the
-  implementing agent. A "plan" qualifies only
+  implementing agent — and, afterwards, updating an already handed-over
+  project when this doctrine has moved on since (auditing its CLAUDE.md,
+  workflow tooling, permission baseline and harness against the doctrine
+  changelog, then proposing the changes). A "plan" qualifies only
   when it means a plan of what to build; planning how to build
   (implementation, refactoring or integration plans for a coding task) is
   out of scope.
@@ -86,6 +89,13 @@ then ask the user which phase to enter: extend, review round, challenge,
 finalization, or handoff. Every phase but handoff also reads the decision
 log; handoff reads the specification only (phase 7 says why). Otherwise
 start at phase 1.
+
+A repository holding implementation artifacts — `CLAUDE.md`, a `PLAN.md`, a
+decision log — is a project already handed over, whatever its specification
+says. Offer the **workflow update** of phase 8 there, and do not offer the
+specification phases unless the user asks for one: a session invoked in a
+working project is far likelier to want its workflow brought up to date than
+its requirements reopened.
 
 ## The decision log
 
@@ -321,7 +331,9 @@ what keeps old memory out of the session doing this work.
    findings in conversation, where they die with the session. The
    generic fixes are the phase's most reusable output and the easiest
    to lose — they dissolve into commit messages of a project that has
-   nothing to do with the skill.
+   nothing to do with the skill. The file is also the raw material for
+   the doctrine changelog of phase 8: findings flow up from projects,
+   doctrine flows back down to them.
 7. **History squash — gated, clean cut.** Propose collapsing the whole
    history into a single `initial commit` so the implementer's "before the
    first step tag, the range is the whole history" re-orientation sees only
@@ -334,6 +346,27 @@ what keeps old memory out of the session doing this work.
 8. **Hand over the one-liner:** open a fresh Claude Code session at the
    repository root and say *"Read `.claude/spec-work/handoff/PROMPT.md` in
    full and do what it says."*
+
+### 8. Workflow update
+
+For a project already handed over, when this skill's doctrine has moved on
+since. Read [references/updates.md](references/updates.md): it holds the
+pass — an audit subagent, a triage, and a decision entry recording the new
+adoption point — and the index of doctrine changes, from which you read only
+the revision files (`references/updates/<date>.md`) holding entries newer
+than what the project has adopted. Each entry carries the test that detects
+whether a project is affected.
+
+Two things govern it, both easy to get wrong. **A project that deviates by
+logged decision is not behind** — its reasoning was paid for with real work
+and may still be the better answer, so a divergence is presented to the user,
+never corrected on sight. And **the pass runs under the project's rules**,
+not this skill's: its commit conventions, its decision-log format, its
+latitude — and its permission baseline, which stays outside latitude and
+goes to the user whatever the changelog says.
+
+Every change to the doctrine gets a changelog entry as it is made. The
+alternative is what this phase exists to repair.
 
 ## Spawning reviews
 
