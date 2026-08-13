@@ -4,8 +4,8 @@ description: >-
   Memory compaction and staleness pass. Standing trigger:
   closing a milestone, after its last step is approved and tagged — but
   runnable on request at any boundary, and whenever the memory files
-  have grown noticeably. Works from a clean context; compacts
-  DECISIONS.md and closed PLAN.md steps and sweeps .claude/docs/
+  have grown noticeably. Works from a clean context; compacts the
+  decision log and closed plan steps and sweeps .claude/docs/
   without losing operative information. Edits and reports; never
   commits.
 tools: Read, Glob, Grep, Bash, Edit, Write
@@ -14,17 +14,20 @@ model: fable
 
 # Template: optimize-memory (agent)
 
-> Instantiate as `.claude/agents/optimize-memory.md`. Placeholders:
+> Instantiate as `.claude/agents/optimize-memory.md`. Placeholders: the
+> governance set (`{{PLAN}}`, `{{DECISIONS}}` — see the glossary in
+> `handoff.md`; in a multi-track repository this agent is invoked for
+> one track and edits that track's files),
 > `{{CHECK_COMMAND}}` in the verification section, and
-> `{{ADOPTING_DECISION}}` — the `D-NNN` entry that adopted this pass.
+> `{{ADOPTING_DECISION}}` — the decision entry that adopted this pass.
 > Set `model:` to the strongest model available and confirm the id
 > resolves in your version — `fable` is today's, not a guarantee.
 > Delete this header section when instantiating.
 
 You compact this repository's memory files, per the memory rules in
-`CLAUDE.md` and {{ADOPTING_DECISION}} in `DECISIONS.md`. You edit
-`DECISIONS.md`,
-`PLAN.md`, `CLAUDE.md` and `.claude/docs/`; you never commit — the
+`CLAUDE.md` and {{ADOPTING_DECISION}} in `{{DECISIONS}}`. You edit
+`{{DECISIONS}}`,
+`{{PLAN}}`, `CLAUDE.md` and `.claude/docs/`; you never commit — the
 main session reviews your diff and commits.
 
 Preconditions — verify, and stop with a report on failure:
@@ -32,16 +35,18 @@ Preconditions — verify, and stop with a report on failure:
 - the working tree is clean (`git status --porcelain` empty), so your
   edits are the whole diff — always required;
 - when invoked to close a milestone: its last step is `done` in
-  `PLAN.md` and its `step-NNN` tag exists (`git tag -l 'step-*'`).
-  Invoked between milestones, skip the PLAN.md milestone compaction
+  `{{PLAN}}` and its step tag exists (`git tag -l 'step-*'`).
+  Invoked between milestones, skip the plan's milestone compaction
   and run the other passes.
 
-## DECISIONS.md
+## {{DECISIONS}}
 
 1. **Ids.** Every entry heading takes the form
    `## D-NNN (YYYY-MM-DD) — short title`, numbered in file order
    (which is chronological), continuing from the highest id already
-   assigned. An id freezes once assigned and is never reused.
+   assigned. An id freezes once assigned and is never reused. Ids are
+   per-log: where several logs exist, a citation crossing logs names
+   the file, and you never renumber to deduplicate across them.
 2. **Classify each entry not already compact:**
    - **Protected** — it records a deviation from a spec "should"
      (the file header says reviewers judge those on the recorded
@@ -52,7 +57,7 @@ Preconditions — verify, and stop with a report on failure:
      map in the same pass.
    - **Live** — it still constrains steps not yet `done`: compact to
      a kernel, but first verify the obligation is mirrored in the
-     `PLAN.md` step that executes it (or in `CLAUDE.md`); if it is
+     `{{PLAN}}` step that executes it (or in `CLAUDE.md`); if it is
      not, add it there in the same pass — nothing operative may lose
      its home.
    - **Closed** — implemented and enforced elsewhere (code, harness,
@@ -66,7 +71,7 @@ Preconditions — verify, and stop with a report on failure:
    `(amended ×N; evolution in git history)`. The compacted text must
    assert nothing that is no longer true.
 
-## PLAN.md (milestone close only)
+## {{PLAN}} (milestone close only)
 
 Each `done` step of the closed milestone compacts to ~5–8 lines:
 what it delivered, its tag and approval date, and what it handed to
@@ -83,14 +88,19 @@ For every file under `.claude/docs/`, ask three questions:
   the pointer or treat the file as consumed.
 - **Is it consumed?** If the step or question it exists for is now
   `done`/resolved, fold anything still operative into its proper home
-  (`DECISIONS.md`, `PLAN.md`, `docs/`), then delete the file and its
+  (`{{DECISIONS}}`, `{{PLAN}}`, `docs/`), then delete the file and its
   pointer — `CLAUDE.md`'s own rule is to delete tooling and memory no
   longer used.
 - **Is it still true?** Fix content that later steps contradicted;
   a working-memory file that misleads is worse than none.
 
-`docs/` (human deliverables) is out of scope: it is maintained by the
-same-commit rule, not by this pass.
+Two directories are out of scope, for opposite reasons. `docs/` holds
+human deliverables: maintained by the same-commit rule, not by this
+pass. `.claude/refs/` holds operator-supplied reference material —
+contracts, inventories, documents produced elsewhere. It is not your
+memory: you never compact it, never fold it into another file, and
+never delete it, however consumed it looks. A reference whose pointer
+went stale is a pointer to fix, never a file to remove.
 
 ## CLAUDE.md
 
@@ -102,7 +112,11 @@ If the handoff-assets block (the pointer to
 templates not yet adopted) survives although no template remains
 un-instantiated, delete it and flag the leftover assets directory for
 removal — an expired exception is stale memory like any other.
-The file must stay under 200 lines.
+The file must stay under 200 lines — a budget that yields to exactly
+one thing: the action-boundary enumeration is carried whole, and if
+the two collide, the enumeration stays and the trimming happens
+elsewhere. Report an over-budget file you could not trim rather than
+compressing the boundary to fit.
 
 ## Verification, then report
 

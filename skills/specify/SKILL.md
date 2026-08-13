@@ -50,6 +50,17 @@ Work inside a git repository (offer `git init` if there is none):
 - `.claude/spec-work/decisions.md` — the decision log (format below).
 - `.claude/spec-work/reviews/` — archived review reports, `NNN-<lens>.md` in
   chronological order.
+- `.claude/refs/` — reference material the user supplies that is not part
+  of the specification (a contract of a system that will consume the
+  deliverable, an inventory, a document from elsewhere). Committed, and
+  kept out of `.claude/docs/`: the implementation phase sweeps that
+  directory as its own memory and would eventually fold or delete
+  whatever sits there. Named in the handoff, never in the specification —
+  the spec states requirements, not where to read background.
+- `.gitignore` — carries `.claude/worktrees/` from setup, before the first
+  review is ever spawned. Worktree isolation materializes the reviewer's
+  checkout inside the repository; a commit made while one exists otherwise
+  swallows it (this has happened).
 - `.claude/settings.json` — written and committed at workspace setup with
   `"autoMemoryEnabled": false` (merged in, never overwriting other keys, if
   the file exists). Auto memory is machine-local and unversioned — an
@@ -65,7 +76,10 @@ its history is what makes challenges cheap later. If the project's
 uncommitted log never reaches a reviewer's worktree. Commit at every
 round boundary (a drafting batch applied, a review round triaged and applied),
 and **always commit before spawning a review** — reviewers read from a
-worktree copy of the repository and must see the current state.
+worktree copy of the repository and must see the current state. A decision
+entry and the specification text it justifies are committed **together**:
+a commit where the log asserts what the document contradicts is a state
+nobody should be able to read.
 
 If a `SPECIFICATIONS.md` already exists when the skill is invoked, read it,
 then ask the user which phase to enter: extend, review round, challenge,
@@ -151,7 +165,9 @@ These apply in every phase:
 3. **Facts are researched, not assumed.** Environment constraints (provider
    behavior, product limits, protocol quirks) are verified — web search when
    knowledge could be stale — and stated in the spec as facts with the reason
-   they matter.
+   they matter. A fact that genuinely cannot be settled before implementation
+   is never guessed: it becomes an **open fact** with a pre-committed
+   response per outcome (see [references/structure.md](references/structure.md)).
 4. **Document doctrine.** Structure, tone and precision rules live in
    [references/structure.md](references/structure.md); read it before the
    skeleton phase and keep the document conforming to it thereafter.
@@ -259,7 +275,7 @@ the batch — never a gap to fill from remembered discussion or the log.
 On entry, confirm `.claude/settings.json` carries
 `autoMemoryEnabled: false` — a repository whose spec work predates the
 Workspace rule may lack it; create or merge it (commit, per Workspace)
-before anything else, since this setting, not step 4's residue check, is
+before anything else, since this setting, not step 5's residue check, is
 what keeps old memory out of the session doing this work.
 
 1. **Adapt.** Fill the template's `{{SLOT}}`s from the specification —
@@ -279,13 +295,34 @@ what keeps old memory out of the session doing this work.
    that the other model's review caught, and "quiet" arrives earlier on
    a lenient reviewer — the divergence-proposal rule from "Spawning
    reviews" applies.
-4. **Auto-memory residue check.** The setting has been off since workspace
+4. **Compression pass.** Review rounds append clauses; four of them
+   grew a real prompt by a fifth, all of it into sentences that were
+   already long. The prompt's fate is to be restated by the bootstrap
+   session into a `CLAUDE.md` under 200 lines, and a rule too tangled to
+   restate is a rule that loses a clause there. So once the rounds are
+   quiet, compress: same floor as finalization's, comprehension, and one
+   exemption — the action boundary of rule 9 is safety text and is never
+   shortened. Wording only. Anything that would change meaning stops and
+   goes to the user as a finding.
+5. **Auto-memory residue check.** The setting has been off since workspace
    setup, but memory may predate it: look under
    `~/.claude/projects/<project-path-with-slashes-as-dashes>/memory/`. If
    anything is there, report it for the user's review — deleting is their
    call (it is machine-local and may hold things they want), but it must not
    reach the bootstrap session unreviewed.
-5. **History squash — gated, clean cut.** Propose collapsing the whole
+6. **Upstream findings.** Write
+   `.claude/spec-work/handoff/upstream-findings.md`: every fix applied
+   during this phase that was *not* project-specific — a defect in a
+   copied template, an edit to the prompt's fixed text that would be
+   true of any project, a slot whose guidance turned out to be
+   incomplete. One line each: what was wrong, what the fix was, which
+   round found it. Then name the file in the closing message.
+   This exists because the alternative has been tried: reporting such
+   findings in conversation, where they die with the session. The
+   generic fixes are the phase's most reusable output and the easiest
+   to lose — they dissolve into commit messages of a project that has
+   nothing to do with the skill.
+7. **History squash — gated, clean cut.** Propose collapsing the whole
    history into a single `initial commit` so the implementer's "before the
    first step tag, the range is the whole history" re-orientation sees only
    bootstrap work. Preconditions: the history is purely spec work (the skill
@@ -294,7 +331,7 @@ what keeps old memory out of the session doing this work.
    squash then implies a force-push on the user's side. Only on the user's
    explicit confirmation in that exchange: squash, no archive branch,
    history rewriting is never within latitude.
-6. **Hand over the one-liner:** open a fresh Claude Code session at the
+8. **Hand over the one-liner:** open a fresh Claude Code session at the
    repository root and say *"Read `.claude/spec-work/handoff/PROMPT.md` in
    full and do what it says."*
 
@@ -309,6 +346,19 @@ what keeps old memory out of the session doing this work.
   block, and the context block filled in (repository-relative paths, project
   one-liner). Reviewers get the specification only; the challenger also gets
   the decision log.
+- **Guard against a stale worktree — every spawn, no exceptions.** The
+  isolated checkout is not reliably the commit you just made. Two failures
+  have been observed and both are expensive: file contents from several
+  commits back, which produced a whole review round of findings quoting
+  text that no longer existed; and current file contents over stale git
+  metadata, which produced confident findings about what is or is not
+  tracked. So: put the expected `HEAD` hash in the context block and tell
+  the reviewer to verify its checkout and correct it before reading
+  anything. And tell it that **repository state is not a fact it may
+  derive from git in its worktree** — whether a file is tracked, what the
+  remote is, what the last commit did are facts it takes from the context
+  block or verifies on disk, never from `git ls-files` or `git log`. Both
+  instructions are cheap; a wasted strong-model round is not.
 - Model choice per spawn: inheriting the session model is the default and
   needs no approval. Any divergence from it — up or down — is proposed to
   the user with its reason and spawned only once they approve: model choice
@@ -336,4 +386,14 @@ what keeps old memory out of the session doing this work.
   session-wide raise is not wasted — it also sharpens the triage of the
   report that comes back.
 - Save the returned report verbatim to
-  `.claude/spec-work/reviews/NNN-<lens>.md` before triaging it.
+  `.claude/spec-work/reviews/NNN-<lens>.md` before triaging it, under a
+  short provenance header you write: lens, model, isolation, the commit
+  reviewed, and the documents given. Verbatim without provenance loses
+  exactly what makes the archive useful later — which model found what,
+  and against which state.
+- When triage establishes that a finding rests on a false premise (the
+  staleness artifacts above are the usual cause), do not edit the report:
+  prepend a bracketed **archivist note** naming the finding and the
+  verified truth, and leave the text otherwise untouched. The report is
+  evidence of what a cold reader concluded; the note is evidence of what
+  was true.

@@ -24,6 +24,8 @@ allowed-tools:
 # Template: resume-step (skill)
 
 > Instantiate as `.claude/skills/resume-step/SKILL.md`. Placeholders:
+> the governance set (`{{PLAN}}`, `{{DECISIONS}}` — see the glossary
+> in `handoff.md`);
 > `{{CHECK_COMMAND}}` — the rule-2 check entry point (also in
 > `allowed-tools`); `{{STATE_CHECKS}}` — the project's read-only
 > world-state commands (service status, container lists, mounted
@@ -49,8 +51,8 @@ In order:
    are the complete evidence of everything since — committed and
    uncommitted.
 2. **Cross-check the memory files.** Read `CLAUDE.md`'s pointers,
-   `PLAN.md`'s current-step entry and status, and the tail of
-   `DECISIONS.md`, and check each claim against the git evidence.
+   `{{PLAN}}`'s current-step entry and status, and the tail of
+   `{{DECISIONS}}`, and check each claim against the git evidence.
    They were written by the same interrupted session, so a mismatch
    is a finding, never something to reconcile silently — a status of
    `awaiting test` over a half-delivered diff is precisely what you
@@ -62,7 +64,7 @@ In order:
    well-formed; red localizes the interruption.
 4. **World state, inside the boundary.** The step may have touched
    things no file records — consult the current step's "how I test
-   it" and cleanup notes in `PLAN.md` for what it may have
+   it" and cleanup notes in `{{PLAN}}` for what it may have
    half-applied. Run the free checks from: {{STATE_CHECKS}}. Anything
    gated by the rule-9 boundary you request from the operator, never
    run; anything unverifiable from here you report as unverified —

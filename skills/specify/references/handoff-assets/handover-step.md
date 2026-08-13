@@ -26,6 +26,8 @@ allowed-tools:
 # Template: handover-step (skill)
 
 > Instantiate as `.claude/skills/handover-step/SKILL.md`. Placeholders:
+> the governance set (`{{PLAN}}`, `{{DECISIONS}}`, `{{STEP_ID}}` — see
+> the glossary in `handoff.md`);
 > `{{VERIFY_COMMAND}}`, `{{CHECK_COMMAND}}`, `{{TEST_COMMAND}}` — the
 > repository's rule-2 harness entry points (e.g. `make verify`,
 > `npm run check`, `rake test`), here and in `allowed-tools`. Step 3
@@ -42,10 +44,10 @@ Hand the current step over for operator testing. In order:
    covers them — a check that never ran is not green.
 2. **Staleness sweep (the same-commit rule):** update in the same
    commit(s) as the
-   work everything the step made stale — `PLAN.md` step status (to
+   work everything the step made stale — `{{PLAN}}` step status (to
    `awaiting test`) and any renumber references, `CLAUDE.md`'s
    current-step pointer and file map, `README.md`'s map, `docs/`
-   deliverables, `DECISIONS.md` entries, and any `.claude/docs/`
+   deliverables, `{{DECISIONS}}` entries, and any `.claude/docs/`
    lesson worth keeping for future sessions.
 3. **Review:** run the `step-reviewer` agent over the step's diff
    (last `step-*` tag → HEAD). The diff shows committed work only, so
@@ -53,7 +55,7 @@ Hand the current step over for operator testing. In order:
    Address or explicitly rebut each finding before handover.
 4. **Tree clean:** everything above — the step's work, the sweep, the
    review fixes — is already in small, coherent commits with
-   `step-NNN:` subjects (committed as the work happened, not batched
+   `{{STEP_ID}}:` subjects (committed as the work happened, not batched
    here); `git status` shows nothing pending. No catch-all closing
    commit. Never push.
 5. **Handover message:** (a) short summary of what the step did;

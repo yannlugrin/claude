@@ -68,6 +68,76 @@ with the project; the frame around them does not.
    risks a choice instead of an oversight, and it is the first defense
    against scope creep.
 
+## Open facts
+
+Some facts cannot be researched before implementation. Not because nobody
+looked, but because the answer lives in the artifact itself: whether a
+product's interface behaves as documented, what a tool actually writes
+where, whether a mechanism the design rests on exists at all in the
+version that ships. Search, vendor documentation and the user's own
+knowledge all end at "not known yet", and the specification must not
+guess — a guessed fact reads exactly like a researched one.
+
+Write these as **open facts**: a list, one lettered item each, in the
+section holding the domain's facts. An item states three things.
+
+- **The question, in observable terms** — what would be looked at to
+  settle it, not a topic ("whether the server's stop command answers on
+  a non-interactive pipe", not "console behavior").
+- **What rests on it** — the requirement, tier or mechanism that changes
+  if the answer is unfavourable. This is what makes the item load-bearing
+  rather than curiosity.
+- **The pre-committed response** — what the implementation does under
+  each outcome, decided *now*, by the user, with the reasoning. Up to
+  and including "under this combination the deliverable must not ship",
+  and including the honest degraded case ("ships with a documented
+  limitation, whose blind spot is stated plainly").
+
+The device earns its place by moving the arbitration forward. Without it,
+the implementer meets the fact mid-step and either guesses or returns
+with a question nobody has ruled on — at the point where the cost of
+either is highest. With it, the discovery is expected and the response
+is already the user's decision.
+
+Two rules keep it honest. An item with no pre-committed response is not
+an open fact, it is a gap with a label on it. And an item whose
+unfavourable outcome nobody has costed is a blocking risk in disguise —
+cost it, or settle the fact before the document is finalized.
+
+Resolutions run through the implementation's spec-amendment channel:
+the specification is amended so its facts stay true, and the
+user-facing consequence lands in the deliverable documentation. How much
+of that the implementer may do alone is decided at handoff
+(`handoff.md`, `{{OPEN_FACTS}}`), not here.
+
+## Multi-document specifications
+
+The default is one document. A monorepo is the case that breaks it:
+several deliverables sharing conventions, where per-deliverable sections
+grow with every addition while the conventions stay stable, and where
+the implementer works inside one component's directory at a time. The
+split is a structure deviation like any other — argued, approved,
+logged — and it works like this:
+
+- The **root document** keeps the goal, the environment facts, the core
+  model and the shared conventions, plus one section stating what every
+  per-component document must cover.
+- Each **per-component document** lives in that component's directory,
+  named identically (`<component>/SPECIFICATIONS.md`). It inherits the
+  root's reading contract unchanged and may never weaken a root "must".
+- A component with nothing of its own still gets the file, as a pointer
+  to the root section that specifies it — the layout stays uniform, and
+  a missing file never has to be interpreted.
+- **Cross-references need one convention, stated in each per-component
+  preamble:** `§N` is local, `root §N` points at the root document. The
+  consistency pass then covers every document, and every reference in
+  every direction must resolve.
+
+Everything downstream inherits the split — review context blocks name
+all the documents, and the implementation handoff grows tracks
+(`handoff.md`, "Monorepo and multi-track projects"). Weigh that before
+choosing it for a project that does not need it.
+
 ## Numbering and cross-references
 
 - Sections are numbered (`## 7. Game Instances`, `### 7.2 Configuration`) and

@@ -19,13 +19,20 @@ allowed-tools:
 
 # Template: orient (skill)
 
-> Instantiate as `.claude/skills/orient/SKILL.md`. Placeholders: none.
+> Instantiate as `.claude/skills/orient/SKILL.md`. Placeholders: the
+> governance set (`{{PLAN}}`, `{{DECISIONS}}` — see the glossary in
+> `handoff.md`). Steps 1–2 restate the session-start routine in its
+> single-track shape: where `CLAUDE.md`'s routine is broader (a
+> multi-track repository loads the root files as well as the active
+> track's), that routine wins and this enumeration is rewritten to
+> match it at instantiation — a ritual that reads less than the rule
+> it claims to execute is a ritual that skips reading.
 > Delete this header section when instantiating.
 
 Execute the session-start routine from CLAUDE.md, in order:
 
-1. Read `CLAUDE.md` in full, `PLAN.md`'s current step (the pointer is
-   in CLAUDE.md's "Current state"), and the tail of `DECISIONS.md`.
+1. Read `CLAUDE.md` in full, `{{PLAN}}`'s current step (the pointer is
+   in CLAUDE.md's "Current state"), and the tail of `{{DECISIONS}}`.
 2. Read the spec sections the current step lists.
 3. Locate the last approved state — match the step namespace only:
    `git describe --tags --abbrev=0 --match 'step-*'`
@@ -33,7 +40,7 @@ Execute the session-start routine from CLAUDE.md, in order:
 4. Review the work in progress: `git log` and `git diff` from that tag
    (or root) to `HEAD`, plus `git status` for uncommitted work.
 5. Anomaly check: if what you gathered does not add up — a dirty tree
-   the step's status does not explain, a `PLAN.md` status the diff
+   the step's status does not explain, a `{{PLAN}}` status the diff
    contradicts, a stale `CLAUDE.md` pointer — do not deliver the
    normal report: report the anomaly and recommend `/resume-step`,
    then stop. This skill detects; it does not diagnose.

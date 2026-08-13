@@ -45,7 +45,22 @@ batch.
    Families, not tool invocations — choosing tools is the implementer's
    job. Fill the slot as a short bulleted list (it stands alone in the
    template), never a semicolon chain: review rounds append clauses, and
-   chained prose stops being parseable.
+   chained prose stops being parseable. Three rules the list must
+   respect:
+   - **Every artifact class the repository ships gets a family**, not
+     only the ones the spec names. Third-party tools that enter the
+     tree count: they arrive pinned, with their version or digest
+     recorded, and are covered like anything else shipped.
+   - **The list is the expected instance, not the boundary.** Say so in
+     the slot. The specification deliberately leaves implementation
+     open, so naming a language the spec never chose (an entrypoint
+     "shell script") decides for the implementer something the document
+     refused to decide.
+   - **Never harden a spec "should" into a fact.** Where the spec makes
+     a tool a recommended default the implementer may replace with a
+     logged deviation, the slot says so conditionally ("where the §N.M
+     clients are adopted, they enter pinned…") — flat wording turns a
+     deviation candidate into a settled requirement.
 5. `{{IGNORE_ITEMS}}` — what this stack and project leak into the working
    tree that must never be committed (credential files, local environment
    files, tool caches). `CLAUDE.local.md` is already in the fixed text.
@@ -67,6 +82,25 @@ batch.
    writes as gated, and remote reads fall in neither — put the default
    to the user in the batch rather than assuming one; left to
    themselves, runs have ruled it both ways.
+
+   **Enumerate the free side too, not only the gated one.** The
+   boundary's default — free means local *and* read-only — silently
+   gates most of a normal development loop, because the loop is local
+   and full of writes: starting and stopping the thing being built,
+   reading its logs, inspecting its state, tearing down and recreating
+   local fixtures. An implementer that must ask before stopping a
+   container it just started is unusable, and one that decides on its
+   own that the whole local surface is free has quietly rewritten the
+   policy. Name the project's dev loop end to end and rule it free.
+
+   **Destructive-local splits on blast radius, not on the verb.**
+   Removing this project's own artifacts by name is rebuildable
+   working material and belongs on the free side; the same tool's
+   unscoped sweep (a global prune, a wildcard delete) reaches other
+   projects on the same host and belongs with the gated writes. Two
+   things stay protected whatever the project: git history and the
+   working tree — the step tags and uncommitted work are what rules 3
+   and 6 rest on.
 8. `{{PREREQUISITES}}` — the external prerequisites only the user can
    provide (credentials, delegated services, artifacts from other
    projects), especially the slow ones, each findable in the spec. Look
@@ -79,6 +113,83 @@ batch.
 10. `{{EXCLUSIONS}}` — the spec sections that already list what this pass
     leaves out (Non-Goals, Future Considerations), feeding the plan's
     explicit exclusion list.
+11. `{{OPEN_FACTS}}` — present only when the specification carries open
+    facts (see `structure.md`): facts it could not settle, each with the
+    requirement resting on it and a pre-committed response per outcome.
+    They are the expected case of rule 1's amendment channel — the spec
+    itself ordered them settled at implementation — so the slot must say
+    who may close one and how far. **The latitude splits in two, and the
+    split is decided here, not left to the implementer:** recording a
+    verified fact is autonomous (decision entry and amendment in one
+    commit, reported in the step's summary), while any resolution that
+    changes a requirement, a tier, a documented limitation or the
+    decision to ship comes back to the user before the amendment. Name
+    the items that always come back — the ones whose unfavourable
+    outcome carries a tier or ship consequence — rather than leaving the
+    criterion to be applied item by item. Also state where the
+    resolutions land: the specification is amended so its facts stay
+    true, and the user-facing consequence goes into the deliverable
+    documentation. Drop the slot entirely when the spec has no open
+    facts; do not invent them.
+12. `{{REFERENCES}}` — documents the user supplies as *input* to the
+    implementation without their being part of the specification:
+    contracts of systems that will consume the deliverable,
+    inventories, material produced by another project. Each gets a
+    path under `.claude/refs/`, a **read-trigger** naming when to read
+    it ("before designing the operator interface"), and the standing
+    caveat that it is information, never a requirement source — a
+    conflict between a reference and the specification is a question
+    for the user, not a constraint. `.claude/refs/` is deliberately
+    not `.claude/docs/`: the memory sweep owns the latter and would
+    eventually fold or delete anything in it, and an operator-supplied
+    reference is not the implementer's memory to compact. Drop the
+    slot when there are none.
+
+## Monorepo and multi-track projects
+
+The template assumes one specification, one plan, one decision log, one
+step-number namespace. That holds for most projects and should not be
+abandoned lightly — but a monorepo breaks it, and the usual trigger is a
+specification already split into a root document plus one per component
+(`structure.md`, "Multi-document specifications"). When it applies, the
+shape is **tracks**: the root track owns repository-wide work (the
+foundation and harness, CI, shared documentation) and each component
+directory owns one track. What changes, rule by rule — nothing else does:
+
+- **Rule 1** — "every `SPECIFICATIONS.md` is read-only", root and
+  per-component alike.
+- **Rule 3** — each track owns a `PLAN.md` and a `DECISIONS.md`, placed
+  in its directory (the root track's at the repository root). Exactly
+  one `CLAUDE.md` exists repository-wide, and it carries the **track
+  map**. The session routine loads the root plan and log, then the
+  active track's plan, log and specification; other tracks' files load
+  only when the current step names a cross-track dependency. State
+  explicitly that **the root specification is never "another track's
+  document"** — its core model and conventions are standing reading for
+  any component-track step. Without that sentence, "the other tracks'
+  specifications not at all" reads as excluding the very document that
+  carries the shared conventions, and whether they get loaded then
+  depends on each step's section list being complete — the thing a plan
+  is likeliest to under-enumerate.
+- **Rule 4** — decision ids are **per log**: an entry lands in the log
+  of the track whose files it governs, anything repository-wide in the
+  root log, and a citation crossing logs names the file
+  (`project-zomboid/DECISIONS.md D-003`).
+- **Rule 6** — step identifiers are track-qualified (`step-000` for the
+  root track, a short prefix for each component: `step-pz-001`), with
+  numbering independent per track and each new component registering
+  its prefix in the track map. Add one invariant the single-track shape
+  gets for free: **exactly one step is in progress repository-wide**,
+  whichever track it belongs to — history stays linear and the last
+  `step-*` tag remains the single last-approved state rule 3's
+  re-orientation depends on. Each plan orders only its own track;
+  cross-track sequencing comes from steps naming their dependencies
+  ("needs `step-sc-002` done"), never from a global sequence.
+- **The first task** produces one plan and one log per track, plus the
+  single `CLAUDE.md` and root `README.md`; the plans *together* must
+  account for every section of every specification document.
+- **The templates** resolve their governance placeholders to the active
+  track's files. This is what the placeholders are for.
 
 ## The prompt template
 
@@ -104,10 +215,21 @@ and every section matters.
 1. **`SPECIFICATIONS.md` is read-only for you.** You never edit it on your
    own initiative. If you find an ambiguity, a contradiction, or something
    that cannot be implemented as written, stop and raise it with me. If we
-   agree a change is needed, you record the agreement in `DECISIONS.md`
-   first, and only then amend the specification in a dedicated commit that
-   references that decision. Silent drift between the spec and the
+   agree a change is needed, the decision entry is written before the
+   amendment — never a rationalization after it — and both land **in one
+   commit**: the `DECISIONS.md` entry and the specification text, nothing
+   else, the subject naming the decision (`step-012: spec amendment —
+   D-007, …`). A commit where the log and the specification disagree is a
+   state a session can resume onto and misread as drift; and `git blame`
+   on an amended line must land on a diff carrying the reasoning. Code
+   stays out, so `git log -- SPECIFICATIONS.md` remains a readable
+   history of amendments; the code implementing the change follows in the
+   step's later commits. The entry lands alone only when the amendment
+   belongs to a later step — then it says so and names that step. Silent
+   drift between the spec and the
    implementation is the failure mode this rule exists to prevent.
+
+   {{OPEN_FACTS}}
 
    **Of the phase that produced the specification, the specification
    itself is your only input** — what I tell you in our exchanges, and
@@ -133,27 +255,31 @@ and every section matters.
 
    {{STATIC_CHECKS}}
 
-   Two families belong on that list whatever the stack: well-formedness
-   of your own instantiated tooling under `.claude/skills/` and
-   `.claude/agents/` — frontmatter parses, and every command, path and
-   agent a file names resolves, because a malformed skill does not fail,
-   it silently never loads — and prove once, at step `000`, that each
+   Two families belong on that list whatever the stack. **Governance
+   well-formedness:** your instantiated tooling under `.claude/skills/`
+   and `.claude/agents/`, and `.claude/settings.json` — frontmatter and
+   JSON parse, and every command, path and agent a file names resolves.
+   A malformed skill does not fail, it silently never loads; and the
+   settings file is the enforcement mechanism itself, so malforming it
+   after step `000`'s one-time probe fails exactly as quietly.
+   **Prose lint over the governance documents**, configured to them as
+   they already are — `SPECIFICATIONS.md` is
+   read-only under rule 1, so the lint bends to it and never the reverse,
+   and excluding a document from a rule is a logged decision, not a quiet
+   config line. And prove once, at step `000`, that each
    enforcement mechanism actually binds in your version: one probe for
    the settings baseline, a separate one for skill-frontmatter
    restrictions — two mechanisms, and one passing says nothing about
    the other; an unenforced allowlist is a guard that
-   exists only on paper; and prose lint over the governance documents,
-   configured to them as they already are — `SPECIFICATIONS.md` is
-   read-only under rule 1, so the lint bends to it and never the reverse,
-   and excluding a document from a rule is a logged decision, not a quiet
-   config line. These checks live behind **documented commands in
+   exists only on paper. These checks live behind **documented commands in
    the repository** — two questions, kept apart because each answer must
    mean something: a *check* ("is what is committed here well-formed?" —
    syntax, lint and formatting over the whole working tree, untracked
    files included and gitignored paths excluded, with one standing
    exception this prompt decides now:
-   the tracked files under `.claude/spec-work/` are excluded from the
-   harness, because rule 1 makes them no session's reading material) and
+   everything under `.claude/spec-work/` is excluded from the harness —
+   the exclusion keys on the path, not on tracked status — because
+   rule 1 makes that directory no session's reading material) and
    a *test* ("is the implementation right?" — fixtures
    and expectations proving behavior, including the cases that must fail
    and those that must only warn: a warning nobody proves is emitted
@@ -197,6 +323,13 @@ and every section matters.
    is what makes lazy loading actually happen. Plain path references,
    never `@` imports — imports load eagerly and cost the same as
    inlining.
+   **`.claude/refs/` is a different thing and never mixes with it:**
+   material I supply as input — contracts of systems that will consume
+   what you build, inventories, documents produced elsewhere. Read each
+   at its trigger, treat it as information and never as a requirement
+   source (a conflict between a reference and the specification is a
+   question for me), and never sweep, compact, fold or delete one: it
+   is not your memory. {{REFERENCES}}
    *Instructions* tied to one part of the tree may instead be path-scoped
    rules in `.claude/rules/` with a `paths` frontmatter, which load
    themselves exactly when you work on matching files — but never an
@@ -248,8 +381,15 @@ and every section matters.
    and five agents
    (`step-reviewer`, `optimize-memory`, `state-reviewer`,
    `code-reviewer`, `test-reviewer`). Instantiate only the ones that fit
-   this project, adapted (fill their placeholders with this repository's
-   real commands and paths), each adoption logged; the ones that earn
+   this project, adapted: fill every placeholder with this repository's
+   real commands and paths — including the governance set (`{{PLAN}}`,
+   `{{DECISIONS}}`, `{{SPEC}}`, `{{STEP_ID}}`), which each template
+   resolves to the files and identifier form that actually govern the
+   work it performs. A template arrives with those as placeholders on
+   purpose: a leftover one is visible, while a plausible wrong filename
+   is not. Where a template's own enumeration of a routine is narrower
+   than the rule it claims to execute, the rule wins and the
+   enumeration is rewritten to match. Each adoption logged; the ones that earn
    their place later can wait — and once none remains un-instantiated
    (each adopted or explicitly dropped, logged), delete the assets
    directory and every pointer and exception referring to it in the same
@@ -372,13 +512,21 @@ Produce four files, then stop for my review:
      **extending the committed `.claude/settings.json`** (auto memory is
      already off — keep it off) with a permission-and-hook baseline
      enforcing rule 9's boundary, proposed for my review: allow the
-     harness, the setup command and the *additive* subset of local git
-     (add, commit, status, diff, log, describe, annotated tags); **ask**
+     harness, the setup command, the free side of rule 9's boundary and
+     the *additive and read-only* subset of local git
+     (add, commit, status, diff, log, show, rev-parse, describe, tag
+     listing, annotated tags); **ask**
      for everything
      rule 9 gates, `git push` included — a denied pattern cannot be
      overridden in the very exchange rule 9 relies on — and for
-     state-destroying local git (`reset --hard`, deleting tags or
-     branches): the step tags and the working tree are the memory rules
+     state-destroying local git. State that last one as a classifier,
+     not a list, because a list is what gets outgrown: anything that
+     rewrites history (`commit --amend`, `rebase`), moves or deletes
+     tags or branches, or destroys uncommitted or untracked work
+     (`reset --hard`, `git clean`) asks first — and an allow pattern
+     must not silently admit one of them, the trap being that a bare
+     `git commit` allowance admits `--amend`. The step tags, the linear
+     history and the working tree are the memory rules
      3 and 6 rest on; reserve **deny**
      for what has no authorised use at all, naming each in the proposal
      rather than leaving "destructive" to interpretation; and a guard
@@ -396,7 +544,14 @@ Produce four files, then stop for my review:
      skips a step. One carve-out: a name that sits on `CLAUDE.md`'s
      not-yet-adopted list is not dangling — it is the documented
      fallback the milestone ritual relies on. Its test: a fresh clone, the
-     setup command, the check command, one commit — all green.
+     setup command, the check command, one commit — all green. Step
+     `000`'s breadth is deliberate — one composite foundation step,
+     this prompt's stated exception to the small-step rule, because its
+     parts gate nothing separately testable: the fresh-clone test is
+     the gate, the enforcement probes report their results in the
+     step's summary, and anything only a remote can exercise is
+     verified at first push. The plan cold-review below treats that
+     breadth as decided here, never as a granularity finding.
    - Steps carry three-digit identifiers per rule 6 — `000`, the
      foundation, onward — grouped under milestones or feature headings
      when the plan is big enough that grouping helps. Steps must be small
@@ -430,7 +585,15 @@ Produce four files, then stop for my review:
    routine — including the standing instruction that a session resumed
    after an interruption, or told the work was interrupted, runs
    `/resume-step` before touching anything, never trusting the
-   transcript. For as long as any tooling template remains un-instantiated
+   transcript, and — until step `000` has instantiated that skill —
+   applies rule 3's re-orientation routine directly instead: the
+   pointer to a not-yet-existing command must not strand the one
+   interruption most likely to happen early, the one during step `000`
+   itself. It also carries the plan-step entry shape and the
+   boundary-crossing-cost rule from the plan instructions above: later
+   sessions extend the plan, and the bootstrap cold review sources
+   those conventions from `CLAUDE.md`, so they must actually be there.
+   For as long as any tooling template remains un-instantiated
    it also carries the pointer to `.claude/spec-work/handoff/assets/`,
    rule 1's standing exception for that one directory, and the list of
    templates not yet adopted — a block deleted, together with the
@@ -466,7 +629,13 @@ agent files come later, in step 000) that reads only `SPECIFICATIONS.md`
 and the four files you have just written — never this conversation, and
 nothing under `.claude/spec-work/`: it holds the specification phase's
 history, this prompt included, and a reviewer that reads any of it is no
-longer cold. It audits `PLAN.md` against `SPECIFICATIONS.md`:
+longer cold. The workflow conventions its criteria cite — the step
+entry shape, boundary-crossing test costs, what counts as cheap — live
+in the `CLAUDE.md` you have just written, not in the specification:
+name it in the reviewer's prompt as the source of those conventions,
+and tell the reviewer that `CLAUDE.md`'s pointer to
+`.claude/spec-work/handoff/assets/` is out of bounds like the rest of
+that directory. It audits `PLAN.md` against `SPECIFICATIONS.md`:
 
 - **coverage** — every spec section mapped to a step or explicitly
   excluded with reason, verified section by section, not trusted;
@@ -497,10 +666,28 @@ the real adaptation (the harness commands' names, what the guard must
 block) only exists once step 000 designs the harness. One exception has a
 channel: when a cold review round finds a defect in a copied template
 itself — generic, nothing project-specific in the fix — correct the local
-copy during triage and report it to the user as an upstream finding
-against this skill, so the template is fixed at its source too. Each
-template states
+copy during triage, and record it in the upstream findings file (phase 7,
+step 6) so the template is fixed at its source too. Each template states
 its target path and placeholders in a header comment.
+
+### Governance placeholders
+
+Four placeholders recur across the templates and mean the same thing
+everywhere. They exist because the failure they prevent is silent: a
+template that ships a literal `PLAN.md` instantiates cleanly into a
+repository whose plan is somewhere else, and the ritual then reads the
+wrong file — or nothing — without complaining. A leftover `{{PLAN}}`,
+by contrast, is visible on sight.
+
+| Placeholder      | Resolves to                                                       | Single-track value |
+| ---------------- | ----------------------------------------------------------------- | ------------------ |
+| `{{PLAN}}`       | the plan governing the work this template performs                 | `PLAN.md`          |
+| `{{DECISIONS}}`  | the decision log governing it                                      | `DECISIONS.md`     |
+| `{{SPEC}}`       | the specification document(s) it must read                         | `SPECIFICATIONS.md`|
+| `{{STEP_ID}}`    | the step identifier form used in commit subjects and tag names     | `step-NNN`         |
+
+The tag *glob* is not one of them: `step-*` matches every form, so
+`git describe --match 'step-*'` stays literal in every project.
 
 | Template            | Becomes                                | Adoption default                              |
 | ------------------- | -------------------------------------- | --------------------------------------------- |

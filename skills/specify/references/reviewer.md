@@ -133,9 +133,20 @@ bootstrap are findings.
 
 ```text
 Project: <one line, from §1 of the specification>
-Specification: <repository-relative path, usually SPECIFICATIONS.md>
-Read the specification from the repository you are working in. Reports are
-in English.
+Specification: <repository-relative path(s) — one document, or the root
+document and each per-component document, each with what it covers>
+Expected HEAD: <commit hash>
+
+Read the specification from the repository you are working in. Verify
+first that your checkout is at the expected commit, and correct it before
+reading anything: an isolated worktree is not reliably at the commit you
+were given, and a review of superseded text is worse than no review.
+Repository state is not yours to derive from git either — whether a file
+is tracked, what the remote is, what the last commit changed: take such
+facts from this block or verify them on disk, never from `git ls-files`
+or `git log`, whose view here has been wrong before.
+
+Reports are in English.
 ```
 
 ## External review packet
