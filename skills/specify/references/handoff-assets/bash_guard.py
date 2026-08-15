@@ -287,6 +287,15 @@ the command itself.
 KEEPING IT HONEST
 -----------------
 
+This file is written at 88 columns and keeps them wherever it is vendored. A
+project whose lint is narrower exempts the width rule for this path alone —
+every other rule still applies — because reflowing it makes each refresh a
+diff against your reformatting rather than against the template, and because
+the formatter's answer here is worse: a nine-word set becomes eleven lines and
+the comment explaining each dataclass field strands after a closing paren.
+(With pre-commit, the exemption also needs `force-exclude`, since filenames
+are passed explicitly.)
+
 Because a broken guard fails open silently, it has to be gated twice, and the
 two gates ask different questions.
 
@@ -302,6 +311,22 @@ reaches fails it. Wire that into the project's test entry point. Add a case
 for every rule you add; that is the only place the intent is written down in
 an executable form, and the coverage check is what makes it mandatory rather
 than advisory.
+
+Neither answers *is this guard reached*. A path in `settings.json` that names
+a file which is not this one leaves valid JSON, a settings file that loads, a
+green lint — and a guard that never runs. Nothing here can see that, so the
+project checks the pointer itself (its governance well-formedness family is
+the place) and probes it live: a command this guard refuses must come back
+refused *by it*, naming the rule. If it merely prompts, the hook is not
+reaching the tool call and only the deny backstop is left.
+
+A project harness may also prove what CASES cannot. Cases are strings written
+by hand; a harness can derive them — every playbook under an exempt directory
+must be silent, every one outside it gated, so a file added tomorrow is judged
+tomorrow without anyone remembering. Derive what only the project can derive,
+and leave the rest here: a case about how a command line is read belongs in
+ENGINE_CASES, one about a tool's verdicts in CASES, and duplicating either in
+a harness means two places to update and one of them silently wrong.
 """
 
 from __future__ import annotations

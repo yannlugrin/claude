@@ -17,53 +17,34 @@ handoff review rounds produced — is the raw material for the rest.
 
 ## Index
 
-The detail lives in `updates/<date>.md`, one file per revision. This index
-is the whole of what a pass must read up front: it carries enough to skip an
-entry without opening anything. Ids are permanent, never reused, and
-continue across revisions.
+Empty, and that is a state rather than a gap: **everything through U-021 is
+applied in every project that exists**, and the entries themselves are in git
+history — `git log -- skills/specify/references/updates/` reaches them, which
+is where a citation like "adopted through U-021" resolves.
 
-**Applies to** says who an entry concerns: *running* — a handed-over
-project, so the update pass walks it; *bootstrap* — only the generation of
-a new handoff prompt; *spec phase* — only the specification process itself.
+Ids are permanent and never reused, so the next entry is **U-022**. The index
+resumes with it, one revision section per date:
 
-### [2026-08-13](updates/2026-08-13.md) — one project's handoff run
+```text
+### [YYYY-MM-DD](updates/YYYY-MM-DD.md) — what this revision was about
 
-| Id    | Applies to | Title                                                    |
-| ----- | ---------- | -------------------------------------------------------- |
-| U-001 | running    | A spec amendment and its decision are one commit          |
-| U-002 | running    | Reviewer agents take the whole gated set                  |
-| U-003 | running    | The line budget yields to the boundary                    |
-| U-004 | running    | `.claude/refs/` for operator-supplied material            |
-| U-005 | running    | The milestone ritual's fallback outlives the agents       |
-| U-006 | running    | `settings.json` under the well-formedness check           |
-| U-007 | running    | The git ask-tier is a classifier, not a list              |
-| U-008 | running    | The boundary enumerates its free side                     |
-| U-009 | running    | Every shipped artifact class gets a check family          |
-| U-010 | running    | `CLAUDE.md` carries the plan-step conventions             |
-| U-011 | running¹   | The open-facts latitude split                             |
-| U-012 | running²   | The spec-work exclusion keys on path                      |
-| U-013 | bootstrap  | Governance placeholders in the tooling templates          |
-| U-014 | bootstrap  | `/resume-step` gains a pre-instantiation fallback         |
-| U-015 | bootstrap  | Step 000's breadth blessed as a deliberate composite      |
-| U-016 | bootstrap  | The plan's cold reviewer sources conventions from CLAUDE.md |
-| U-017 | spec phase | Open facts and multi-document specifications              |
-| U-018 | spec phase | Review staleness guard, archive provenance, worktrees ignored |
-| U-019 | spec phase | Phase 7 compression pass and upstream-findings file       |
+| Id    | Applies to | Title |
+| ----- | ---------- | ----- |
+| U-0NN | running    | …     |
+```
 
-¹ only where the specification carries open facts.
-² only where `.claude/spec-work/` survives in the project.
+**Applies to** says who an entry concerns: *running* — a handed-over project,
+so the update pass walks it; *bootstrap* — only the generation of a new
+handoff prompt; *spec phase* — only the specification process itself. The
+index is the whole of what a pass reads up front, so each row carries enough
+to skip an entry without opening anything.
 
-### [2026-08-14](updates/2026-08-14.md) — the Bash guard becomes a template
-
-| Id    | Applies to | Title                                                    |
-| ----- | ---------- | -------------------------------------------------------- |
-| U-020 | running    | The Bash guard is a template, and it reshapes settings.json |
-
-### [2026-08-15](updates/2026-08-15.md) — a remedy that pointed the wrong way
-
-| Id    | Applies to | Title                                                    |
-| ----- | ---------- | -------------------------------------------------------- |
-| U-021 | running    | Reviewer agents cite rule 9 rather than restating it (supersedes U-002) |
+The clearing happened on 2026-08-15, when the last project running an older
+doctrine was brought current. It is not a habit: entries accumulate until
+every project has them, and only then is emptying them free. What was kept is
+the mechanism — this file — because the next divergence is a certainty rather
+than a possibility: doctrine moves while a project is mid-plan, and the
+changelog is what makes the gap findable rather than remembered.
 
 ## Adding an entry
 

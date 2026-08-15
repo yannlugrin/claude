@@ -477,7 +477,12 @@ and every section matters.
    plan already carries. Rule 9's enumeration never leaves, and neither
    does the current-step pointer. If the rules still cannot be restated
    inside the headroom after that, that is a finding to raise with me,
-   not a file to pack. It holds only what applies always —
+   not a file to pack — and one legitimate outcome of raising it is a
+   budget of this project's own, logged as a deviation with what makes
+   it necessary. A repository whose boundary enumeration is long, or
+   which has many source-of-truth directories to name, has a higher
+   floor than these numbers assume; what must not happen is the floor
+   being met by deleting something with nowhere else to go. It holds only what applies always —
    the rules, the file map, the current-step pointer, the session
    routine — and *pointers* to everything else. Knowledge needed only in
    a specific context — per-topic notes, environment details,
@@ -810,8 +815,18 @@ Produce four files, then stop for my review:
        in a `.claude/docs/` file — every claim a measurement with the
        version it was taken on, the method, and a short re-measure
        recipe to re-run after a Claude Code update — plus a liveness
-       check the session rituals of `002` can run: one silent command,
-       one the guard asks on, one the settings ask on. Report in the
+       check the session rituals of `002` can run: one command that
+       must run silently, one the guard *grants*, and one it must
+       **refuse, naming the rule that read it**. That third probe is
+       the only one that says the hook is reached at all: if it merely
+       prompts, the hook is not wired and the deny backstop is all that
+       is left, while the guard's own `--selftest` and `--liveness`
+       would still pass — they answer whether the file is correct, not
+       whether anything calls it. For the same reason the governance
+       family checks that the hook path in the settings resolves: a
+       path naming a file that is not there leaves valid JSON, a
+       settings file that loads, a green lint, and a guard that never
+       runs. Report in the
        step summary what each mechanism actually did, including the
        ones that turned out to enforce nothing. Name the permission
        mode you expect me to work in — it is a committed setting
