@@ -932,9 +932,17 @@ Produce four files, then stop for my review:
    instructions — concise, not verbatim, and keeping this numbering:
    tooling and decision entries cite the rules by number, and
    renumbering orphans every citation — plus the repository layout as
-   it will emerge, a section headed exactly **`Current state`** holding
-   the pointer to the current step (that wording — your tooling
-   templates reference the section by name), and the session-start
+   it will emerge, a section headed exactly **`Current state`** (that
+   wording — your tooling templates reference the section by name)
+   **holding a closed list of item kinds and nothing else**: the
+   current and next step, live world-state, open obligations, the
+   pointers into `.claude/docs/`. What a closed step *produced* is not
+   one of them — its outcome belongs in its plan entry and its tag, a
+   durable fact in `.claude/docs/`, an invariant in the decision log —
+   so the close ritual deletes that paragraph rather than demoting it.
+   Say so here: without the closed list, each close adds one reasonable
+   paragraph and the section becomes a changelog, which has been
+   measured at 131 lines. And the session-start
    routine — including the standing instruction that a session resumed
    after an interruption, or told the work was interrupted, runs
    `/resume-step` before touching anything, never trusting the
