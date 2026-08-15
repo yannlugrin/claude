@@ -122,9 +122,15 @@ the prompt's rules, or between a rule and the first-task instructions; any
 instruction a cold-started implementer could not follow (references to
 files, tags or conventions that will not exist yet at bootstrap); any
 instruction sending the implementer into `.claude/spec-work/` beyond this
-prompt and its assets (the specification must be its only input); and asset
+prompt and its assets (the specification must be its only input); asset
 templates whose placeholders or adoption guidance conflict with what the
-prompt says about them. For the summary-back, describe what the implementer
+prompt says about them; and — ranked with the rest, not as an aside — any
+instruction that will make the implementer build more than the project
+needs: a rule whose wording mandates a bespoke tool (it cannot then be
+deleted without amending the rule), an obligation to cover artifacts the
+repository does not yet contain, a "mechanism of your choice" where the
+operator plainly has a standard one, a first step too large for a single
+gate. For the summary-back, describe what the implementer
 would do in its first session, step by step — mismatches with the intended
 bootstrap are findings.
 ```

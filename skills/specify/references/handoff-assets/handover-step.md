@@ -1,26 +1,9 @@
 ---
 name: handover-step
-description: Pre-test handover sequence — checks, staleness sweep,
-  review, then hand the step to the operator for testing.
-when_to_use: When the current step's implementation is complete and
-  ready for operator testing, or when the operator asks for the
-  handover. The post-approval close is /approve-step, not this.
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - Edit
-  - Write
-  - Agent
-  - Bash({{VERIFY_COMMAND}}*)
-  - Bash({{CHECK_COMMAND}}*)
-  - Bash({{TEST_COMMAND}}*)
-  - Bash(git status*)
-  - Bash(git diff*)
-  - Bash(git log*)
-  - Bash(git describe*)
-  - Bash(git add*)
-  - Bash(git commit*)
+description: Pre-test handover sequence — run when the current step's
+  implementation is complete and ready for operator testing, or when the
+  operator asks for the handover. Checks, staleness sweep, review, then
+  hand the step to the operator.
 ---
 
 # Template: handover-step (skill)
@@ -32,11 +15,27 @@ allowed-tools:
 > repository qualifies it per track);
 > `{{VERIFY_COMMAND}}`, `{{CHECK_COMMAND}}`, `{{TEST_COMMAND}}` — the
 > repository's rule-2 harness entry points (e.g. `make verify`,
-> `npm run check`, `rake test`), here and in `allowed-tools`. Step 3
-> invokes the `step-reviewer` agent, so `allowed-tools` must keep the
-> subagent-invocation tool (`Agent`) — an allowlist that omits it makes
-> the review silently not happen. Delete this header section when
-> instantiating.
+> `npm run check`, `rake test`).
+> Frontmatter carries `name` and `description` only, deliberately: a
+> skill's `allowed-tools` list restricts nothing (probed live, Claude
+> Code 2.1.231 — a `Write` and a plain `ls` both ran while a read-only
+> ritual was active), `disallowed-tools` binds the whole invoking turn
+> and never prompts, and a key Claude Code does not
+> define (`when_to_use`) buys nothing while its handling is
+> unspecified — keep frontmatter to keys the version you run
+> defines. That last one is a precaution, not a measurement,
+> unlike the two before it. What
+> actually binds lives in `.claude/settings.json` and the guard hook.
+> Re-probe before reintroducing any of them — and if a version ever
+> makes allowlists bind, the list must keep the subagent-invocation tool
+> (`Agent` in Claude Code; verify the name in the version you run),
+> since step 3 invokes the `step-reviewer` agent and a missing entry
+> would make that review silently not happen.
+> Delete this header section when instantiating.
+
+**When to use.** When the step is implemented and ready for the
+operator's manual test, or when they ask for the handover. The
+post-approval close is `/approve-step`, not this.
 
 Hand the current step over for operator testing. In order:
 

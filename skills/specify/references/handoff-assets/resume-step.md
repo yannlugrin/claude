@@ -1,24 +1,11 @@
 ---
 name: resume-step
-description: Post-interruption verification — distrust the transcript,
-  verify the claimed state against the repository and the world, then
-  report discrepancies and repair options. Verifies and reports only;
-  it never repairs.
-when_to_use: After work ended abnormally — a usage limit, a crash, a
-  reboot, a killed console — or whenever the operator doubts what the
-  last session claims to have done. Runs instead of /orient (it embeds
-  the same orientation); prefer invoking it from a fresh session, which
-  cannot be tempted to trust the old transcript.
-allowed-tools:
-  - Read
-  - Glob
-  - Grep
-  - Bash(git describe*)
-  - Bash(git log*)
-  - Bash(git diff*)
-  - Bash(git status*)
-  - Bash(git tag -n99*)
-  - Bash({{CHECK_COMMAND}}*)
+description: Post-interruption verification — run after work ended
+  abnormally (a usage limit, a crash, a reboot, a killed console) or
+  whenever the operator doubts what the last session claims to have done.
+  Distrusts the transcript, verifies the claimed state against the
+  repository and the world, then reports discrepancies and repair
+  options. Verifies and reports only; it never repairs.
 ---
 
 # Template: resume-step (skill)
@@ -26,14 +13,31 @@ allowed-tools:
 > Instantiate as `.claude/skills/resume-step/SKILL.md`. Placeholders:
 > `{{PLAN}}` and `{{DECISIONS}}` — the plan and decision log governing
 > the work this file performs;
-> `{{CHECK_COMMAND}}` — the rule-2 check entry point (also in
-> `allowed-tools`); `{{STATE_CHECKS}}` — the project's read-only
+> `{{CHECK_COMMAND}}` — the rule-2 check entry point;
+> `{{STATE_CHECKS}}` — the project's read-only
 > world-state commands (service status, container lists, mounted
 > volumes…), each marked free or gated per the rule-9 boundary.
+> Frontmatter carries `name` and `description` only, deliberately: a
+> skill's `allowed-tools` list restricts nothing (probed live, Claude
+> Code 2.1.231 — a `Write` and a plain `ls` both ran while a read-only
+> ritual was active), `disallowed-tools` binds the whole invoking turn
+> and never prompts, and a key Claude Code does not
+> define (`when_to_use`) buys nothing while its handling is
+> unspecified — keep frontmatter to keys the version you run
+> defines. That last one is a precaution, not a measurement,
+> unlike the two before it. This
+> ritual's verify-only discipline is prose, below; what actually binds
+> lives in `.claude/settings.json` and the guard hook. Re-probe before
+> reintroducing any of them.
 > Delete this header section when instantiating.
 
 Work was interrupted or the last session's claims are in doubt. Your
 job is to establish what is actually true, then stop.
+
+**When to use.** Instead of `/orient` — it embeds the same orientation —
+after an abnormal end, or whenever the operator doubts the last
+session's account. Prefer invoking it from a fresh session, which cannot
+be tempted to trust the old transcript.
 
 **Doctrine: the transcript is a claim, not evidence.** What the
 conversation — or its summary, or your own memory of it — says was

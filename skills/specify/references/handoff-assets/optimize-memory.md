@@ -8,8 +8,7 @@ description: >-
   decision log and closed plan steps and sweeps .claude/docs/
   without losing operative information. Edits and reports; never
   commits.
-tools: Read, Glob, Grep, Bash, Edit, Write
-model: fable
+tools: Read, Bash, Edit, Write
 ---
 
 # Template: optimize-memory (agent)
@@ -20,9 +19,28 @@ model: fable
 > is invoked for one track and edits that track's files);
 > `{{CHECK_COMMAND}}` in the verification section, and
 > `{{ADOPTING_DECISION}}` — the decision entry that adopted this pass.
-> Set `model:` to the strongest model available and confirm the id
-> resolves in your version — `fable` is today's, not a guarantee.
+>
+> **Add no `model:` key.** This pass must not run on the model that wrote
+> the work it examines, and that requirement is a *relation*: no fixed
+> value can state it, since a pinned id becomes same-model the day
+> implementation moves to it. The constraint therefore lives in the
+> ritual that spawns this pass, which passes the override at invocation.
+> Keep the body paragraph below: absence is not neutral — an agent
+> without `model:` inherits the invoking session's, which is the one
+> outcome to avoid.
+>
+> `tools:` binds, and an unlisted tool is absent rather than refused —
+> so check the tool inventory of the version you run before editing this
+> line; a name that does not exist is dropped in silence.
+>
 > Delete this header section when instantiating.
+
+No `model:` is pinned here, and adding one would be a mistake: this pass
+must not run on the model that wrote the work it examines, and no fixed
+value states a relation. Its absence is not neutral either — an agent
+without `model:` inherits the invoking session's, which is the outcome to
+avoid — so whoever spawns this pass passes the override explicitly,
+naming a model that did not implement the work.
 
 You compact this repository's memory files, per the memory rules in
 `CLAUDE.md` and {{ADOPTING_DECISION}} in `{{DECISIONS}}`. You edit
@@ -41,8 +59,10 @@ Preconditions — verify, and stop with a report on failure:
 
 ## {{DECISIONS}}
 
-1. **Ids.** Every entry heading takes the form
-   `## D-NNN (YYYY-MM-DD) — short title`, numbered in file order
+1. **Ids.** The entry format is whatever `{{DECISIONS}}`'s own header
+   defines — read it first and follow it exactly; this file must never
+   impose a shape of its own, and rewriting entries into one is damage,
+   not compaction. Ids are numbered in file order
    (which is chronological), continuing from the highest id already
    assigned. An id freezes once assigned and is never reused. Ids are
    per-log: where several logs exist, a citation crossing logs names
@@ -114,7 +134,10 @@ If the handoff-assets block (the pointer to
 templates not yet adopted) survives although no template remains
 un-instantiated, delete it and flag the leftover assets directory for
 removal — an expired exception is stale memory like any other.
-The file must stay under 200 lines — a budget that yields to exactly
+The file must stay under 220 lines, and compaction targets **~180, not
+the cap**: it is written with headroom so the next session that must add
+a pointer adds it instead of reflowing the file first, and a compaction
+that leaves it at 199 has restored nothing. The budget yields to exactly
 one thing: the action-boundary enumeration is carried whole, and if
 the two collide, the enumeration stays and the trimming happens
 elsewhere. Report an over-budget file you could not trim rather than

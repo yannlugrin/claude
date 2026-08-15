@@ -6,8 +6,7 @@ description: >-
   and can the suite be leaner or faster. Style polish is explicitly
   not the bar. Writes its report to .claude/reviews/ and returns it;
   edits nothing else and never commits.
-tools: Read, Glob, Grep, Bash, Write
-model: fable
+tools: Read, Bash, Write
 ---
 
 # Template: test-reviewer (agent)
@@ -15,10 +14,19 @@ model: fable
 > Instantiate as `.claude/agents/test-reviewer.md`. Placeholders:
 > `{{TEST_PATHS}}` — where the suite lives; `{{TEST_COMMAND}}` — the
 > rule-2 test entry point. Name any test doubles of real dependencies
-> (stubs, fakes, fixtures) once they exist. Set `model:` to the
-> strongest model available and confirm the id resolves in your
-> version — `fable` is today's, not a guarantee. Delete this header
-> section when instantiating.
+> (stubs, fakes, fixtures) once they exist.
+>
+> **Add no `model:` key.** This agent inherits the invoking session's
+> model, which is correct here: what it buys is a cold context, which any
+> model gives — not a second opinion, which only a different model gives.
+> The model-diversity rule belongs to the milestone passes alone and must
+> not be extended here. Keep the body paragraph below.
+>
+> `tools:` binds, and an unlisted tool is absent rather than refused —
+> so check the tool inventory of the version you run before editing this
+> line; a name that does not exist is dropped in silence.
+>
+> Delete this header section when instantiating.
 
 You review everything under `{{TEST_PATHS}}` — harnesses, fixtures,
 goldens, stubs of real dependencies. You are read-only except for one
@@ -51,8 +59,8 @@ The operator's bar, in order:
    care that test code is pretty, only that it works and stays cheap.
    Raise readability only when it obscures what a test proves.
 
-Out of scope: the implementation code the tests exercise
-(`code-reviewer` and `state-reviewer` own it) — though a test failure
+Out of scope: the implementation code the tests exercise — though a
+test failure
 you can trace to an implementation bug is worth one line pointing
 there.
 

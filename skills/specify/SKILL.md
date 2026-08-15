@@ -72,8 +72,8 @@ Work inside a git repository (offer `git init` if there is none):
   the file exists). Auto memory is machine-local and unversioned — an
   ungoverned second memory outside git and outside review; neither the spec
   sessions nor the future bootstrap session may accumulate or load it. The
-  implementation workflow keeps it off (its step 000 extends this same
-  file).
+  implementation workflow keeps it off (its permission-baseline step
+  extends this same file).
 
 `.claude/spec-work/` is process scaffolding, not part of the deliverable — it
 lives under `.claude/` so the project root stays clean — but it is committed:
@@ -294,12 +294,19 @@ what keeps old memory out of the session doing this work.
 1. **Adapt.** Fill the template's `{{SLOT}}`s from the specification —
    never invented — and present them as a numbered batch with
    recommendations. The implementer's action boundary (what it may never run
-   on its own initiative) is the one pure policy call: flag it as such. The
-   user rules; only then write.
+   on its own initiative) is the one pure policy call: flag it as such.
+   Three slots have no source in the specification and are **asked for**
+   in the same batch rather than derived: the boundary,
+   `{{HOUSE_TOOLING}}` and `{{REFERENCES}}` — see their entries in
+   `handoff.md`, which carry why each is asked and what goes wrong when
+   it is not. The user rules; only then write.
 2. **Write and commit.** `PROMPT.md`, and the
    [references/handoff-assets/](references/handoff-assets/) templates copied
    verbatim to `.claude/spec-work/handoff/assets/` — the implementer
-   instantiates them later, not this session.
+   instantiates them later, not this session. `bash_guard.py` is code, not
+   a markdown template: copy it with its executable bit and confirm
+   `./bash_guard.py --selftest` still passes from its new location, since
+   a guard that cannot execute fails open and says nothing.
 3. **Cold review.** Spawn per "Spawning reviews" with the **handoff** lens
    from [references/reviewer.md](references/reviewer.md); triage, apply,
    repeat until quiet — phase 4 rules apply unchanged. Propose at least
@@ -311,7 +318,7 @@ what keeps old memory out of the session doing this work.
 4. **Compression pass.** Review rounds append clauses; four of them
    grew a real prompt by a fifth, all of it into sentences that were
    already long. The prompt's fate is to be restated by the bootstrap
-   session into a `CLAUDE.md` under 200 lines, and a rule too tangled to
+   session into a `CLAUDE.md` under 220 lines, and a rule too tangled to
    restate is a rule that loses a clause there. So once the rounds are
    quiet, compress: same floor as finalization's, comprehension, and one
    exemption — the action boundary of rule 9 is safety text and is never
@@ -394,7 +401,13 @@ alternative is what this phase exists to repair.
   derive from git in its worktree** — whether a file is tracked, what the
   remote is, what the last commit did are facts it takes from the context
   block or verifies on disk, never from `git ls-files` or `git log`. Both
-  instructions are cheap; a wasted strong-model round is not.
+  instructions are cheap; a wasted strong-model round is not. The
+  prohibition alone has since proved insufficient — a worktree served
+  stale metadata anyway and the round came back with a confident finding
+  that committed files were untracked — so **state the truth positively
+  as well**: an authoritative line in the context block ("at this `HEAD`,
+  these files are tracked: …"), which leaves nothing to infer and has
+  held in every round since.
 - Model choice per spawn: inheriting the session model is the default and
   needs no approval. Any divergence from it — up or down — is proposed to
   the user with its reason and spawned only once they approve: model choice
