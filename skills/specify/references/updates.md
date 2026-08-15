@@ -53,6 +53,18 @@ a new handoff prompt; *spec phase* — only the specification process itself.
 ¹ only where the specification carries open facts.
 ² only where `.claude/spec-work/` survives in the project.
 
+### [2026-08-14](updates/2026-08-14.md) — the Bash guard becomes a template
+
+| Id    | Applies to | Title                                                    |
+| ----- | ---------- | -------------------------------------------------------- |
+| U-020 | running    | The Bash guard is a template, and it reshapes settings.json |
+
+### [2026-08-15](updates/2026-08-15.md) — a remedy that pointed the wrong way
+
+| Id    | Applies to | Title                                                    |
+| ----- | ---------- | -------------------------------------------------------- |
+| U-021 | running    | Reviewer agents cite rule 9 rather than restating it (supersedes U-002) |
+
 ## Adding an entry
 
 Append to the current date's file, creating it and its index section on the
