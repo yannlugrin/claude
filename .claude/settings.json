@@ -1,21 +1,81 @@
 {
   "permissions": {
     "defaultMode": "default",
+    "disableBypassPermissionsMode": "disable",
     "allow": [
-      "Grep",
-      "Bash(grep *)",
-      "Bash(git status*)",
-      "Bash(git diff)",
-      "Bash(git diff *)",
-      "Bash(git log*)",
-      "Bash(git show*)",
-      "Bash(git add *)",
-      "Bash(git commit *)",
-      "Bash(git describe*)"
+      "Bash(git:*)",
+      "Bash(rm:*)",
+      "Bash(docker:*)",
+      "Bash(./manage.py:*)",
+      "Bash(python3 manage.py:*)",
+
+      "Bash(just)",
+      "Bash(just check)",
+      "Bash(just check all)",
+      "Bash(just check changed)",
+      "Bash(just test)",
+      "Bash(just verify)",
+      "Bash(just setup)",
+      "Bash(just --list*)",
+      "Bash(just --summary*)",
+      "Bash(.venv/bin/pre-commit run*)",
+      "Bash(.claude/hooks/bash_guard.py --selftest)",
+      "Bash(.claude/hooks/bash_guard.py --liveness)",
+
+      "WebSearch",
+      "WebFetch(domain:code.claude.com)",
+      "WebFetch(domain:docs.claude.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:just.systems)",
+      "WebFetch(domain:pre-commit.com)"
     ],
     "ask": [
-      "Bash(git push*)"
+      "Edit(/.claude/settings.json)",
+      "Edit(/.claude/hooks/**)",
+
+      "Read(**/.env)",
+      "Edit(**/.env)",
+
+      "Bash(gh:*)",
+      "Bash(curl:*)",
+      "Bash(wget:*)"
     ],
-    "deny": []
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(git filter-repo:*)",
+      "Bash(git reflog expire:*)",
+      "Bash(git reflog delete:*)",
+      "Bash(git update-ref -d:*)",
+      "Bash(git gc --prune:*)",
+
+      "Bash(rm -rf /:*)",
+      "Bash(rm -fr /:*)",
+      "Bash(rm -rf ~:*)",
+      "Bash(rm -fr ~:*)",
+
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.docker/config.json)",
+      "Read(~/.claude/.credentials.json)",
+      "Read(**/id_rsa*)",
+      "Read(**/id_ed25519*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PROJECT_DIR}/.claude/hooks/bash_guard.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
   }
 }

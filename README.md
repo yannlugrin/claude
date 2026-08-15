@@ -29,8 +29,19 @@ It only ever removes symlinks pointing into this repo — real files and foreign
 ## Development
 
 ```sh
-make setup   # create .venv, install dependencies, install the pre-commit git hook
-make check   # run all lints on all files (also run automatically on commit)
+just setup           # create .venv from requirements.txt, install the git hook
+just check           # every check over the whole tree, untracked files included
+just check changed   # the same checks over what differs from HEAD
+just test            # this repository's own behaviour
+just verify          # check, then test
 ```
 
-Requires Python 3 with the `venv` module (`apt install python3-venv` on Debian/Ubuntu). Lints: [ruff](https://docs.astral.sh/ruff/) for Python, [pymarkdown](https://github.com/jackdewinter/pymarkdown) for Markdown, and `scripts/lint-assets.py` for asset frontmatter (skills need a `description`, agents a `name` and `description`). Hooks are defined in `.pre-commit-config.yaml` and run the `.venv/` tools directly, so `make check` and the git hook share one toolchain.
+Requires [`just`](https://github.com/casey/just) and Python 3 with the `venv` module (`apt install python3-venv` on Debian/Ubuntu). Checks are defined once in `.pre-commit-config.yaml` — `just check` and the installed git hook both read it, so they cannot differ in *what* they look for, only in how much of the tree they look at. Lints: [ruff](https://docs.astral.sh/ruff/) for Python, [pymarkdown](https://github.com/jackdewinter/pymarkdown) for Markdown, `scripts/lint-assets.py` for asset frontmatter (skills need a `description`, agents a `name` and `description`), plus the upstream hygiene hooks and a liveness check for the Bash guard. Dependency versions are pinned in `requirements.txt`.
+
+Note that `just check` can *modify* files: the whitespace hooks fix what they find and fail the run, so a red check may leave a changed tree to inspect and commit.
+
+### The Bash guard
+
+`.claude/hooks/bash_guard.py` is a `PreToolUse` hook registered in `.claude/settings.json`. It gates what a permission prefix cannot express — a flag that arrives late, a command inside a wrapper — deciding on parsed argv per subcommand. Here it carries the standard git rules, docker's publish and host-global sweeps, `manage.py`'s two acts that reach outside this clone, and an `rm` that is silent only under the rebuildable directories.
+
+It is an instantiation of the template shipped at `skills/specify/references/handoff-assets/bash_guard.py`; everything above its `REGISTRY` banner is meant to stay identical to it, and improvements there are copied down by hand. `just test` runs its full case suite, and every commit runs `--liveness` — a hook that stops loading fails open silently, so it is gated twice.

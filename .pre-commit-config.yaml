@@ -1,6 +1,36 @@
-# All hooks run the tools installed in .venv by `make setup`, so the git hook
-# and `make check` share one toolchain and one set of versions.
+# Every check this repository runs.
+#
+# `just check` and the git hook installed by `just setup` both run these
+# definitions, so the two local runners cannot diverge. The local hooks use
+# the `.venv/` tools, whose versions are pinned in requirements.txt; the
+# upstream hooks are pinned by `rev:`.
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      # Structured-file well-formedness. check-json covers
+      # `.claude/settings.json`, check-yaml this file and the workflows.
+      - id: check-json
+      - id: check-yaml
+      # Repository hygiene.
+      # --enforce-all: without it the hook inspects only files staged as
+      # added, so it would always pass under `just check`, which stages
+      # nothing — a false green on the gate that matters.
+      - id: check-added-large-files
+        args: [--enforce-all]
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      # No key material, ever.
+      - id: detect-private-key
+      # Whitespace and line endings.
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
   - repo: local
     hooks:
       - id: ruff
@@ -13,9 +43,27 @@ repos:
         entry: .venv/bin/pymarkdown scan
         language: system
         types: [markdown]
-        exclude: ^LICENSE\.md$
       - id: lint-assets
         name: Claude asset frontmatter
         entry: .venv/bin/python scripts/lint-assets.py
         language: system
         files: ^(skills|agents|commands)/.*\.md$
+      # The guard fails open: if it stops loading, Claude Code logs the
+      # failure and proceeds to the permission rules, which are broad by
+      # design. Liveness is the lint half — executable bit, registry builds,
+      # rules well-formed, a payload still answered — and runs no behaviour
+      # cases; `just test` runs those. always_run, because a commit touching
+      # nothing under `.claude/` can still have broken it.
+      - id: bash-guard-liveness
+        name: bash guard liveness
+        entry: .claude/hooks/bash_guard.py --liveness
+        language: system
+        always_run: true
+        pass_filenames: false
+      # New artifact class: the justfile. Well-formedness is "just can parse
+      # it"; formatting is not enforced, `just --fmt` being unstable.
+      - id: justfile-parses
+        name: justfile parses
+        entry: just --summary --justfile
+        language: system
+        files: ^justfile$
