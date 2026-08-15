@@ -38,8 +38,11 @@ _SPEC.loader.exec_module(guard)
 
 def run_hook(payload, argv=()):
     """Feed the guard a payload the way the tool layer does."""
+    # Invoked by path, so the shebang and the exec bit are part of what is
+    # tested — that is how Claude Code runs it, and `python3 <file>` would
+    # stay green after either is lost.
     return subprocess.run(
-        [sys.executable, str(GUARD), *argv],
+        [str(GUARD), *argv],
         input=payload if isinstance(payload, str) else json.dumps(payload),
         capture_output=True,
         text=True,

@@ -68,7 +68,7 @@ check scope="all": _require-tooling
     printf '%s\0' "${files[@]}" | xargs -0 "{{ pre_commit }}" run --files
 
 # Is the implementation right?
-test:
+test: _require-tooling
     #!/usr/bin/env bash
     set -euo pipefail
     cd "{{ justfile_directory() }}"
@@ -83,7 +83,13 @@ test:
     .claude/hooks/bash_guard.py --selftest
     echo
     echo "── unit tests: manage.py, scripts/lint-assets.py ──"
-    python3 -m unittest discover --start-directory tests --top-level-directory .
+    # The venv interpreter, because what these test imports its
+    # dependencies from there — a system python3 that happens to have
+    # PyYAML passes here and fails on a clean machine, which is what CI is
+    # for. The guard above is the other way round on purpose: it must run
+    # under the interpreter Claude Code invokes it with.
+    "{{ venv }}/bin/python" -m unittest discover \
+        --start-directory tests --top-level-directory .
 
 # The whole-tree `check`, then `test`.
 verify: check test
