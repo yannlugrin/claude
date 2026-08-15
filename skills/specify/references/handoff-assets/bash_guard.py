@@ -601,8 +601,14 @@ MAX_NESTED_PATH = 3  # `docker compose run`
 
 def strip_heredocs(command: str) -> str:
     """Drop heredoc bodies, which are data — a commit message quoting a gated
-    command is not that command. Bodies fed to an interpreter stay: there the
-    text really is what runs.
+    command is not that command. A body fed to a *shell* stays: there the text
+    really is what runs.
+
+    A body fed to another language is dropped like any other data, on the same
+    reasoning that leaves `python3 -c` alone (WHAT THIS DOES NOT SEE): reading
+    Python as shell is guesswork, and it guesses wrong in the direction that
+    costs a refusal — a backtick inside a Python string is not a command
+    substitution, and a docstring naming a gated command is not that command.
 
     A kept body is only reachable because newlines separate commands: it lands
     as its own segment and is judged like any other. Without that it would
@@ -610,7 +616,11 @@ def strip_heredocs(command: str) -> str:
     behaviours are coupled — do not weaken one without checking the other.
     """
     for match in HEREDOC.finditer(command):
-        if INTERPRETER.search(command[: match.start()]):
+        before = command[: match.start()]
+        interpreter = None
+        for found in INTERPRETER.finditer(before):
+            interpreter = found.group(0)
+        if interpreter and interpreter in SHELL_RUNNERS:
             return command
     kept: list[str] = []
     delimiter: str | None = None
@@ -1040,6 +1050,30 @@ def matching_rules(tool: Tool, invocation: Invocation) -> list[Rule]:
     return matched
 
 
+def cited(tool: Tool, rule: Rule | None, invocation: Invocation) -> str:
+    """Name what decided, so a wrong verdict can be traced to a line of registry.
+
+    A reason says why the guard objects; this says *what it read* to get there
+    — the tool, the subcommand path, and the flag, assignment or operand that
+    matched. Without it a false positive is a sentence with nothing to grep
+    for, and the only way to find the rule is to read them all.
+    """
+    subject = " ".join((tool.name, *invocation.words[:3])).strip()
+    if rule is None:
+        return f"[{subject}: no proven-safe shape]"
+    hits: list[str] = []
+    if rule.flags:
+        hits += sorted(rule.flags & invocation.flags.keys())
+    if rule.env:
+        hits += sorted(rule.env & invocation.env.keys())
+    if rule.operands is not None:
+        operands = list(invocation.words[len(rule.path):])
+        matcher = rule.operands.matcher if isinstance(rule.operands, AnyOf) else rule.operands
+        hits += [o for o in operands if matches(matcher, o)]
+    where = " ".join(("rule", tool.name, *rule.path)).strip()
+    return f"[{where}{': ' + ', '.join(hits) if hits else ''}]"
+
+
 def judge(tool: Tool, invocation: Invocation) -> tuple[str, str] | None:
     """Strongest verdict for one invocation: deny, then ask, then allow.
 
@@ -1054,7 +1088,7 @@ def judge(tool: Tool, invocation: Invocation) -> tuple[str, str] | None:
             invocation.globals_seen <= rule.allow_globals
         ):
             continue  # a global we have not accounted for: no grant
-        verdicts.append((rule.verdict, rule.reason))
+        verdicts.append((rule.verdict, f"{rule.reason} {cited(tool, rule, invocation)}"))
     # The verdict for an invocation nothing matched. Set explicitly, it holds
     # whether or not the tool declares grants — which is how "everything here
     # is the operator's" is said without inventing an empty grant list.
@@ -1062,7 +1096,7 @@ def judge(tool: Tool, invocation: Invocation) -> tuple[str, str] | None:
     # has them and was not granted.
     gated = tool.gated_verdict or ("ask" if tool.grants is not None else None)
     if gated is not None and (tool.grants is None or not is_granted(tool, invocation)):
-        verdicts.append((gated, tool.gated_reason))
+        verdicts.append((gated, f"{tool.gated_reason} {cited(tool, None, invocation)}"))
     for rank in ("deny", "ask", "allow"):
         for verdict in verdicts:
             if verdict[0] == rank:
@@ -1880,6 +1914,12 @@ ENGINE_CASES: tuple[tuple[str, str], ...] = (
     ('stubtool --syntax-check "$(stubtool wipe)"', "deny"),
     ("echo '$(stubtool wipe)'", "silent"),  # literal: the shell runs nothing
     ("echo '`stubtool wipe`'", "silent"),
+    # A heredoc fed to a *shell* is what runs, so it is judged; one fed to
+    # another language is program text, and reading it as shell guesses wrong
+    # in the direction that costs a refusal.
+    ("bash <<'SH'\nstubtool wipe\nSH", "deny"),
+    ("python3 - <<'PY'\nnote = \"see `stubtool wipe` for why\"\nPY", "silent"),
+    ("python3 - <<'PY'\ns = s.replace(\"stubtool wipe\", \"x\")\nPY", "silent"),
     ('echo "$(stubtool --syntax-check a.yml)"', "silent"),  # nothing gated inside
     ('echo "$(echo $(stubtool wipe))"', "deny"),  # parentheses are counted
     ('echo "no substitution here"', "silent"),
