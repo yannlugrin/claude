@@ -79,7 +79,11 @@ test:
     # exercises the path Claude Code uses: the shebang and the exec bit.
     # `python3 <file>` would stay green after a lost `+x`, which is one of
     # the ways the guard silently stops running.
+    echo "── bash guard: liveness, cases, rule coverage ──"
     .claude/hooks/bash_guard.py --selftest
+    echo
+    echo "── unit tests: manage.py, scripts/lint-assets.py ──"
+    python3 -m unittest discover --start-directory tests --top-level-directory .
 
 # The whole-tree `check`, then `test`.
 verify: check test
