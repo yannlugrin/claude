@@ -2,15 +2,17 @@
 """Validate the YAML frontmatter of Claude Code asset files.
 
 Rules, per asset kind (derived from the path):
-  skills/<name>/SKILL.md  — frontmatter required, with a non-empty `description`;
-                            a `name` field, if present, must match the directory;
-                            and none of the keys under INERT_SKILL_KEYS.
+  skills/<name>/SKILL.md  — frontmatter required, with a non-empty
+                            `description`; a `name` field, if present,
+                            matching the directory; and none of the keys
+                            under INERT_SKILL_KEYS.
   skills/<name>/**        — any file in a skill directory: its frontmatter must
                             parse if it has any, and a `SKILL.md` must exist
                             beside it — a directory without one is not a skill.
   agents/<name>.md        — frontmatter required, with non-empty `name` and
                             `description`.
-  commands/<name>.md      — frontmatter optional, but must be valid YAML if present.
+  commands/<name>.md      — frontmatter optional, but valid YAML when
+                            present.
 
 Everything here guards a silent failure: malformed frontmatter does not raise
 at load time, the asset simply never loads.
@@ -31,12 +33,12 @@ ASSET_KINDS = ("skills", "agents", "commands", "hooks")
 # Skill frontmatter keys that look like they do something and do not. Measured
 # on Claude Code 2.1.231–2.1.233; re-measure before removing an entry.
 INERT_SKILL_KEYS = {
-    "allowed-tools": "restricts nothing — a skill's allowlist is not enforced, "
-                     "so it reads as a guard while being none",
+    "allowed-tools": "restricts nothing — a skill's allowlist is not "
+    "enforced, so it reads as a guard while being none",
     "disallowed-tools": "binds for the whole turn that invoked the skill and "
-                        "never prompts, stranding the rest of that turn",
+    "never prompts, stranding the rest of that turn",
     "when_to_use": "is not a key Claude Code defines; put it in `description` "
-                   "and restate it in the body",
+    "and restate it in the body",
 }
 
 
@@ -68,7 +70,9 @@ def relative_to_repo(path: Path) -> Path | None:
 def check(path: Path) -> list[str]:
     inside = relative_to_repo(path)
     if inside is None:
-        return [f"outside the repository ({REPO_ROOT}), so no rules apply to it"]
+        return [
+            f"outside the repository ({REPO_ROOT}), so no rules apply to it"
+        ]
     kind = inside.parts[0] if len(inside.parts) > 1 else None
     if kind is not None and kind not in ASSET_KINDS:
         kind = None
@@ -81,8 +85,8 @@ def check(path: Path) -> list[str]:
         skill_dir = REPO_ROOT / "skills" / inside.parts[1]
         if len(inside.parts) > 2 and not (skill_dir / "SKILL.md").exists():
             errors.append(
-                f"`skills/{inside.parts[1]}/` has no SKILL.md, so it is not a skill "
-                "and nothing in it loads"
+                f"`skills/{inside.parts[1]}/` has no SKILL.md, so it is "
+                "not a skill and nothing in it loads"
             )
         if path.name != "SKILL.md":
             return errors  # supporting file, nothing else to validate
@@ -93,14 +97,17 @@ def check(path: Path) -> list[str]:
         name = frontmatter.get("name")
         if name is not None and name != path.parent.name:
             errors.append(
-                f"frontmatter `name: {name}` does not match directory `{path.parent.name}`"
+                f"frontmatter `name: {name}` does not match directory "
+                f"`{path.parent.name}`"
             )
         for key, why in INERT_SKILL_KEYS.items():
             if key in frontmatter:
                 errors.append(f"frontmatter key `{key}` {why}")
     elif kind == "agents":
         if frontmatter is None:
-            return ["missing frontmatter (an agent needs `name` and `description`)"]
+            return [
+                "missing frontmatter (an agent needs `name` and `description`)"
+            ]
         for field in ("name", "description"):
             if not str(frontmatter.get(field) or "").strip():
                 errors.append(f"frontmatter needs a non-empty `{field}`")

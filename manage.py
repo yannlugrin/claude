@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Enable/disable Claude Code assets from this repo by symlinking them into a
-Claude config directory (~/.claude by default, or a project's .claude via --target).
+Claude config directory: ~/.claude by default, or a project's .claude
+with --target.
 
 Usage:
   ./manage.py status
@@ -22,9 +23,9 @@ DEFAULT_TARGET = Path.home() / ".claude"
 
 @dataclass(frozen=True)
 class Asset:
-    kind: str        # skills | agents | commands | hooks
-    name: str        # selection name (file stem or directory name)
-    source: Path     # absolute path inside the repo
+    kind: str  # skills | agents | commands | hooks
+    name: str  # selection name (file stem or directory name)
+    source: Path  # absolute path inside the repo
 
     @property
     def qualified(self) -> str:
@@ -67,8 +68,10 @@ def select(assets: list[Asset], selectors: list[str]) -> list[Asset]:
         else:
             matches = [a for a in assets if a.name == sel]
         if not matches:
-            sys.exit(f"error: no asset named '{sel}'"
-                     f" (run './manage.py status' to list assets)")
+            sys.exit(
+                f"error: no asset named '{sel}'"
+                f" (run './manage.py status' to list assets)"
+            )
         if len(matches) > 1:
             options = ", ".join(a.qualified for a in matches)
             sys.exit(f"error: '{sel}' is ambiguous, qualify it: {options}")
@@ -84,8 +87,11 @@ def enable(asset: Asset, target: Path, force: bool) -> str:
     if current == "conflict":
         if not (force and link.is_symlink()):
             what = "foreign symlink" if link.is_symlink() else "real file"
-            hint = " (use --force to replace)" if link.is_symlink() else \
-                   " (refusing to touch a real file; move it away yourself)"
+            hint = (
+                " (use --force to replace)"
+                if link.is_symlink()
+                else " (refusing to touch a real file; move it away yourself)"
+            )
             return f"  ! {asset.qualified} blocked by {what} at {link}{hint}"
         link.unlink()
     link.parent.mkdir(parents=True, exist_ok=True)
@@ -100,7 +106,9 @@ def disable(asset: Asset, target: Path) -> str:
         return f"  = {asset.qualified} already disabled"
     if current == "conflict":
         what = "foreign symlink" if link.is_symlink() else "real file"
-        return f"  ! {asset.qualified} not ours ({what} at {link}), left in place"
+        return (
+            f"  ! {asset.qualified} not ours ({what} at {link}), left in place"
+        )
     link.unlink()
     return f"  - {asset.qualified} disabled"
 
@@ -112,8 +120,12 @@ def cmd_status(assets: list[Asset], target: Path) -> None:
     print(f"target: {target}")
     width = max(len(a.qualified) for a in assets)
     for asset in assets:
-        marker = {"enabled": "*", "disabled": " ", "conflict": "!"}[state(asset, target)]
-        print(f"  [{marker}] {asset.qualified:<{width}}  {state(asset, target)}")
+        marker = {"enabled": "*", "disabled": " ", "conflict": "!"}[
+            state(asset, target)
+        ]
+        print(
+            f"  [{marker}] {asset.qualified:<{width}}  {state(asset, target)}"
+        )
 
 
 def main() -> None:
@@ -121,20 +133,35 @@ def main() -> None:
         description=__doc__.splitlines()[0],
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--target", type=Path, default=DEFAULT_TARGET,
-                        help="Claude config directory to link into (default: ~/.claude)")
+    parser.add_argument(
+        "--target",
+        type=Path,
+        default=DEFAULT_TARGET,
+        help="Claude config directory to link into (default: ~/.claude)",
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
     sub.add_parser("status", help="list assets and whether they are enabled")
 
     for verb in ("enable", "disable"):
-        p = sub.add_parser(verb, help=f"{verb} assets ({verb} --all or by name)")
-        p.add_argument("names", nargs="*", metavar="name",
-                       help="asset name, or kind/name if ambiguous")
-        p.add_argument("--all", action="store_true", help=f"{verb} every asset")
+        p = sub.add_parser(
+            verb, help=f"{verb} assets ({verb} --all or by name)"
+        )
+        p.add_argument(
+            "names",
+            nargs="*",
+            metavar="name",
+            help="asset name, or kind/name if ambiguous",
+        )
+        p.add_argument(
+            "--all", action="store_true", help=f"{verb} every asset"
+        )
         if verb == "enable":
-            p.add_argument("--force", action="store_true",
-                           help="replace a foreign symlink occupying the link path")
+            p.add_argument(
+                "--force",
+                action="store_true",
+                help="replace a foreign symlink occupying the link path",
+            )
 
     args = parser.parse_args()
     target = args.target.expanduser().resolve()

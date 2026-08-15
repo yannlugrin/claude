@@ -41,7 +41,9 @@ class RepoFixture(unittest.TestCase):
 
     def asset(self, qualified: str) -> manage.Asset:
         kind, _, name = qualified.partition("/")
-        return next(a for a in manage.discover() if a.kind == kind and a.name == name)
+        return next(
+            a for a in manage.discover() if a.kind == kind and a.name == name
+        )
 
 
 class TestDiscover(RepoFixture):
@@ -50,16 +52,22 @@ class TestDiscover(RepoFixture):
         self.assertEqual(found, {"skills/demo", "agents/helper"})
 
     def test_skips_dotfiles(self):
-        self.assertNotIn("agents/.hidden", {a.qualified for a in manage.discover()})
+        self.assertNotIn(
+            "agents/.hidden", {a.qualified for a in manage.discover()}
+        )
 
-    def test_name_is_the_stem_for_files_and_the_directory_name_for_directories(self):
+    def test_name_is_the_stem_for_files_and_the_directory_name_for_directories(
+        self,
+    ):
         self.assertEqual(self.asset("agents/helper").source.name, "helper.md")
         self.assertEqual(self.asset("skills/demo").source.name, "demo")
 
 
 class TestState(RepoFixture):
     def test_disabled_when_nothing_is_there(self):
-        self.assertEqual(manage.state(self.asset("skills/demo"), self.target), "disabled")
+        self.assertEqual(
+            manage.state(self.asset("skills/demo"), self.target), "disabled"
+        )
 
     def test_enabled_when_the_link_points_into_this_repo(self):
         asset = self.asset("skills/demo")
@@ -100,7 +108,9 @@ class TestEnable(RepoFixture):
     def test_is_idempotent(self):
         asset = self.asset("skills/demo")
         manage.enable(asset, self.target, force=False)
-        self.assertIn("already enabled", manage.enable(asset, self.target, force=False))
+        self.assertIn(
+            "already enabled", manage.enable(asset, self.target, force=False)
+        )
 
     def test_refuses_a_real_file_and_leaves_it_untouched(self):
         asset = self.asset("agents/helper")

@@ -1,0 +1,23 @@
+# ruff configuration (Python lint).
+#
+# Same rules and width as the other projects here: a lint that differs per
+# repository is one you re-learn every time you switch.
+line-length = 79
+# pre-commit passes filenames explicitly, and ruff honours `exclude` and
+# per-file ignores for those only when this is set.
+force-exclude = true
+
+[lint]
+# Defaults (E4/E7/E9, F) plus: full pycodestyle, isort, bugbear,
+# pyupgrade, and flake8-simplify.
+select = ["E", "W", "F", "I", "B", "UP", "SIM"]
+
+[lint.per-file-ignores]
+# The Bash guard is written at 88 columns and stays there. It ships to other
+# projects, where it is vendored and refreshed from this copy by hand, so its
+# width is a property of the file rather than of any one repository — and
+# reflowing it to 79 costs more than it buys: the formatter explodes a
+# nine-word set into eleven lines and strands the comments that explain each
+# dataclass field after a closing paren. Every other rule still applies to it.
+"skills/specify/references/handoff-assets/bash_guard.py" = ["E501"]
+".claude/hooks/bash_guard.py" = ["E501"]

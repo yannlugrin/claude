@@ -31,7 +31,9 @@ class TestParseFrontmatter(unittest.TestCase):
         self.assertIsNone(error)
 
     def test_a_closed_block_parses(self):
-        data, error = lint_assets.parse_frontmatter("---\nname: x\n---\nbody\n")
+        data, error = lint_assets.parse_frontmatter(
+            "---\nname: x\n---\nbody\n"
+        )
         self.assertEqual(data, {"name": "x"})
         self.assertIsNone(error)
 
@@ -76,7 +78,9 @@ class CheckFixture(unittest.TestCase):
 
 class TestSkills(CheckFixture):
     def test_a_well_formed_skill_passes(self):
-        path = self.write("skills/demo/SKILL.md", "---\ndescription: does a thing\n---\n")
+        path = self.write(
+            "skills/demo/SKILL.md", "---\ndescription: does a thing\n---\n"
+        )
         self.assertEqual(lint_assets.check(path), [])
 
     def test_missing_frontmatter_is_reported(self):
@@ -84,7 +88,9 @@ class TestSkills(CheckFixture):
         self.assertIn("missing frontmatter", lint_assets.check(path)[0])
 
     def test_an_empty_description_is_reported(self):
-        path = self.write("skills/demo/SKILL.md", "---\ndescription: '   '\n---\n")
+        path = self.write(
+            "skills/demo/SKILL.md", "---\ndescription: '   '\n---\n"
+        )
         self.assertIn("non-empty `description`", lint_assets.check(path)[0])
 
     def test_a_name_disagreeing_with_the_directory_is_reported(self):
@@ -101,12 +107,16 @@ class TestSkills(CheckFixture):
 
     def test_a_supporting_file_is_not_held_to_the_entrypoint_contract(self):
         self.write("skills/demo/SKILL.md", "---\ndescription: x\n---\n")
-        path = self.write("skills/demo/references/notes.md", "no frontmatter\n")
+        path = self.write(
+            "skills/demo/references/notes.md", "no frontmatter\n"
+        )
         self.assertEqual(lint_assets.check(path), [])
 
     def test_a_supporting_file_with_broken_frontmatter_is_still_reported(self):
         self.write("skills/demo/SKILL.md", "---\ndescription: x\n---\n")
-        path = self.write("skills/demo/references/notes.md", "---\nname: [oops\n---\n")
+        path = self.write(
+            "skills/demo/references/notes.md", "---\nname: [oops\n---\n"
+        )
         self.assertIn("invalid YAML", lint_assets.check(path)[0])
 
 
@@ -140,14 +150,16 @@ class TestInertSkillKeys(CheckFixture):
 
     def test_when_to_use_is_reported(self):
         path = self.write(
-            "skills/demo/SKILL.md", "---\ndescription: x\nwhen_to_use: sometimes\n---\n"
+            "skills/demo/SKILL.md",
+            "---\ndescription: x\nwhen_to_use: sometimes\n---\n",
         )
         self.assertIn("`when_to_use`", lint_assets.check(path)[0])
 
     def test_an_agent_may_still_declare_tools(self):
         """`tools:` binds for agents; only skills are lied to."""
         path = self.write(
-            "agents/helper.md", "---\nname: helper\ndescription: x\ntools: Read\n---\n"
+            "agents/helper.md",
+            "---\nname: helper\ndescription: x\ntools: Read\n---\n",
         )
         self.assertEqual(lint_assets.check(path), [])
 
@@ -164,7 +176,9 @@ class TestOutsideTheRepository(CheckFixture):
 
 class TestAgents(CheckFixture):
     def test_a_well_formed_agent_passes(self):
-        path = self.write("agents/helper.md", "---\nname: helper\ndescription: x\n---\n")
+        path = self.write(
+            "agents/helper.md", "---\nname: helper\ndescription: x\n---\n"
+        )
         self.assertEqual(lint_assets.check(path), [])
 
     def test_missing_frontmatter_is_reported(self):
@@ -197,7 +211,9 @@ class TestMain(CheckFixture):
         self.assertIn("missing frontmatter", out.getvalue())
 
     def test_exit_status_is_zero_when_every_file_passes(self):
-        self.write("agents/helper.md", "---\nname: helper\ndescription: x\n---\n")
+        self.write(
+            "agents/helper.md", "---\nname: helper\ndescription: x\n---\n"
+        )
         self.assertEqual(lint_assets.main(["agents/helper.md"]), 0)
 
 
