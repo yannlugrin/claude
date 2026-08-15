@@ -68,6 +68,60 @@ Before adding a second one, satisfy yourself that no expansion of the granted
 command can become a path or a command. If it can, the answer is silence.
 
 
+HOW A VERDICT IS REACHED
+------------------------
+
+Each command in a line is judged on its own, and the strongest verdict in the
+line wins: deny, then ask, then allow, then silence. Within one invocation:
+
+* a **Rule** that matches contributes its verdict — deny, ask or allow — and
+  rules are consulted whether or not the tool declares grants;
+* a **Grant** that matches contributes nothing: it is the absence of an
+  objection, which is what silence means here;
+* if nothing else applied, **`gated_verdict`** is contributed — the tool's
+  answer for an invocation nothing matched;
+* if that leaves nothing, the guard stays silent and the permission rules and
+  the current mode decide.
+
+`gated_verdict` set holds whether or not the tool declares grants, which is how
+"everything here is the operator's" is said — a tool with no grants and
+`gated_verdict="deny"` refuses every invocation, with its reason. Left unset it
+derives: silent for a tool with no grants, `ask` for one that declares grants
+and was not granted. So the common shapes need nothing: git and docker declare
+rules and stay silent elsewhere; a deploy tool declares grants and asks
+elsewhere; and a project that has decided unproven means refused says
+`gated_verdict="deny"` once.
+
+Two cases follow from that and are worth stating, because both look like holes
+and neither is:
+
+*Rules but no grants, and no rule matched* — silence. That is the safe-by-
+default model working: the acts worth naming are named, everything else falls
+through to the permission rules. git and docker are this shape.
+
+*Neither rules nor grants* — silence, always. Such an entry exists for a
+different job: it declares `nested`, so the guard can walk through it to the
+command it runs, or it names aliases. Every shell wrapper is this shape.
+
+`--liveness` checks the pair rather than the shape: a `gated_verdict` that is
+not a real verdict, or one set with no `gated_reason` — a refusal that says
+nothing is worse than none, since the reader cannot tell a rule from a bug.
+
+A worked example, because the interaction is the part that misleads. With
+`gated_verdict="deny"` and a grant on "any operand is a read verb", a deny
+*rule* for write verbs looks redundant — a write-only command matches no grant
+and is denied already, and `osmp server list && osmp server delete x` is
+denied on its second invocation, since each is judged alone. It is not
+redundant for one case: an operand that is a read verb without being a verb.
+
+    openstack server delete list        # a server named "list"
+
+The grant sees `list`, holds, and the command goes silent. Only a rule reading
+"a write verb sits in this command" catches it. That is the whole of what such
+a rule buys once judging is per-invocation, and it is worth its line where the
+tool reaches real infrastructure.
+
+
 CHOOSING A RULE KIND
 --------------------
 
@@ -375,7 +429,8 @@ class Rule:
     verdict: str  # "deny" | "ask" | "allow"
     path: tuple[str, ...]
     reason: str
-    flags: frozenset[str] | None = None  # None: the path alone is the act
+    flags: frozenset[str] | None = None
+    operands: Matcher | AnyOf | None = None  # None: the path alone is the act
     env: frozenset[str] | None = None  # None: no environment condition
     allow_globals: frozenset[str] = frozenset()  # allow rules only
 
@@ -509,6 +564,7 @@ class Tool:
     rules: tuple[Rule, ...] = ()
     # Declaring grants makes the tool gated: dangerous unless a grant holds.
     grants: tuple[Grant, ...] | None = None
+    gated_verdict: str | None = None  # verdict when nothing matched; see below
     gated_reason: str = ""  # shown in the prompt; say how to satisfy a grant
     known_flags: frozenset[str] = frozenset()  # closed world, gated tools only
     known_env: frozenset[str] = frozenset()  # closed world for assignments
@@ -842,10 +898,43 @@ def parse(tool: Tool, args: list[str], env: dict[str, str]) -> Invocation:
     )
 
 
+class AnyOf:
+    """Wraps an operand matcher to mean *at least one*, not *every*.
+
+    The quantifier cannot live in the matcher — a matcher sees one value at a
+    time — so it is carried here and unwrapped where operands are compared.
+    Use it where the deciding token can sit anywhere among the operands, as a
+    verb does in `openstack server list`: the position varies with the noun,
+    and `security group rule list` puts it fourth.
+    """
+
+    __slots__ = ("matcher",)
+
+    def __init__(self, matcher: Matcher) -> None:
+        self.matcher = matcher
+
+
+def any_of(matcher: Matcher) -> AnyOf:
+    """`operands=any_of(READ_VERBS)`: one operand matching is enough."""
+    return AnyOf(matcher)
+
+
 def matches(matcher: Matcher, value: str) -> bool:
     if isinstance(matcher, re.Pattern):
         return matcher.match(value) is not None
     return bool(matcher(value))
+
+
+def operands_match(matcher, operands: list[str]) -> bool:
+    """Compare operands against a matcher, honouring `any_of`.
+
+    Empty operands never match: a matcher on operands is a statement about
+    what the command acts on, and a command acting on nothing has not proven
+    it.
+    """
+    quantify = any if isinstance(matcher, AnyOf) else all
+    matcher = matcher.matcher if isinstance(matcher, AnyOf) else matcher
+    return bool(operands) and quantify(matches(matcher, o) for o in operands)
 
 
 def under(*locations: str | re.Pattern[str]) -> Callable[[str], bool]:
@@ -909,7 +998,7 @@ def grant_holds(grant: Grant, invocation: Invocation) -> bool:
     if not grant.allow_operands and operands:
         return False
     if grant.operands is not None:
-        return bool(operands) and all(matches(grant.operands, o) for o in operands)
+        return operands_match(grant.operands, operands)
     return True
 
 
@@ -943,6 +1032,10 @@ def matching_rules(tool: Tool, invocation: Invocation) -> list[Rule]:
             continue
         if rule.env is not None and not (rule.env & invocation.env.keys()):
             continue
+        if rule.operands is not None and not operands_match(
+            rule.operands, list(invocation.words[len(rule.path):])
+        ):
+            continue
         matched.append(rule)
     return matched
 
@@ -962,8 +1055,14 @@ def judge(tool: Tool, invocation: Invocation) -> tuple[str, str] | None:
         ):
             continue  # a global we have not accounted for: no grant
         verdicts.append((rule.verdict, rule.reason))
-    if tool.grants is not None and not is_granted(tool, invocation):
-        verdicts.append(("ask", tool.gated_reason))
+    # The verdict for an invocation nothing matched. Set explicitly, it holds
+    # whether or not the tool declares grants — which is how "everything here
+    # is the operator's" is said without inventing an empty grant list.
+    # Unset, it derives: silent for a tool with no grants, ask for one that
+    # has them and was not granted.
+    gated = tool.gated_verdict or ("ask" if tool.grants is not None else None)
+    if gated is not None and (tool.grants is None or not is_granted(tool, invocation)):
+        verdicts.append((gated, tool.gated_reason))
     for rank in ("deny", "ask", "allow"):
         for verdict in verdicts:
             if verdict[0] == rank:
@@ -1468,6 +1567,31 @@ CASES: tuple[tuple[str, str], ...] = (
 
 STUB_SAFE_FILE = re.compile(r"^(?:.*/)?validates?\.ya?ml$")
 
+STUB_READ_VERBS = re.compile(r"^(list|show|catalog)$")
+STUB_WRITE_VERBS = re.compile(r"^(create|delete|set)$")
+
+# A second fixture, for the shapes the first cannot express: a verb that can
+# sit anywhere among the operands, and a tool whose unproven case is a denial
+# rather than a prompt.
+STUBCLI = Tool(
+    name="stubcli",
+    gated_verdict="deny",
+    gated_reason="stub: only a demonstrable read is free here",
+    grants=(Grant(operands=any_of(STUB_READ_VERBS)),),
+    rules=(
+        Rule("deny", (), "stub: a write verb sits in this command",
+             operands=any_of(STUB_WRITE_VERBS)),
+    ),
+)
+
+# Nothing here is ever silent: no grants, no rules, one verdict. The shape a
+# tool takes when every use of it is the operator's.
+STUBALWAYS = Tool(
+    name="stubalways",
+    gated_verdict="deny",
+    gated_reason="stub: every use of this one is the operator's",
+)
+
 STUB = Tool(
     name="stubtool",
     # A second name for the same tool, so alias indexing is exercised.
@@ -1646,6 +1770,21 @@ ENGINE_CASES: tuple[tuple[str, str], ...] = (
     # to list it there, not to guess from a name appearing in the line, which
     # would gate the second case too.
     ("myrunner stubtool wipe", "silent"),
+    # --- any_of, and a gated tool whose unproven case is a denial ----------
+    ("stubcli server list", "silent"),  # the verb sits second
+    ("stubcli security group rule list", "silent"),  # …and here, fourth
+    ("stubcli catalog list", "silent"),
+    ("stubcli server delete x", "deny"),  # no read verb: not a proven shape
+    ("stubcli server frobnicate x", "deny"),  # unknown is gated, not silent
+    ("stubcli", "deny"),  # a matcher on operands needs operands
+    ("stubcli server list && stubcli server delete x", "deny"),  # judged apart
+    # the one case the deny rule buys once judging is per-invocation: a read
+    # verb that is a name rather than a verb
+    ("stubcli server delete list", "deny"),
+    # gated_verdict without grants: the tool that is always the operator's
+    ("stubalways anything at all", "deny"),
+    ("stubalways", "deny"),
+    ("sudo stubalways --help", "deny"),  # a wrapper does not launder it
     ("grep stubtool README.md", "silent"),
     ("ls ../stubtool", "silent"),
     ("cat docs/env", "silent"),  # `env` is a wrapper name, and also a filename
@@ -1773,10 +1912,10 @@ def uncovered_rules() -> int:
     global AUDIT
     AUDIT = set()
     try:
-        for cases, tools in ((CASES, TOOLS), (ENGINE_CASES, registry(STUB))):
+        for cases, tools in ((CASES, TOOLS), (ENGINE_CASES, registry(STUB, STUBCLI, STUBALWAYS))):
             for command, _ in cases:
                 decide_bash(command, tools)
-        tools = (*TOOLS.values(), STUB)
+        tools = (*TOOLS.values(), STUB, STUBCLI, STUBALWAYS)
         declared = {rule for tool in tools for rule in tool.rules}
         declared |= {grant for tool in tools for grant in tool.grants or ()}
         missing = declared - AUDIT
@@ -1826,6 +1965,13 @@ def liveness() -> int:
             if rule.verdict == "allow" and tool.grants is None and not rule.flags:
                 problems.append(f"{where}: an unconditional allow on a tool with no "
                                 "grants waives the sandbox for the whole tool")
+        if tool.gated_verdict is not None:
+            if tool.gated_verdict not in VERDICTS:
+                problems.append(f"{name}: gated_verdict {tool.gated_verdict!r} is "
+                                f"not one of {sorted(VERDICTS)}")
+            if not tool.gated_reason.strip():
+                problems.append(f"{name}: gated_verdict with no gated_reason, so "
+                                "the prompt or refusal would say nothing")
         for grant in tool.grants or ():
             if not (grant.path or grant.operands or grant.require_any
                     or grant.flag_values):
@@ -1853,7 +1999,7 @@ def liveness() -> int:
     for problem in problems:
         print(f"DEAD  {problem}")
     tools = set(TOOLS.values())
-    gated = [t for t in tools if t.rules or t.grants]
+    gated = [t for t in tools if t.rules or t.grants or t.gated_verdict]
     declared = sum(len(t.rules) + len(t.grants or ()) for t in gated)
     print(f"liveness: {len(gated)} gated tools, {declared} rules and grants, "
           f"{len(tools) - len(gated)} wrappers, "
@@ -1864,7 +2010,7 @@ def liveness() -> int:
 def selftest() -> int:
     failures = liveness()
     failures += run(CASES, TOOLS, "registry")
-    failures += run(ENGINE_CASES, registry(STUB), "engine")
+    failures += run(ENGINE_CASES, registry(STUB, STUBCLI, STUBALWAYS), "engine")
     failures += uncovered_rules()
     return 1 if failures else 0
 
