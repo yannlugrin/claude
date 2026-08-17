@@ -141,12 +141,16 @@ bootstrap are findings.
 Project: <one line, from §1 of the specification>
 Specification: <repository-relative path(s) — one document, or the root
 document and each per-component document, each with what it covers>
-Expected HEAD: <commit hash>
+Expected HEAD: <commit hash>, on branch <branch name>
 
 Read the specification from the repository you are working in. Verify
 first that your checkout is at the expected commit, and correct it before
 reading anything: an isolated worktree is not reliably at the commit you
-were given, and a review of superseded text is worse than no review.
+were given, and a review of superseded text is worse than no review. The
+branch is named because a repository carrying several lines of work
+materializes plausible wrong checkouts — a sibling branch's tip reads as
+a real project, not as an error, and the commit hash is the only thing
+that distinguishes them.
 Repository state is not yours to derive from git either — whether a file
 is tracked, what the remote is, what the last commit changed: take such
 facts from this block or verify them on disk, never from `git ls-files`

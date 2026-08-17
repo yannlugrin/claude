@@ -28,7 +28,9 @@ never hides what it wraps.
 Decisions: **deny** what has no authorized use, **ask** for anything that
 writes outward or destroys work, stay silent otherwise. Silence is not approval
 — it hands the call back to the permission rules and the current permission
-mode, which under `auto` or `bypassPermissions` will approve. There is also one
+mode, and what that mode then does with an unmatched command (prompt,
+auto-approve, judge by classifier) is a property of the installed version,
+probed at instantiation, never assumed from this docstring. There is also one
 **allow**, which is the exception the next section is about.
 
 
@@ -61,7 +63,8 @@ opinion, and `allow_globals` withholds it if any global option was used.
 The reason it is worth having at all: Claude Code prompts on *any* line
 containing a substitution, no permission rule can lift that, and the system
 prompt pushes Claude toward writing them. Without the grant that prompt is
-unavoidable and constant, which is how operators end up in `auto` mode — where
+unavoidable and constant, which is how operators end up in a looser
+permission mode — where
 the sandbox is gone for everything, not just for one proven shape.
 
 Before adding a second one, satisfy yourself that no expansion of the granted
@@ -184,10 +187,13 @@ accordingly:
     costs extra prompts; under `Bash(git:*)` it costs an unprompted
     `git push --force`. The broad allow and the deny list are a package.
 
-5.  **Mind the permission mode.** Under `default`, a command matching no rule
-    prompts, so the guard's silence is backed by a prompt. Under `auto` or
-    `bypassPermissions`, no rule means auto-approved and the guard's asks are
-    the only gate left — which is exactly when the grants carry real weight.
+5.  **Mind the permission mode.** In a mode that prompts on unmatched
+    commands, the guard's silence is backed by a prompt; in a mode that
+    suppresses or delegates that prompt, the guard's asks may be the only
+    gate left — which is exactly when the grants carry real weight. The
+    mode list and each mode's actual unmatched-command behavior belong to
+    the installed version: probe and record them, never take them from
+    this docstring.
 
 A minimal pairing for the default registry, which carries git and docker.
 Add one allow line per tool the project puts in the registry:

@@ -24,9 +24,14 @@ tools: Read, Bash, Write
 >
 > The gated set is **not** a placeholder: cite rule 9 rather than
 > restating it. Two instantiated agents that each carried their own copy
-> were measured drifting apart inside one step, and a probe confirmed
-> `CLAUDE.md` reaches every subagent's context — so the copy is both
-> avoidable and the thing that goes stale. What the body adds is only
+> were measured drifting apart inside one step, and a probe in the
+> project that produced this template confirmed `CLAUDE.md` reaches
+> every subagent's context — so the copy is both
+> avoidable and the thing that goes stale. Re-probe here (the step-002
+> probe of the ground rules) rather than trusting that result; if it
+> fails, the pre-committed response is the reverse form: inline the
+> gated set in this body, logged with its single-source-of-truth cost,
+> never a citation to a rule this agent cannot read. What the body adds is only
 > what rule 9 cannot say: that a subagent, having no exchange to be
 > gated in, treats the gated set as forbidden outright.
 >

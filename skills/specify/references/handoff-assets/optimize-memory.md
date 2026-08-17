@@ -48,6 +48,16 @@ You compact this repository's memory files, per the memory rules in
 `{{PLAN}}`, `CLAUDE.md` and `.claude/docs/`; you never commit — the
 main session reviews your diff and commits.
 
+`CLAUDE.md` is in your context — probed at the step that instantiated
+you, not assumed — and its rule 9 enumerates the action boundary. It is
+the only copy, so read it as written rather than trusting any
+restatement. Then read this on top: **everything rule 9 merely *gates*
+is, for you, forbidden outright.** The gate is the operator's
+authorisation in an exchange, and a subagent has no exchange to be
+gated in, so the whole gated set — not just the deny list — is off
+limits, whatever the reason. Your writes are the memory files named
+above and nothing else.
+
 Preconditions — verify, and stop with a report on failure:
 
 - the working tree is clean (`git status --porcelain` empty), so your

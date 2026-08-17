@@ -17,13 +17,15 @@ handoff review rounds produced — is the raw material for the rest.
 
 ## Index
 
-Empty, and that is a state rather than a gap: **everything through U-021 is
-applied in every project that exists**, and the entries themselves are in git
-history — `git log -- skills/specify/references/updates/` reaches them, which
-is where a citation like "adopted through U-021" resolves.
+**Everything through U-021 is applied in every project that exists**, and
+those entries are in git history rather than here — `git log --
+skills/specify/references/updates/` reaches them, which is where a citation
+like "adopted through U-021" resolves. What follows is what accumulated
+since; it empties again when the last project running an older doctrine has
+been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-022**. The index
-resumes with it, one revision section per date:
+Ids are permanent and never reused, so the next entry is **U-034**. One
+revision section per date:
 
 ```text
 ### [YYYY-MM-DD](updates/YYYY-MM-DD.md) — what this revision was about
@@ -32,6 +34,23 @@ resumes with it, one revision section per date:
 | ----- | ---------- | ----- |
 | U-0NN | running    | …     |
 ```
+
+### [2026-08-17](updates/2026-08-17.md) — handoff findings from one project's third handoff iteration
+
+| Id    | Applies to  | Title |
+| ----- | ----------- | ----- |
+| U-022 | running     | Permission-mode names read from the harness, never asserted |
+| U-023 | running     | The close-ritual track rule needs a carrier past bootstrap (multi-track only) |
+| U-024 | running     | A named task runner obliges the no-gated-act invariant |
+| U-025 | running     | One step's change is the previous `step-*` tag of any track (multi-track only) |
+| U-026 | running     | `.claude/worktrees/` stays ignored across the handoff |
+| U-027 | spec phase  | The reviewer context block names the expected branch |
+| U-028 | spec phase  | The compression pass reports its delta |
+| U-029 | running     | `.claude/refs/` is excluded from the check harness (projects with references) |
+| U-030 | running     | The memory-compaction agent carries the action boundary |
+| U-031 | running     | Agent templates order a re-probe rather than citing an old result |
+| U-032 | spec phase  | Triage verifies reviewer-asserted environment facts |
+| U-033 | bootstrap   | The handoff prompt's ten review-round fixes |
 
 **Applies to** says who an entry concerns: *running* — a handed-over project,
 so the update pass walks it; *bootstrap* — only the generation of a new

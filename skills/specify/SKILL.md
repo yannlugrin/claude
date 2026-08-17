@@ -178,7 +178,15 @@ These apply in every phase:
 3. **Facts are researched, not assumed.** Environment constraints (provider
    behavior, product limits, protocol quirks) are verified — web search when
    knowledge could be stale — and stated in the spec as facts with the reason
-   they matter. A fact that genuinely cannot be settled before implementation
+   they matter. **This binds triage as hard as it binds drafting.** A
+   finding that asserts what a harness, platform or provider defines — a
+   permission mode's name, an API's limit, a tool's flag — is verified
+   against the real thing before it is applied, however confident the
+   reviewer and however plausible the correction. A reviewer runs on
+   training knowledge like anyone else, and an accepted finding arrives
+   with the authority of a review: measured once, a cold round asserted a
+   harness fact, the triage applied it, and the "fix" was wrong in a way
+   the original text was not. A fact that genuinely cannot be settled before implementation
    is never guessed: it becomes an **open fact** with a pre-committed
    response per outcome (see [references/structure.md](references/structure.md)).
 4. **Document doctrine.** Structure, tone and precision rules live in
@@ -317,7 +325,11 @@ what keeps old memory out of the session doing this work.
    reviews" applies.
 4. **Compression pass.** Review rounds append clauses; four of them
    grew a real prompt by a fifth, all of it into sentences that were
-   already long. The prompt's fate is to be restated by the bootstrap
+   already long. **Report the pass's line and word delta against the
+   prompt as first written**, in the commit and to the user: measured,
+   a pass that deduplicated one clause while the rounds added eighty
+   lines is visible as the nominal pass it was; unmeasured, it reads
+   as done. The prompt's fate is to be restated by the bootstrap
    session into a `CLAUDE.md` under 220 lines, and a rule too tangled to
    restate is a rule that loses a clause there. So once the rounds are
    quiet, compress: same floor as finalization's, comprehension, and one

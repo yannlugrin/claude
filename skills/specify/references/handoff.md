@@ -83,9 +83,19 @@ batch.
      logged deviation, the slot says so conditionally ("where the §N.M
      clients are adopted, they enter pinned…") — flat wording turns a
      deviation candidate into a settled requirement.
+
+   One family is standing whatever the stack, and the slot names it:
+   **Python, for `bash_guard.py`** — the repository ships it from step
+   `001` on, whichever language the entrypoints and tooling turn out to
+   be, so a slot written around the entrypoint language leaves the most
+   load-bearing file in the tree covered only by the catch-all above.
+   Carry its own width exemption forward with it (the docstring names
+   the rule and the path) as a known configuration item of step `001`.
 5. `{{IGNORE_ITEMS}}` — what this stack and project leak into the working
    tree that must never be committed (credential files, local environment
-   files, tool caches). `CLAUDE.local.md` is already in the fixed text.
+   files, tool caches). The fixed text already carries the three that
+   hold in every project: `CLAUDE.local.md`, `.claude/reviews/` and
+   `.claude/worktrees/`.
 6. `{{SECRETS_SOURCE}}` — the spec section defining how secrets are
    sourced. If the project has no secrets story, drop the sentence that
    cites it and keep the rest of rule 5.
@@ -148,10 +158,16 @@ batch.
     verified fact is autonomous (decision entry and amendment in one
     commit, reported in the step's summary), while any resolution that
     changes a requirement, a tier, a documented limitation or the
-    decision to ship comes back to the user before the amendment. Name
-    the items that always come back — the ones whose unfavourable
-    outcome carries a tier or ship consequence — rather than leaving the
-    criterion to be applied item by item. Also state where the
+    decision to ship comes back to the user before the amendment.
+    **Say which clause wins where both apply, and it is the escalation
+    list**: a specification that pre-commits a response fixes what will
+    happen, not who watches it land, so a pre-committed branch that
+    changes a tier, a limitation or a documented capability still comes
+    back. Unstated, this is the collision two reasonable implementers
+    resolve in opposite directions, on the project's most consequential
+    items. Name the ones that always come back — the ones whose
+    unfavourable outcome carries a tier or ship consequence — rather
+    than leaving the criterion to be applied item by item. Also state where the
     resolutions land: the specification is amended so its facts stay
     true, and the user-facing consequence goes into the deliverable
     documentation. Drop the slot entirely when the spec has no open
@@ -222,6 +238,20 @@ batch.
     differently, the answer wins and this list is not argued back at
     them.
 
+    **Naming a task runner obliges its companion invariant, and the
+    prompt carries it: no recipe ever performs an act the boundary
+    gates.** A `PreToolUse` guard judges the command it is given — it
+    sees `just release` or `make publish`, never the `docker push`
+    inside the recipe — and no permission rule reaches inside one
+    either, so a gated act behind a recipe name bypasses the gate
+    unseen. The alternative, gating the runner itself, prompts on
+    every `just check` and destroys the development loop the boundary's
+    free side exists to protect. Gated acts live in CI, or in a command
+    the user invokes directly. This holds for any runner that turns a
+    name into commands (`make`, `npm run`, `task`), not only for
+    `just`, and the step that builds the permission baseline records it
+    as a rule of that baseline.
+
 ## Monorepo and multi-track projects
 
 The template assumes one specification, one plan, one decision log, one
@@ -268,7 +298,15 @@ directory owns one track. What changes, rule by rule — nothing else does:
   `step-*` tag remains the single last-approved state rule 3's
   re-orientation depends on. Each plan orders only its own track;
   cross-track sequencing comes from steps naming their dependencies
-  ("needs `step-sc-002` done"), never from a global sequence.
+  ("needs `step-sc-002` done"), never from a global sequence. One
+  consequence must be restated rather than inherited: the template's
+  "`git diff` between two tags is exactly one step's change" holds only
+  where one namespace is one sequence. With tracks interleaved in a
+  single history, a step's change is the range from the **previous
+  `step-*` tag of any track** — the same tag rule 3's re-orientation
+  finds — never from that track's own previous tag, which sweeps in
+  every other track's steps that landed between the two. The compacted
+  plan entry's `<previous step tag>` means that tag as well.
 - **The first task** produces one plan and one log per track, plus the
   single `CLAUDE.md` and root `README.md`; the plans *together* must
   account for every section of every specification document.
@@ -283,7 +321,12 @@ directory owns one track. What changes, rule by rule — nothing else does:
   close ritual, never on the pointer. The close ritual advances that
   pointer before it fires them, so at any cross-track milestone boundary
   resolve-at-invocation aims both passes at the wrong track, and a state
-  reviewer reading the wrong track's plan reports nothing wrong.
+  reviewer reading the wrong track's plan reports nothing wrong. **That
+  exception needs a carrier past bootstrap**, since the prompt is
+  consumed once: name it in the list of what `CLAUDE.md` must hold and
+  in the step `002` plan entry's content, not only here — stated only
+  in the prompt, it survives just where the concise restatement happens
+  to keep it, which is the one place nothing checks.
 
 ## The prompt template
 
@@ -320,8 +363,8 @@ and every section matters.
    history of amendments; the code implementing the change follows in the
    step's later commits — as does any documentation the amendment makes
    stale: for amendment commits, this rule wins over rule 6's
-   same-commit staleness sweep, and the two rules otherwise collide with
-   no stated winner. The entry lands alone only when the amendment
+   same-commit staleness sweep — stated because the two rules would
+   otherwise collide with no winner. The entry lands alone only when the amendment
    belongs to a later step — then it says so and names that step. Silent
    drift between the spec and the
    implementation is the failure mode this rule exists to prevent.
@@ -364,7 +407,10 @@ and every section matters.
    never loads; and the settings file is the enforcement mechanism
    itself, so malforming it after step `001`'s one-time probe fails
    exactly as quietly. Those two parse checks are cheap and exact, and
-   they are the whole of what this rule requires. Checking further —
+   they are the whole of what this rule requires. The frontmatter parse
+   has no standard ecosystem tool, so a few-line custom check is
+   **sanctioned** here — rule 11's question was asked, and the silent
+   failure it guards against earns the exception. Checking further —
    that a command, path or agent a file names actually resolves — is a
    *should*: worth doing where it is exact (an agent name against
    `.claude/agents/`, a path against the tree), and worth refusing where
@@ -381,9 +427,15 @@ and every section matters.
    introduces that mechanism**: settings keys, permission patterns and
    the guard hook being reached at all at step `001`; an agent's
    `tools:` frontmatter, and whether `CLAUDE.md` reaches a subagent's
-   context at all, at step `002` — that one costs one exchange with the
-   first agent you spawn ("quote rule 9's opening line") and every
-   reviewer agent's boundary rests on it; `.claude/rules/` loading at
+   context at all, at step `002` — one exchange with the first agent
+   that step spawns ("quote rule 9's opening line" — never the
+   bootstrap cold reviewer, whose context must stay confined to the
+   specification and your four files), and every reviewer agent's
+   boundary rests on it. Its pre-committed unfavorable branch: if
+   `CLAUDE.md` does not reach a subagent's context, each agent's body
+   carries the gated set inlined — a logged decision naming the
+   single-source-of-truth cost — never a citation to a rule the agent
+   cannot read; `.claude/rules/` loading at
    the step that first adopts a rules file, if any. The probes are
    independent, and one passing says nothing about another; pinning them
    all to the first step means probing mechanisms that do not exist yet,
@@ -405,11 +457,19 @@ and every section matters.
    the repository** — two questions, kept apart because each answer must
    mean something: a *check* ("is what is committed here well-formed?" —
    syntax, lint and formatting over the whole working tree, untracked
-   files included and gitignored paths excluded, with one standing
-   exception this prompt decides now:
-   everything under `.claude/spec-work/` is excluded from the harness —
-   the exclusion keys on the path, not on tracked status — because
-   rule 1 makes that directory no session's reading material) and
+   files included and gitignored paths excluded, with the standing
+   exceptions this prompt decides now — keyed on the path, not on
+   tracked status:
+   everything under `.claude/spec-work/`, because
+   rule 1 makes that directory no session's reading material, and —
+   where `{{REFERENCES}}` filled it — everything under `.claude/refs/`,
+   because it is the user's supplied material, read-only under rule 3
+   and owned elsewhere, not this repository's product to lint. Without
+   that second exclusion a lint finding inside a reference has no legal
+   resolution: the file cannot be edited, and the bend-the-config
+   escape beside it is written for the specification alone. Drop the
+   clause where the project has no references, rather than naming a
+   directory that will not exist) and
    a *test* ("is the implementation right?" — fixtures and expectations
    proving the behaviour **this repository itself ships**, the cases
    that must fail included). Three limits keep that honest: a
@@ -715,7 +775,12 @@ and every section matters.
 
 ## Your first task — this session, no implementation yet
 
-Produce four files, then stop for my review:
+Produce four files and have them cold-reviewed as this section's closing
+paragraphs order; only then stop for my review. (This first task is
+deliberately one ungated unit, unlike the foundation it plans: its
+output is text a correction rewrites cheaply, and its cold review is
+rule 2's self-verification before handover — the session has no harness
+yet — not a step gate.)
 
 1. **`PLAN.md`** — the implementation plan, derived from the
    specification:
@@ -739,10 +804,22 @@ Produce four files, then stop for my review:
        rule 5 in mind ({{IGNORE_ITEMS}}; `.claude/reviews/`, which the
        reviewer templates assume is ignored — an untracked report
        otherwise blocks every clean-tree precondition downstream;
+       `.claude/worktrees/`, which the specification phase already
+       ignores and which stays ignored — an isolated worktree
+       materializes inside the repository, and a commit made while one
+       exists swallows the checkout, which has happened; you are
+       rewriting this file, so carry forward what is in it rather than
+       replacing it from this list;
        `CLAUDE.local.md`); pinned base dependencies installable through
        one documented setup command; the check/test/verify harness of
        rule 2, built on the tools named there rather than on anything of
-       your own; **`check` in both of rule 2's scopes from the start** —
+       your own — the harness *skeleton* and entry points, carrying at
+       `000` only the families whose artifacts already exist (the
+       governance documents and whatever else this step itself lands):
+       the rest join with their first artifact, per rule 2's
+       never-ahead rule, so this step's green gate says nothing about
+       files that are not there;
+       **`check` in both of rule 2's scopes from the start** —
        the whole-tree gate as the default, and the narrowed
        what-changed form the development loop runs between gates, since
        every step after this one uses it — as **one entry point taking
@@ -831,15 +908,20 @@ Produce four files, then stop for my review:
        ones that turned out to enforce nothing. Name the permission
        mode you expect me to work in — it is a committed setting
        (`permissions.defaultMode`), not only a per-session choice, and
-       it decides how much the rest has to carry: under `default` an
-       unmatched command still prompts, while under `auto` or
-       `bypassPermissions` nothing prompts by itself and the guard's
-       asks are the only gate left — so **whether a hook `ask` still
-       prompts in that mode is one of this step's probes**, recorded
+       it decides how much the rest has to carry. **This prompt names
+       no modes and asserts no mode behavior — deliberately**: the
+       mode set and what each mode does to an unmatched command are
+       properties of the installed version (modes exist that prompt,
+       that auto-approve, and that judge by classifier and can deny
+       outright — three different answers to what backs the guard's
+       silence), so take the list from the running version and **probe
+       the mode you propose**: what an unmatched command does under
+       it, and **whether a hook `ask` still prompts** — recorded
        like the rest: the close ritual attempts its push in reliance on
        it, and a gate that has stopped gating says nothing about it.
        Set the mode rather than working
-       around it — `acceptEdits` is what removes the need for a blanket
+       around it — a mode that auto-accepts file edits is what removes
+       the need for a blanket
        `Edit(/**)` allowance — and let it decide whether the
        mode-disabling keys belong in the baseline at all. Its test: my
        review of the proposal, the
@@ -1057,7 +1139,16 @@ that directory. It audits `PLAN.md` against `SPECIFICATIONS.md`:
   not state is flagged for verification, never trusted: training
   knowledge goes stale.
 
-Triage its findings — accept, reject with reason, or genuinely my
+One check the cold reviewer is structurally barred from — it may not
+read this prompt — runs beside it: spawn a **second subagent,
+deliberately not cold**, that reads only this prompt's foundation-step
+prescriptions (`000`–`003` above) and the plan, and reports every
+prescription the four foundation entries dropped or weakened. It judges
+transcription fidelity, nothing else — this prompt is consumed once,
+and a dropped clause in the plan is invisible later, not wrong. Its
+findings join the same triage.
+
+Triage all findings — accept, reject with reason, or genuinely my
 call — **apply and commit the accepted ones**, then present the triage
 together with the corrected plan for discussion, rejected findings and
 their reasons included. Step `000` begins only after I approve the plan.

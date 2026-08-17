@@ -13,7 +13,14 @@ description: Post-approval close of the current step — run only when the
 > `{{PLAN}}` — the plan governing the work this file performs;
 > `{{STEP_ID}}` — the step identifier form used in commit subjects and
 > tag names (`step-NNN`, unless this repository qualifies it per
-> track); plus
+> track). In a multi-track repository, `{{PLAN}}` here resolves to the
+> track of the step **being closed**, and step 5 must name that track
+> explicitly when spawning its passes — never resolve from `CLAUDE.md`'s
+> "Current state" pointer, which step 3 has already advanced, possibly
+> onto another track; and `<previous step tag>` in the compacted entry
+> means the `step-*` tag immediately before this one **of any track** —
+> history is linear repository-wide, so a track's own previous tag may
+> have other tracks' steps between it and this one; plus
 > `{{CHECK_COMMAND}}` (step 3) — the
 > repository's rule-2 check entry point in its **full** form, never a
 > narrowed fast pass: the close commit receives the step tag and
@@ -96,7 +103,10 @@ In order:
 5. **Milestone boundary:** if this was the milestone's last step, do
    not start the next one — suggest the whole-state review and then
    the memory-compaction pass, in that order, so the compaction runs
-   after the review has read the uncompacted memory. The adopted
+   after the review has read the uncompacted memory. In a multi-track
+   repository, both passes target the track of the step **just
+   closed** — name it explicitly at spawn; the "Current state" pointer
+   has already moved and may point at another track. The adopted
    agents (`state-reviewer`, `optimize-memory`) perform them where they
    exist; where they were not adopted, point at `CLAUDE.md`'s
    not-yet-adopted list; where they were dropped or that list no longer
