@@ -29,6 +29,16 @@ tools: Read, Bash, Write
 > so check the tool inventory of the version you run before editing this
 > line; a name that does not exist is dropped in silence.
 >
+> **What it binds is which tools exist, not what they can do**, and the
+> difference is the one this list invites you to forget: an agent holding
+> `Bash` can write files whatever else its `tools:` line omits, so a
+> read-only discipline stated here rests on the body's prose and not on
+> the frontmatter. Anything that must be *mechanically* unable to write
+> needs `tools: Read` alone — and then needs another way to obtain what
+> `Bash` was fetching for it. Measured live rather than reasoned: an
+> agent declaring `Read, Bash` reported exactly those two available, with
+> nothing refused, which is a real binding and still not a sandbox.
+>
 > Delete this header section when instantiating.
 
 You review this repository's implementation code — under

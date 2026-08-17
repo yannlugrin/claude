@@ -1352,7 +1352,16 @@ skill's read-only discipline is therefore prose ("report and stop"), and
 anything that must actually bind goes in `.claude/settings.json` or a hook
 — where, on the same version, file-edit rules match `Edit(path)` and a
 `Write(path)` rule never fires. Agents are the exception: their `tools:`
-frontmatter does bind, and the templates keep it. Re-probe all of this
+frontmatter does bind, and the templates keep it — **but what it binds is
+which tools exist, not what they can do.** An agent listing `Bash` can
+write files however carefully the rest of the list is drawn, so a
+reviewer's read-only discipline rests on its prose and not on its
+frontmatter; only `tools: Read` alone makes writing mechanically
+impossible, and then the agent needs another route to whatever `Bash`
+was fetching. Stated because the true half invites the wrong conclusion:
+a list that visibly omits `Write` and `Edit` reads as a sandbox, and one
+project's probe had to establish the difference before its reviewers'
+boundary could be described honestly. Re-probe all of this
 at instantiation rather than trusting this paragraph — it describes one
 version, and the failure mode of every item here is silence.
 Further: reviewer agents are read-only except for their own
