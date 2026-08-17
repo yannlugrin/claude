@@ -261,7 +261,45 @@ specification already split into a root document plus one per component
 (`structure.md`, "Multi-document specifications"). When it applies, the
 shape is **tracks**: the root track owns repository-wide work (the
 foundation and harness, CI, shared documentation) and each component
-directory owns one track. What changes, rule by rule — nothing else does:
+directory owns one track.
+
+**Enumerate the tracks from what the repository ships, never from the
+documents that happen to exist.** The split is what suggests tracks, but
+it is not what defines them: a component the root document specifies
+directly has no document of its own, and deriving the track list from the
+document list makes it invisible — the very component that is shared or
+foundational, and whose decisions the most people will later go looking
+for. Walk the specification's deliverables instead; each one that owns —
+or, on this reading, should own — a directory gets a track, and each one
+that has no per-component document yet gets the pointer document
+`structure.md` mandates (a finding against the specification, raised
+under rule 1 before the plans are written, not a gap to route around).
+
+Three rules govern the assignments, and the batch carries them:
+
+- **Ownership follows artifacts, not blast radius.** The question is
+  where a deliverable's files live, not how far its changes ripple. CI is
+  root-owned because `.github/workflows/` is a root directory — not
+  because a rebuild reaches every component; a component whose changes
+  reach every other one is a component with many cross-track dependency
+  edges, which is what those edges are for. Left unstated, this is
+  decided by whichever criterion the session reaches for first, and
+  "ripples widely" is the one that reads as most responsible.
+- **The root track's charter is closed**: the foundation and harness, CI,
+  shared documentation, and files at the repository root. Widening it —
+  putting a shippable component on the root track — is a decision with a
+  reason, logged, never a line transcribed into the track map. Measured:
+  a bootstrap prompt added "the builder image" to that enumeration in
+  passing, the implementing session transcribed it, and neither the plan
+  nor the log carried a word of why; the reasoning had to be constructed
+  after the fact, under challenge, by the session that had inherited it —
+  which is late, since by then the operator has to overrule a defence
+  rather than choose between options.
+- **A milestone in the root plan named after a single deliverable is a
+  track wearing a disguise.** It is the visible-on-sight tell, and it
+  belongs in the batch as a check on the assignment the prompt proposes.
+
+What changes, rule by rule — nothing else does:
 
 - **Rule 1** — "every `SPECIFICATIONS.md` is read-only", root and
   per-component alike.
@@ -309,7 +347,23 @@ directory owns one track. What changes, rule by rule — nothing else does:
   plan entry's `<previous step tag>` means that tag as well.
 - **The first task** produces one plan and one log per track, plus the
   single `CLAUDE.md` and root `README.md`; the plans *together* must
-  account for every section of every specification document.
+  account for every section of every specification document. **The track
+  map is its own logged decision**, not a clause of the entry adopting the
+  workflow: every component considered, every deliverable the root track
+  owns named with the reason it is root-owned. The prompt proposes that
+  map; the implementer re-derives it against the three rules above and
+  logs what it concluded. A map transcribed without that entry is
+  unanswerable later — the question "why is this here?" has no reader, and
+  the session that inherited the answer no longer exists.
+- **Every deliverable has a location, and the plans say so.** A track's
+  directory fixes it for the ordinary case; anything landing outside the
+  active track's directory names its path in the step's deliverables. A
+  path no plan states is a path the implementing session invents at the
+  moment it needs one, and two sessions invent differently — the observed
+  failure is a component whose files had no home in any document, where
+  the next session would have put a `Dockerfile` at the repository root
+  beside the task runner and made the contributor guide describe two
+  shapes.
 - **The templates** are instantiated **once each**, and their governance
   placeholders resolve to the active track **at invocation** — from the
   track map and the `Current state` pointer — not to one literal path.
@@ -540,9 +594,14 @@ and every section matters.
    not a file to pack — and one legitimate outcome of raising it is a
    budget of this project's own, logged as a deviation with what makes
    it necessary. A repository whose boundary enumeration is long, or
-   which has many source-of-truth directories to name, has a higher
-   floor than these numbers assume; what must not happen is the floor
-   being met by deleting something with nowhere else to go. It holds only what applies always —
+   which has many source-of-truth directories to name, or which carries
+   a track map, has a higher floor than these numbers assume — so where
+   you can already see that at the first task, **derive the budget then
+   and log it** rather than landing over the cap and deviating
+   afterwards: the numbers here are a single-track baseline, and a
+   budget first met by breaching it teaches the next session that the
+   budget is decorative. What must not happen is the floor being met by
+   deleting something with nowhere else to go. It holds only what applies always —
    the rules, the file map, the current-step pointer, the session
    routine — and *pointers* to everything else. Knowledge needed only in
    a specific context — per-topic notes, environment details,
@@ -983,6 +1042,11 @@ yet — not a step gate.)
      boundary, that it does, what it costs, and how I clean up
      afterwards — and **status** (`pending` / `in progress` /
      `awaiting test` / `done`).
+     **Deliverables say where their files land** wherever the
+     specification does not already fix it: a path no plan states is a
+     path a later session invents at the moment it needs one, and two
+     sessions invent differently. Naming the directory once per
+     deliverable is enough — the files inside it need no enumeration.
      **An approved step keeps none of that.** On approval its entry is
      replaced, not annotated — the plan text described intentions the
      step itself has since changed, and it sits in a file every session
@@ -1024,7 +1088,13 @@ yet — not a step gate.)
      underspecified, risky, or worth reordering — questions for me, never
      silent assumptions.
 2. **`DECISIONS.md`** — initialised with the entry format and a first
-   entry recording the adoption of this workflow.
+   entry recording the adoption of this workflow. Where the repository
+   has tracks, a second entry records the **track map** — every component
+   considered, every deliverable the root track owns and why it is
+   root-owned. The map this prompt proposes is a proposal: re-derive it
+   from what the repository ships, and log what you concluded, including
+   where you agreed with me. An assignment nobody wrote down is an
+   assignment nobody can answer for later.
 3. **`CLAUDE.md`** — the ground rules above restated as your own standing
    instructions — concise, not verbatim, and keeping this numbering:
    tooling and decision entries cite the rules by number, and
@@ -1117,6 +1187,15 @@ that directory. It audits `PLAN.md` against `SPECIFICATIONS.md`:
   — a section-level pointer ("verified across the later steps") is not
   a mapping, and the items that slip are the ones a section mentions in
   passing rather than lists;
+- **layout and ownership** — every deliverable has a location the plan
+  states, and nothing the repository ships is left without one. Where the
+  plan has tracks, every deliverable has an owning track too, and any the
+  root track owns that is not a root-level or shared artifact carries the
+  reason. This lens exists because the others cannot see its failure: a
+  component with no directory and no owner passes coverage (its sections
+  are mapped), ordering, granularity and consistency untouched, and
+  surfaces only when someone builds it or, later, comes looking for its
+  decisions;
 - **ordering** — dependencies respected, the cheap steps genuinely
   first, and no step depending on a capability a later step delivers
   (the classic: something goes live before its day-two operations

@@ -128,6 +128,20 @@ logged — and it works like this:
 - A component with nothing of its own still gets the file, as a pointer
   to the root section that specifies it — the layout stays uniform, and
   a missing file never has to be interpreted.
+- **The component list is the list of things the repository ships**, and
+  the section defining the per-component document says so in those terms.
+  Naming the class after the interesting majority — *per-game*,
+  *per-service*, *per-plugin* — silently excludes every shipped
+  deliverable that is not one, and the excluded one is typically the
+  shared or foundational component everything else builds on. Measured: a
+  repository of game images plus the builder image they all build from
+  titled its section "Per-game specifications"; the builder, specified in
+  a root section, got no document — and therefore no directory and no
+  owner — a gap nothing downstream could see, because the handoff derives
+  its component list from the documents that exist. The finalization
+  consistency sweep checks the class name against the full deliverable
+  list, and a deliverable outside the name is either given a document or
+  given a written reason.
 - **Cross-references need one convention, stated in each per-component
   preamble:** `§N` is local, `root §N` points at the root document. The
   consistency pass then covers every document, and every reference in

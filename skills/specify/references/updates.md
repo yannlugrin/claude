@@ -24,7 +24,7 @@ like "adopted through U-021" resolves. What follows is what accumulated
 since; it empties again when the last project running an older doctrine has
 been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-042**. One
+Ids are permanent and never reused, so the next entry is **U-048**. One
 revision section per date:
 
 ```text
@@ -35,7 +35,7 @@ revision section per date:
 | U-0NN | running    | …     |
 ```
 
-### [2026-08-17](updates/2026-08-17.md) — handoff findings from one project's third handoff iteration, and another project's specification-run review
+### [2026-08-17](updates/2026-08-17.md) — handoff findings from one project's third handoff iteration, another project's specification-run review, and the operator's review of the first project's bootstrap output
 
 | Id    | Applies to  | Title |
 | ----- | ----------- | ----- |
@@ -59,6 +59,12 @@ revision section per date:
 | U-039 | spec phase  | "Strongest available" names its candidates |
 | U-040 | spec phase  | Two lenses, and a protocol for the operator's reading pass |
 | U-041 | spec phase  | Review worktrees are pruned when the phase ends |
+| U-042 | running     | Tracks are enumerated from deliverables, not documents (multi-track only) |
+| U-043 | running     | Ownership follows artifacts, not blast radius (multi-track only) |
+| U-044 | running     | The track map is a logged decision (multi-track only) |
+| U-045 | running     | Deliverables state their location; the cold review checks layout and ownership |
+| U-046 | spec phase  | The per-component class is checked against the deliverable list |
+| U-047 | running     | The `CLAUDE.md` budget is derived when its floor is visible |
 
 **Applies to** says who an entry concerns: *running* — a handed-over project,
 so the update pass walks it; *bootstrap* — only the generation of a new

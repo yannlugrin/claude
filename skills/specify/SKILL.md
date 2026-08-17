@@ -314,7 +314,10 @@ In order, each gated by the user:
    nothing is a claim nobody downstream can check. Where restraint is the
    answer, the numbers are the argument for it, not a substitute for one.
 3. **Final consistency sweep** — cross-references, numbering, terminology,
-   tier classification.
+   tier classification, and — where the document is split — the
+   component-class check of [structure.md](references/structure.md): every
+   shipped deliverable is inside the class the root document names, or has
+   a written reason for being outside it.
 4. **Final audit** — a cold review with the final-audit lens on the strongest
    available model. Quiet means done.
 5. **Doctrine findings** — write `.claude/spec-work/upstream-findings.md`:
