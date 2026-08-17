@@ -104,6 +104,46 @@ statement: would you hand this to the implementer as-is — yes or no, and if
 no, what is missing.
 ```
 
+### Focused artifact audit
+
+For a companion artifact the specification depends on — a corpus, an
+inventory, a data set handed over beside the document — usually before it
+becomes irreversible (a squash, a deletion of the source it came from).
+
+```text
+Lens: focused artifact audit. Your subject is <path>, not the
+specification; the specification is your reference for judging it. That
+artifact is <what it is, and what depends on it>. Judge it against its own
+stated bar: complete for its purpose, internally consistent, and carrying
+enough context that its user can act on it mechanically rather than by
+interpretation. Report separately, as its own inventory, every place the
+artifact and the specification decide the same question differently —
+naming both sides and taking neither. Where the artifact was derived from
+a source, re-derive it independently rather than trusting the extraction,
+and state in your report how you checked and what you found. Your verdict
+says whether it is fit to be handed over as it stands, and if not, what
+the shortest path to fit is.
+```
+
+### Source comparison
+
+For a specification meant to serialize something that already exists — a
+prototype, a prior implementation, a system being replaced.
+
+```text
+Lens: source comparison. Besides the specification you are given <the
+source artifacts>, which the specification is meant to serialize. The
+specification is the carrier; the sources are evidence of behavior. Report
+what the serialization lost: behavior the sources exhibit that the
+document does not state, a rule whose direction is inverted in the
+retelling, a constraint stated more loosely than the source's actual
+conduct. Fidelity findings only — a departure the document appears to have
+made deliberately goes in your questions, not your findings, since only
+the operator knows whether it was a choice. Never propose that the
+specification adopt a source's implementation shape: the sources prove
+what a system did, never what this one should be built like.
+```
+
 ### Handoff prompt (phase 7)
 
 ```text

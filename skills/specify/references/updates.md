@@ -24,7 +24,7 @@ like "adopted through U-021" resolves. What follows is what accumulated
 since; it empties again when the last project running an older doctrine has
 been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-034**. One
+Ids are permanent and never reused, so the next entry is **U-042**. One
 revision section per date:
 
 ```text
@@ -35,7 +35,7 @@ revision section per date:
 | U-0NN | running    | …     |
 ```
 
-### [2026-08-17](updates/2026-08-17.md) — handoff findings from one project's third handoff iteration
+### [2026-08-17](updates/2026-08-17.md) — handoff findings from one project's third handoff iteration, and another project's specification-run review
 
 | Id    | Applies to  | Title |
 | ----- | ----------- | ----- |
@@ -51,6 +51,14 @@ revision section per date:
 | U-031 | running     | Agent templates order a re-probe rather than citing an old result |
 | U-032 | spec phase  | Triage verifies reviewer-asserted environment facts |
 | U-033 | bootstrap   | The handoff prompt's ten review-round fixes |
+| U-034 | spec phase  | The specification phases carry their own upstream-findings file |
+| U-035 | spec phase  | "Quiet" means no requirement-changing finding, not an empty round |
+| U-036 | spec phase  | Triage weighs cost, and every round reports the line delta |
+| U-037 | spec phase  | A neutralized-benefits diagnosis owes a subtractive proposal |
+| U-038 | spec phase  | The finalization compression pass reports its delta too |
+| U-039 | spec phase  | "Strongest available" names its candidates |
+| U-040 | spec phase  | Two lenses, and a protocol for the operator's reading pass |
+| U-041 | spec phase  | Review worktrees are pruned when the phase ends |
 
 **Applies to** says who an entry concerns: *running* — a handed-over project,
 so the update pass walks it; *bootstrap* — only the generation of a new

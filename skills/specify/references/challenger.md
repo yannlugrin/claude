@@ -57,7 +57,13 @@ fewer is better; zero is a valid outcome:
 2. What in the current picture undermines it — cite the sections or entries.
 3. The zero-based answer: what would be chosen today, and why.
 4. Recommendation: **reaffirm** (the decision survives the test — say why) or
-   **reopen** (with a direction, not a redesign).
+   **reopen** (with a direction, not a redesign). On a neutralized-benefits
+   target neither answer is complete on its own: a reaffirmation there must
+   also name the condition that would retire the mechanism, or one concrete
+   simplification to rule on. The pattern's whole danger is that every
+   accumulated step looked locally reasonable, so "still justified" merely
+   repeats the reasoning that produced it — and a diagnosis with nothing to
+   decide leaves the mechanism exactly as it was found.
 5. The cost asymmetry: what changing course costs now versus later. A cheap
    switch later argues for reaffirming now; an expensive one later argues
    for deciding now.

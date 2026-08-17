@@ -66,7 +66,13 @@ Work inside a git repository (offer `git init` if there is none):
 - `.gitignore` — carries `.claude/worktrees/` from setup, before the first
   review is ever spawned. Worktree isolation materializes the reviewer's
   checkout inside the repository; a commit made while one exists otherwise
-  swallows it (this has happened).
+  swallows it (this has happened). Ignored is not gone: **prune the
+  checkouts when the phase ends** (`git worktree prune`, then remove the
+  directory), before the handoff and its squash. Measured on one run:
+  sixteen of them, eight megabytes, still registered against the
+  repository's former path, and still holding copies of the `.claude/refs/`
+  material the tree had deliberately dropped so the implementer would never
+  receive it.
 - `.claude/settings.json` — written and committed at workspace setup with
   `"autoMemoryEnabled": false` (merged in, never overwriting other keys, if
   the file exists). Auto memory is machine-local and unversioned — an
@@ -235,16 +241,36 @@ Spawn a cold review (see "Spawning reviews") with the **cold read** lens from
 [references/reviewer.md](references/reviewer.md). Then:
 
 1. Triage the findings: for each, your recommendation — accept, reject with
-   reason, or genuinely the user's call.
+   reason, or genuinely the user's call. **Weigh what a finding costs the
+   document against what it buys**, and say which. A sequence where nearly
+   everything is accepted is evidence about the triage, not about the
+   reviews: measured on a twenty-round run, about a hundred and ten of a
+   hundred and eleven labelled findings were applied, while reviewer
+   *questions* in the same reports were regularly answered without any
+   change. The label was doing the arbitrating — a finding is a cold
+   reader's opinion, not a defect report.
 2. Present the triage; the user rules point by point.
 3. Apply the accepted items, run the consistency pass, commit, archive the
-   report under `.claude/spec-work/reviews/`.
+   report under `.claude/spec-work/reviews/`. **Report the document's line
+   delta in the triage commit**: every accepted finding adds text and
+   nothing in this phase removes any — the same run grew its specification
+   from 1270 to 2023 lines across twelve rounds without one commit ever
+   reducing it. Stated per round, accretion is visible while answering it is
+   still cheap; unstated, it arrives at finalization as a compression pass
+   that cannot recover it.
 
 Repeat with a fresh spawn until a round is **quiet**: no finding the user
-accepts as substantive — and never declared quiet on same-model rounds
-alone; at least one round runs on a different strong model (see "Spawning
-reviews"). One round equals one spawn plus one full triage —
-never a fix-per-finding loop.
+accepts as **requirement-changing** — a new must, a changed tier, a decision
+moved. Clarifications, restatements and editorial repairs are the steady
+output of a cold read on a mature document and do not reset the count. Read
+"quiet" as "nothing accepted at all" and the criterion is unreachable: over
+that same twenty-round run no round ever came back empty, every archived
+verdict read *not quiet*, and what actually ended the sequence was the user
+deciding it had had enough — which is a fine reason to stop, and a bad one
+to leave unwritten. Never declared quiet on same-model rounds alone; at
+least one round runs on a different strong model (see "Spawning reviews").
+One round equals one spawn plus one full triage — never a fix-per-finding
+loop.
 
 On request, prepare an **external review packet** (see
 [references/reviewer.md](references/reviewer.md)) for the user to run on
@@ -260,6 +286,17 @@ specification **and the decision log**. Triage as in phase 4. Record outcomes
 in the log: reaffirmed (with date) or reopened — a reopened foundational
 decision usually means returning to phase 3 for the affected sections.
 
+A challenge that names the **neutralized-benefits pattern** owes more than a
+verdict, and the triage holds it to that: reaffirmation there is an answer
+only when it arrives with a retirement condition or a concrete simplification
+for the user to rule on (see
+[references/challenger.md](references/challenger.md)). Measured: a challenge
+diagnosed the pattern as "textbook shape" on a mechanism that had accumulated
+seven hedges and a defaults layer serving one remaining use, recommended
+reaffirmation with directions attached, and the mechanism reached the final
+audit whole. Naming an accretion and then reaffirming it is how the pattern
+survives the instrument built to catch it.
+
 ### 6. Finalization
 
 In order, each gated by the user:
@@ -270,11 +307,35 @@ In order, each gated by the user:
    propose a different strong one (see "Spawning reviews").
 2. **Compression pass** — shorten wording, merge redundancy; the floor is
    comprehension: nothing is removed that a requirement needs to be
-   understood.
+   understood. **Report the line and word delta**, in the commit and to the
+   user, exactly as phase 7's pass does. Measured on one run, the pass
+   changed not a single line and argued its restraint in the log — which may
+   well have been the right call, but a pass that reads as done and removed
+   nothing is a claim nobody downstream can check. Where restraint is the
+   answer, the numbers are the argument for it, not a substitute for one.
 3. **Final consistency sweep** — cross-references, numbering, terminology,
    tier classification.
 4. **Final audit** — a cold review with the final-audit lens on the strongest
    available model. Quiet means done.
+5. **Doctrine findings** — write `.claude/spec-work/upstream-findings.md`:
+   what this run learned about *the process* rather than the project — a
+   rule that never fired, a lens improvised because none of the standard
+   ones fitted, a step whose cost outran its yield, a place where the
+   doctrine was deviated from deliberately. One line each, with what
+   triggered it. Phase 7 has carried such a file for the handoff since it
+   was measured that these findings otherwise die in the session that found
+   them; phases 1–6 had no carrier at all, and a full specification run's
+   worth of them had to be reconstructed from git history afterwards. This
+   file is raw material for the doctrine changelog
+   ([references/updates.md](references/updates.md)).
+
+**The operator's own reading pass** — the user reading the finished document
+end to end — is not one of these gates, and when it happens it gets its own
+protocol: comments arrive one at a time, you give your opinion per comment
+and record the ruling, and **nothing is edited until they declare the pass
+finished** — then one batch, one commit. Proven on a full-document pass:
+editing while they read moves the text under a reader who is still in it, and
+the next comment then lands on a paragraph that no longer says what they saw.
 
 ### 7. Implementation handoff
 
@@ -355,7 +416,11 @@ what keeps old memory out of the session doing this work.
    to lose — they dissolve into commit messages of a project that has
    nothing to do with the skill. The file is also the raw material for
    the doctrine changelog of phase 8: findings flow up from projects,
-   doctrine flows back down to them.
+   doctrine flows back down to them. Where the specification phases left
+   their own `.claude/spec-work/upstream-findings.md` (phase 6, step 5),
+   name it in the closing message beside this one — never merge the two: a
+   fresh handoff session cannot vouch for a run it did not sit through, and
+   the two files answer different questions.
 7. **History squash — gated, clean cut.** Propose collapsing the whole
    history into a single `initial commit` so the implementer's "before the
    first step tag, the range is the whole history" re-orientation sees only
@@ -434,7 +499,17 @@ alternative is what this phase exists to repair.
   and for the implementer probe, propose at least one round on a strong
   model *different* from the session's; the challenger and final audit stay
   on the strongest available regardless — diversity never weakens the last
-  gate. Quick re-checks after fixes may go cheaper, knowing what
+  gate. **Name the candidates when you claim "strongest available."** That
+  claim is a judgment, and left implicit its answer is always the model
+  already running: one run put both challenges and the final audit — its
+  three most consequential gates — on the session's own model while a
+  divergent strong model sat unused beside them, all three headers asserting
+  "strongest available" and none of them saying against what. In that same
+  run the two divergent-model rounds returned eighteen and fifteen findings
+  against a five-to-eight baseline from their same-model neighbours: the
+  divergence is the highest-yield lever measured anywhere in this process,
+  and sixteen of twenty rounds still went to the session's model.
+  Quick re-checks after fixes may go cheaper, knowing what
   that trades away: small models keep the report format but lose calibration
   (severity inflation, doctrine drift, the occasional false finding), so
   their output gets extra-skeptical triage. The final audit is never
