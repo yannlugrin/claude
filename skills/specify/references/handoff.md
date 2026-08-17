@@ -336,7 +336,21 @@ What changes, rule by rule — nothing else does:
   `step-*` tag remains the single last-approved state rule 3's
   re-orientation depends on. Each plan orders only its own track;
   cross-track sequencing comes from steps naming their dependencies
-  ("needs `step-sc-002` done"), never from a global sequence. One
+  ("needs `step-sc-002` done"), never from a global sequence. **What a
+  step's position used to guarantee, an edge must now state** — and the
+  first of those is the foundation: every component track's first step
+  names the foundation's last step as a dependency, or the whole track
+  becomes startable as soon as the harness skeleton exists, before the
+  permission baseline meant to be gating its work. Inside one plan, "the
+  foundation comes first, before any project code" is enforced by
+  ordering; split across plans it is enforced by nothing unless written.
+  The failure is quiet in the worst way — the plans stay consistent,
+  every reference resolves, and the only symptom is that the rule the
+  plans state (position never sequences, only dependency lines do) has
+  become true of a step nobody meant it to be true of. Watch for it
+  wherever a step moves out of the root plan into a track: it arrives
+  carrying only the dependencies that were worth writing down back when
+  its position said the rest. One
   consequence must be restated rather than inherited: the template's
   "`git diff` between two tags is exactly one step's change" holds only
   where one namespace is one sequence. With tracks interleaved in a
