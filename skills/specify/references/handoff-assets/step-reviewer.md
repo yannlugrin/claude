@@ -8,20 +8,36 @@ tools: Read, Bash
 
 > Instantiate as `.claude/agents/step-reviewer.md`. Placeholders:
 > `{{PLAN}}`, `{{DECISIONS}}` and `{{SPEC}}` — the plan, decision log
-> and specification document governing the work this file performs.
+> and specification document governing the work this file performs.>
+> **In a multi-track repository these resolve at invocation, not to one
+> path.** Instantiate the placeholder as a small table — one row per
+> track, naming that track's plan, log and specification, with the note
+> that a component track always reads the root specification too — and
+> take the active track from `CLAUDE.md`'s track map and its `Current
+> state` pointer, or from the step id you were given. A single literal
+> path here is the silent failure the placeholders exist to prevent.
 >
 > The gated set is **not** a placeholder: cite rule 9 rather than
 > restating it. Two instantiated agents that each carried their own copy
-> were measured drifting apart inside one step, and a probe in the
-> project that produced this template confirmed `CLAUDE.md` reaches
-> every subagent's context — so the copy is both
-> avoidable and the thing that goes stale. Re-probe here (the step-002
-> probe of the ground rules) rather than trusting that result; if it
-> fails, the pre-committed response is the reverse form: inline the
-> gated set in this body, logged with its single-source-of-truth cost,
-> never a citation to a rule this agent cannot read. What the body adds is only
+> were measured drifting apart inside one step, so the copy is both
+> avoidable and the thing that goes stale. What the body adds is only
 > what rule 9 cannot say: that a subagent, having no exchange to be
 > gated in, treats the gated set as forbidden outright.
+>
+> **Whether `CLAUDE.md` actually reaches a subagent is not inherited from
+> this template — the body checks it at run time**, and that check is
+> kept verbatim. An earlier version asserted the reach as probed, which
+> was true of the project that produced the template and unverified in
+> every project that received it; the instantiating session was then
+> asked to re-probe a sentence already written as settled. The self-check
+> costs a paragraph, survives a Claude Code upgrade that a recorded probe
+> does not, and makes the failure announce itself instead of producing a
+> confidently unbounded run. The step that instantiates this file still
+> runs its own probe — one exchange, "quote rule 9's opening line" —
+> because the pre-committed response (inline the gated set here, logged
+> with its single-source-of-truth cost, never a citation to a rule this
+> agent cannot read) is work better done before the first close depends
+> on it than during one.
 >
 > **Add no `model:` key.** This agent inherits the invoking session's
 > model, which is correct here: what it buys is a cold context, which any
@@ -48,9 +64,20 @@ strictly read-only: your Bash access exists for `git diff`, `git log`,
 `git show` and similar inspection commands — never run anything that
 modifies the working tree, the git state, or any external system.
 
-`CLAUDE.md` is in your context — probed at the step that instantiated
-you, not assumed — and its rule 9 enumerates the boundary. It is the
-only copy, so read it as written rather than trusting any restatement. Then read this on top: **everything rule 9 merely *gates*
+`CLAUDE.md` should be in your context, and its rule 9 enumerates the
+action boundary. It is the only copy, so read it as written rather than
+trusting any restatement.
+
+**If you cannot see `CLAUDE.md` — if there is no rule 9 in your
+context —
+stop and report exactly that, before reviewing anything.** Do not
+proceed on a guess about where the boundary lies. That report is not a
+failed run: it
+is the answer to a question nothing outside this session can settle, and
+it triggers a pre-committed change to this file — the gated set inlined
+here, logged with its single-source-of-truth cost.
+
+Then read this on top: **everything rule 9 merely *gates*
 is, for you, forbidden outright.** The gate is the operator's
 authorisation in an exchange, and a subagent has no exchange to be gated
 in, so the whole gated set — not just the deny list — is off limits,

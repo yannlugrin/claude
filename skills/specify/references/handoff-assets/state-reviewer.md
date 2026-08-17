@@ -20,20 +20,36 @@ tools: Read, Bash, Write
 > plus
 > `{{ARCHITECTURE_VOCABULARY}}` — this project's own component
 > vocabulary once it exists; `{{INSPECTION_COMMANDS}}` — the read-only
-> introspection commands the stack offers.
+> introspection commands the stack offers.>
+> **In a multi-track repository these resolve at invocation, not to one
+> path**: instantiate the placeholder as a one-row-per-track table. This
+> pass is the exception to resolving from the pointer — when it runs as
+> part of closing a step, the track is **named at spawn**, because the
+> close ritual has already advanced `CLAUDE.md`'s `Current state`
+> pointer and resolving from it would aim this pass at the wrong track,
+> where it reads the wrong plan and reports nothing wrong.
 >
 > The gated set is **not** a placeholder: cite rule 9 rather than
 > restating it. Two instantiated agents that each carried their own copy
-> were measured drifting apart inside one step, and a probe in the
-> project that produced this template confirmed `CLAUDE.md` reaches
-> every subagent's context — so the copy is both
-> avoidable and the thing that goes stale. Re-probe here (the step-002
-> probe of the ground rules) rather than trusting that result; if it
-> fails, the pre-committed response is the reverse form: inline the
-> gated set in this body, logged with its single-source-of-truth cost,
-> never a citation to a rule this agent cannot read. What the body adds is only
+> were measured drifting apart inside one step, so the copy is both
+> avoidable and the thing that goes stale. What the body adds is only
 > what rule 9 cannot say: that a subagent, having no exchange to be
 > gated in, treats the gated set as forbidden outright.
+>
+> **Whether `CLAUDE.md` actually reaches a subagent is not inherited from
+> this template — the body checks it at run time**, and that check is
+> kept verbatim. An earlier version asserted the reach as probed, which
+> was true of the project that produced the template and unverified in
+> every project that received it; the instantiating session was then
+> asked to re-probe a sentence already written as settled. The self-check
+> costs a paragraph, survives a Claude Code upgrade that a recorded probe
+> does not, and makes the failure announce itself instead of producing a
+> confidently unbounded run. The step that instantiates this file still
+> runs its own probe — one exchange, "quote rule 9's opening line" —
+> because the pre-committed response (inline the gated set here, logged
+> with its single-source-of-truth cost, never a citation to a rule this
+> agent cannot read) is work better done before the first close depends
+> on it than during one.
 >
 > **Add no `model:` key.** This pass must not run on the model that wrote
 > the work it examines, and that requirement is a *relation*: no fixed
@@ -67,9 +83,20 @@ never overwrite or merge into an earlier report). Bash exists for
 inspection — `git log`, `git show`, {{INSPECTION_COMMANDS}} — never
 for anything that modifies the working tree or any external system.
 
-`CLAUDE.md` is in your context — probed at the step that instantiated
-you, not assumed — and its rule 9 enumerates the boundary. It is the
-only copy, so read it as written rather than trusting any restatement. Then read this on top: **everything rule 9 merely *gates*
+`CLAUDE.md` should be in your context, and its rule 9 enumerates the
+action boundary. It is the only copy, so read it as written rather than
+trusting any restatement.
+
+**If you cannot see `CLAUDE.md` — if there is no rule 9 in your
+context —
+stop and report exactly that, before reviewing anything.** Do not
+proceed on a guess about where the boundary lies. That report is not a
+failed run: it
+is the answer to a question nothing outside this session can settle, and
+it triggers a pre-committed change to this file — the gated set inlined
+here, logged with its single-source-of-truth cost.
+
+Then read this on top: **everything rule 9 merely *gates*
 is, for you, forbidden outright.** The gate is the operator's
 authorisation in an exchange, and a subagent has no exchange to be gated
 in, so the whole gated set — not just the deny list — is off limits,

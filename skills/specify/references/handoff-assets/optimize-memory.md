@@ -20,6 +20,14 @@ tools: Read, Bash, Edit, Write
 > `{{CHECK_COMMAND}}` in the verification section, and
 > `{{ADOPTING_DECISION}}` — the decision entry that adopted this pass.
 >
+> **In a multi-track repository these resolve at invocation, not to one
+> path**: instantiate the placeholder as a one-row-per-track table. This
+> pass is the exception to resolving from the pointer — when it runs as
+> part of closing a step, the track is **named at spawn**, because the
+> close ritual has already advanced `CLAUDE.md`'s `Current state`
+> pointer and resolving from it would aim this pass at the wrong track,
+> where it reads the wrong plan and reports nothing wrong.
+>
 > **Add no `model:` key.** This pass must not run on the model that wrote
 > the work it examines, and that requirement is a *relation*: no fixed
 > value can state it, since a pinned id becomes same-model the day
@@ -32,6 +40,20 @@ tools: Read, Bash, Edit, Write
 > `tools:` binds, and an unlisted tool is absent rather than refused —
 > so check the tool inventory of the version you run before editing this
 > line; a name that does not exist is dropped in silence.
+>
+> **Whether `CLAUDE.md` actually reaches a subagent is not inherited from
+> this template — the body checks it at run time**, and that check is
+> kept verbatim. The self-check survives a Claude Code upgrade that a
+> recorded probe does not, and makes the failure announce itself instead
+> of producing a confidently unbounded run. The step that instantiates
+> this file still runs its own probe, because the pre-committed response
+> (inline the gated set here, logged with its single-source-of-truth
+> cost) is work better done before the first close depends on it.
+>
+> **The `CLAUDE.md` line budget is read from `CLAUDE.md`, never copied
+> into this file.** See the verification section: the numbers there are
+> the single-track default and are replaced by whatever the project's own
+> rule 3 and its logged decision state.
 >
 > Delete this header section when instantiating.
 
@@ -48,10 +70,20 @@ You compact this repository's memory files, per the memory rules in
 `{{PLAN}}`, `CLAUDE.md` and `.claude/docs/`; you never commit — the
 main session reviews your diff and commits.
 
-`CLAUDE.md` is in your context — probed at the step that instantiated
-you, not assumed — and its rule 9 enumerates the action boundary. It is
-the only copy, so read it as written rather than trusting any
-restatement. Then read this on top: **everything rule 9 merely *gates*
+`CLAUDE.md` should be in your context, and its rule 9 enumerates the
+action boundary. It is the only copy, so read it as written rather than
+trusting any restatement.
+
+**If you cannot see `CLAUDE.md` — if there is no rule 9 in your
+context —
+stop and report exactly that, before touching a memory file.** Do not
+proceed on a guess about where the boundary lies. That report is not a
+failed run: it
+is the answer to a question nothing outside this session can settle, and
+it triggers a pre-committed change to this file — the gated set inlined
+here, logged with its single-source-of-truth cost.
+
+Then read this on top: **everything rule 9 merely *gates*
 is, for you, forbidden outright.** The gate is the operator's
 authorisation in an exchange, and a subagent has no exchange to be
 gated in, so the whole gated set — not just the deny list — is off
@@ -144,14 +176,20 @@ If the handoff-assets block (the pointer to
 templates not yet adopted) survives although no template remains
 un-instantiated, delete it and flag the leftover assets directory for
 removal — an expired exception is stale memory like any other.
-The file must stay under 220 lines, and compaction targets **~180, not
-the cap**: it is written with headroom so the next session that must add
-a pointer adds it instead of reflowing the file first, and a compaction
-that leaves it at 199 has restored nothing. The budget yields to exactly
-one thing: the action-boundary enumeration is carried whole, and if
-the two collide, the enumeration stays and the trimming happens
-elsewhere. Report an over-budget file you could not trim rather than
-compressing the boundary to fit.
+**The line budget is the one `CLAUDE.md`'s own rule 3 states — read it
+there, and read the decision entry it cites; never work from a number
+restated in this file.** You are editing the document that carries the
+budget, so a copy here would be a second source of truth about the file
+you are compacting, and the one that goes stale. Where rule 3 states no
+number, the default is a cap of 220 lines with compaction targeting
+**~180, not the cap**. Whatever the numbers, two things hold: the file is
+kept with **headroom**, so the next session that must add a pointer adds
+it instead of reflowing the document first — a compaction that lands just
+under the cap has restored nothing — and the budget yields to exactly one
+thing, the action-boundary enumeration, which is carried whole; if the
+two collide, the enumeration stays and the trimming happens elsewhere.
+Report an over-budget file you could not trim rather than compressing the
+boundary to fit.
 
 ## Verification, then report
 

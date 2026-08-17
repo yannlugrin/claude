@@ -1295,6 +1295,18 @@ by contrast, is visible on sight.
 The tag *glob* is not one of them: `step-*` matches every form, so
 `git describe --match 'step-*'` stays literal in every project.
 
+**In a multi-track repository a governance placeholder is instantiated as
+a table, not as a path.** One row per track naming that track's plan, log
+and specification, with the standing note that a component track reads the
+root specification too; the active track comes from the track map and the
+`Current state` pointer, or from the step id the invocation carries — and
+in the two milestone passes, from the track named at spawn, per the
+close-ritual exception above. Say so in the template headers rather than
+only here: "resolves to the active track at invocation" is a property the
+instantiating session has to turn into text, and the natural way to
+satisfy it with a single-valued placeholder is to pick one path, which is
+exactly the silent failure the placeholders exist to prevent.
+
 This table is for the session writing the prompt. **The templates never
 point at it, or at anything else on this side:** a template is copied into
 the project and read there, when they are instantiated, by a session that has no access to

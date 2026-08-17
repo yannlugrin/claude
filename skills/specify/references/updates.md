@@ -24,7 +24,7 @@ like "adopted through U-021" resolves. What follows is what accumulated
 since; it empties again when the last project running an older doctrine has
 been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-049**. One
+Ids are permanent and never reused, so the next entry is **U-052**. One
 revision section per date:
 
 ```text
@@ -66,6 +66,9 @@ revision section per date:
 | U-046 | spec phase  | The per-component class is checked against the deliverable list |
 | U-047 | running     | The `CLAUDE.md` budget is derived when its floor is visible |
 | U-048 | running     | A step moved into a track carries its ordering as an edge (multi-track only) |
+| U-049 | running     | An agent verifies its own premise instead of inheriting a probe |
+| U-050 | running     | The compaction agent reads the line budget, never restates it |
+| U-051 | running     | A governance placeholder in a multi-track repository is a table |
 
 **Applies to** says who an entry concerns: *running* — a handed-over project,
 so the update pass walks it; *bootstrap* — only the generation of a new
