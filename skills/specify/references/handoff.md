@@ -1295,17 +1295,24 @@ by contrast, is visible on sight.
 The tag *glob* is not one of them: `step-*` matches every form, so
 `git describe --match 'step-*'` stays literal in every project.
 
-**In a multi-track repository a governance placeholder is instantiated as
-a table, not as a path.** One row per track naming that track's plan, log
-and specification, with the standing note that a component track reads the
-root specification too; the active track comes from the track map and the
-`Current state` pointer, or from the step id the invocation carries — and
-in the two milestone passes, from the track named at spawn, per the
-close-ritual exception above. Say so in the template headers rather than
-only here: "resolves to the active track at invocation" is a property the
-instantiating session has to turn into text, and the natural way to
-satisfy it with a single-valued placeholder is to pick one path, which is
-exactly the silent failure the placeholders exist to prevent.
+**In a multi-track repository a governance placeholder is never
+instantiated as one literal path**, and how it does resolve depends on who
+reads the file. An **agent** starts from a fresh context holding only a
+step id, so it carries a table: one row per track naming that track's
+plan, log and specification, with the standing note that a component track
+reads the root specification too. A **skill** executes in the invoking
+session, which has just read the track map, so it says the plan, the log
+and the specification mean the active track's and points at that map — a
+second, third and fourth copy of the table would be drift surface bought
+for nothing, and the map is what the copies would be copying. Either way
+the active track comes from the track map and the `Current state` pointer,
+or from the step id the invocation carries — and in the two milestone
+passes, from the track named at spawn, per the close-ritual exception
+above. Say this in the template headers rather than only here: "resolves
+to the active track at invocation" is a property the instantiating session
+has to turn into text, and the natural way to satisfy a single-valued
+placeholder is to pick one path, which is exactly the silent failure the
+placeholders exist to prevent.
 
 This table is for the session writing the prompt. **The templates never
 point at it, or at anything else on this side:** a template is copied into

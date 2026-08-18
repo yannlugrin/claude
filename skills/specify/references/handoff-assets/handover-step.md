@@ -30,7 +30,15 @@ description: Pre-test handover sequence — run when the current step's
 > makes allowlists bind, the list must keep the subagent-invocation tool
 > (`Agent` in Claude Code; verify the name in the version you run),
 > since step 3 invokes the `step-reviewer` agent and a missing entry
-> would make that review silently not happen.
+> would make that review silently not happen.>
+> **Once this project has measured that for itself, this block becomes a
+> one-line pointer** at the `.claude/docs/` file holding the measurement,
+> naming its section — the reasoning is a fact about the installed
+> tooling, and a fact restated in four ritual files ages four times over
+> in files a session opens to perform a ritual, not to learn about
+> frontmatter. It stays written out here because the first instantiation
+> has nothing to point at yet. Check the section number resolves after
+> you write it.
 > Delete this header section when instantiating.
 
 **When to use.** When the step is implemented and ready for the

@@ -28,7 +28,15 @@ description: Post-interruption verification — run after work ended
 > unlike the two before it. This
 > ritual's verify-only discipline is prose, below; what actually binds
 > lives in `.claude/settings.json` and the guard hook. Re-probe before
-> reintroducing any of them.
+> reintroducing any of them.>
+> **Once this project has measured that for itself, this block becomes a
+> one-line pointer** at the `.claude/docs/` file holding the measurement,
+> naming its section — the reasoning is a fact about the installed
+> tooling, and a fact restated in four ritual files ages four times over
+> in files a session opens to perform a ritual, not to learn about
+> frontmatter. It stays written out here because the first instantiation
+> has nothing to point at yet. Check the section number resolves after
+> you write it.
 > Delete this header section when instantiating.
 
 Work was interrupted or the last session's claims are in doubt. Your

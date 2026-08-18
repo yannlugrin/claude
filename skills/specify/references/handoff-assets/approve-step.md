@@ -43,8 +43,17 @@ description: Post-approval close of the current step — run only when the
 > defines. That last one is a precaution, not a measurement,
 > unlike the two before it. What
 > actually binds lives in `.claude/settings.json` and the guard hook.
-> Re-probe before reintroducing any of them. Delete this header
-> section when instantiating.
+> Re-probe before reintroducing any of them.>
+> **Once this project has measured that for itself, this block becomes a
+> one-line pointer** at the `.claude/docs/` file holding the measurement,
+> naming its section — the reasoning is a fact about the installed
+> tooling, and a fact restated in four ritual files ages four times over
+> in files a session opens to perform a ritual, not to learn about
+> frontmatter. It stays written out here because the first instantiation
+> has nothing to point at yet. Check the section number resolves after
+> you write it.
+>
+> Delete this header section when instantiating.
 
 **When to use.** Only after the operator has declared the step approved
 in this exchange, following their own manual test. The pre-test handover
