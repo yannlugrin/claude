@@ -82,11 +82,20 @@ In order:
          entries it rests on. Detail in git history between tags
          `<previous step tag>` and `{{STEP_ID}}`.
 
-   `CLAUDE.md`'s plan conventions state the same invariant in one line,
-   because the first closes happen before this skill exists; this file
-   carries how to reach it, which only matters while performing a
-   close. If the two ever disagree about the shape, `CLAUDE.md` wins —
-   it is what the plan is actually written against.
+   **At instantiation, replace the block above with a citation** —
+   naming the document and section that actually carry the plan-entry
+   shape in this repository, with its title, and verifying that it does.
+   The shape is stated once, in the file the plans are written against;
+   `CLAUDE.md` holds it while the plan conventions live there, and a
+   project that moves them into a lazily-read `.claude/docs/` file under
+   rule 3's eviction order moves this citation with them. Do not
+   hardcode either answer, and do not transcribe the shape here: a
+   ritual carrying its own copy is the copy that goes stale, and one
+   naming a document the conventions have since left routes every
+   disagreement to a section that no longer exists. Both have been
+   observed in the same file. What this ritual legitimately adds is only
+   what the shape cannot say, because it matters only while performing a
+   close:
 
    Write the bullet as the tag message's opening paragraph condensed
    (step 4 writes that message in the same commit-and-tag pass), so the

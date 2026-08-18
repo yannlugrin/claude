@@ -62,10 +62,19 @@ In order:
    `git log` and `git diff` from there to `HEAD`, plus `git status`,
    are the complete evidence of everything since — committed and
    uncommitted.
-2. **Cross-check the memory files.** Read `CLAUDE.md`'s pointers,
-   `{{PLAN}}`'s current-step entry and status, and the tail of
-   `{{DECISIONS}}`, and check each claim against the git evidence.
-   They were written by the same interrupted session, so a mismatch
+2. **Read what `/orient` reads, then cross-check it.** This ritual
+   replaces `/orient`, so it performs the same session-start reading,
+   not a narrower one: `CLAUDE.md` in full, `{{PLAN}}`, `{{DECISIONS}}`
+   and the `{{SPEC}}` sections the current step names — the whole
+   routine `CLAUDE.md`'s session-start rule states, in its own words,
+   including whatever that rule adds in a multi-track repository. Do not
+   substitute a shorter list; `CLAUDE.md` routes a resumed session here
+   *before touching anything*, so a ritual that reads less is how a
+   session ends up working from no specification at all — and this is
+   the ritual that runs when the state is least trustworthy.
+
+   Then check each claim in those files against the git evidence. They
+   were written by the same interrupted session, so a mismatch
    is a finding, never something to reconcile silently — a status of
    `awaiting test` over a half-delivered diff is precisely what you
    are looking for.

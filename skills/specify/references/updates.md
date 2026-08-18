@@ -24,7 +24,7 @@ like "adopted through U-021" resolves. What follows is what accumulated
 since; it empties again when the last project running an older doctrine has
 been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-054**. One
+Ids are permanent and never reused, so the next entry is **U-057**. One
 revision section per date:
 
 ```text
@@ -71,6 +71,9 @@ revision section per date:
 | U-051 | running     | A governance placeholder in a multi-track repository is a table |
 | U-052 | running     | `tools:` binds which tools exist, not what they can do |
 | U-053 | running     | A measured tooling fact lives once, and the templates say so |
+| U-054 | running     | `resume-step` performs the orientation it claims to embed |
+| U-055 | running     | The close ritual cites the plan-entry shape, never transcribes it |
+| U-056 | running     | The `§N` pointer check joins rule 2's exact-enough checks |
 
 **Applies to** says who an entry concerns: *running* — a handed-over project,
 so the update pass walks it; *bootstrap* — only the generation of a new

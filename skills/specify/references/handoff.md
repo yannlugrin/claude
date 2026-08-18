@@ -486,6 +486,19 @@ and every section matters.
    resolves has been built and regretted: it is a false-positive machine
    that grows worse as the repository does, and once mandated by a rule
    it cannot be deleted without amending the rule.
+   One more is exact enough to earn its place once the repository has
+   several `.claude/docs/` files: **a `§N` pointer checked against the
+   target document's headings.** A citation naming the section *title*
+   is checked exactly; a bare number can only be checked for existence,
+   which is why the title is worth requiring in the one class where a
+   pointer is followed by a session that will not re-read the target —
+   the instantiated skills and agents. Measured: an off-by-one section
+   pointer shipped in four ritual files on the day they were written,
+   the numbering having shifted in the same commit. Two scope rules keep
+   it honest: read-only documents stay outside it — a check that can go
+   red inside a file nobody may edit is a check nobody can turn green —
+   and it recognises one citation shape rather than parsing prose, which
+   is the regretted machine above wearing a different hat.
    **Prose lint over the governance documents**, configured to them as
    they already are — `SPECIFICATIONS.md` is
    read-only under rule 1, so the lint bends to it and never the reverse,
