@@ -13,6 +13,8 @@ description: Post-interruption verification — run after work ended
 > Instantiate as `.claude/skills/resume-step/SKILL.md`. Placeholders:
 > `{{PLAN}}` and `{{DECISIONS}}` — the plan and decision log governing
 > the work this file performs;
+> `{{SPEC}}` — the specification document(s) the current step's
+> sections are read from (step 2 reads them);
 > `{{CHECK_COMMAND}}` — the rule-2 check entry point;
 > `{{STATE_CHECKS}}` — the project's read-only
 > world-state commands (service status, container lists, mounted

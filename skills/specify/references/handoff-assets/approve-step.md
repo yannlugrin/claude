@@ -115,10 +115,17 @@ In order:
    `{{CHECK_COMMAND}}` before committing.
    Subject: `{{STEP_ID}}: close — approved, status done, entry
    compacted`.
-4. **Annotated tag** `{{STEP_ID}}` on that commit. Message shape
-   follows the existing tags (`git tag -n99 -l 'step-*'`): a title
-   line `{{STEP_ID}} — <step title>`, then `Approved YYYY-MM-DD.` and
-   a short paragraph of the step's notable outcomes.
+4. **Annotated tag** `{{STEP_ID}}` on that commit. **At instantiation,
+   replace this sentence with a citation** — naming the document and
+   section that carry the tag-message shape in this repository, with
+   its title, and verifying that it does; the shape is fixed in the
+   ground rules precisely so the closes that happen before this ritual
+   exists do not improvise it, so it is stated once and read from
+   there. Do not transcribe it here, and do not source it from
+   `git tag -n99 -l 'step-*'`: the earliest tags were written before
+   this ritual existed, so reading the shape off them makes whatever
+   they improvised the standard. That command is the cross-check, never
+   the carrier.
 5. **Milestone boundary:** if this was the milestone's last step, do
    not start the next one — suggest the whole-state review and then
    the memory-compaction pass, in that order, so the compaction runs

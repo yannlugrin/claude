@@ -112,6 +112,23 @@ first entry of a revision. Each entry states:
   first" is a test; "the project's amendment flow is outdated" is not.
 - **Remedy** — what to change, and where the user's approval is required.
 
+**Size the entry to what a reader must do about it, and say when one is
+not warranted.** Every change to this doctrine gets an index row — that
+is what the index is — but the apparatus below it is not free: a *Detect*
+test and a *Remedy* are written for a project that can be behind and pay
+for it, and manufacturing them for a change no project can be behind on
+buys nothing and is read by every later pass. So a **bootstrap** or **spec
+phase** change is usually a line or two with "none in-project", and
+several fixes found together share one id rather than each taking their
+own — U-033 bundled ten, U-057 fourteen. And not every generic finding
+becomes an entry at all: a defect in this doctrine's own text is fixed
+here and stops there, because the next prompt generated gets the fix for
+free. `upstream-findings.md` is a **record of what a run found**, not a
+queue of things owed an id; promoting all of it is how a phase with no
+subtractive force turns a changelog into a second doctrine. The question
+is always what a future reader has to *do*, never whether the finding was
+real.
+
 An entry is **corrected in place**, with a dated note saying what was
 added, when it misstates or under-states the doctrine it already
 describes — a project reading it must get the doctrine as it stands, not

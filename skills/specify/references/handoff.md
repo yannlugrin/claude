@@ -115,7 +115,11 @@ batch.
    answering "is what is committed here well-formed?" is the
    `git add --intent-to-add` prohibition of rule 2 one step milder, and
    the rituals that read `git status --porcelain` for a clean tree are
-   downstream of both.
+   downstream of both. **The fixers carry the vendored file's exemption
+   with them**, for the same reason the Python family carries it: a
+   vendored file is never reflowed, and a whitespace or final-newline
+   fixer reflows it exactly as a formatter would. Excluding it from the
+   linters and leaving it inside the fixers protects nothing.
 
    Back to the guard's own family:
    carry its own exemptions forward with it as known configuration
@@ -540,7 +544,11 @@ and every section matters.
    they already are — `SPECIFICATIONS.md` is
    read-only under rule 1, so the lint bends to it and never the reverse,
    and excluding a document from a rule is a logged decision, not a quiet
-   config line. And prove what each enforcement mechanism actually does
+   config line. A bend made for the specification is **scoped to that
+   file**: the same finding raised anywhere else is fixed, not
+   accommodated, and a rule relaxed globally to spare one read-only
+   document quietly stops binding on every document that could have
+   been corrected. And prove what each enforcement mechanism actually does
    in your version — one probe per mechanism, **run at the step that
    introduces that mechanism**: settings keys, permission patterns and
    the guard hook being reached at all at step `001`; an agent's
@@ -979,7 +987,10 @@ yet — not a step gate.)
        **The guard first:** instantiate
        `.claude/spec-work/handoff/assets/bash_guard.py` as
        `.claude/hooks/bash_guard.py` (executable), read its module
-       docstring in full, and edit only its `REGISTRY`. That docstring
+       docstring in full, and edit only its `REGISTRY` and `CASES`
+       blocks — the two named together because they are the pair the
+       docstring obliges and they do not sit together in the file.
+       That docstring
        is the doctrine for this deliverable — how to choose between
        *rules* and *grants* per tool, what must land in
        `.claude/settings.json`, what the guard cannot see, and the rule
@@ -1094,7 +1105,9 @@ yet — not a step gate.)
        `step-reviewer` agent, and the agents whose trigger is a
        certainty of this plan (a milestone close needs its state review
        and its memory compaction to exist before it arrives, not to be
-       improvised at the boundary). A recovery ritual created during the
+       improvised at the boundary — and the certainty rests on the
+       foundation milestone this prompt itself declares, never on a
+       later grouping the plan is still free to decline). A recovery ritual created during the
        crisis it is needed for is too late. Propose the conditionally
        triggered rest only when their trigger exists — and an
        instantiated file must never name a skill or agent you did not
@@ -1251,8 +1264,12 @@ yet — not a step gate.)
    pointer to a not-yet-existing command must not strand the
    interruptions most likely to happen early, the ones during the
    foundation steps themselves. It also carries the plan-step entry
-   shape — the open form in full, and the compacted-on-approval form as
-   a single rule rather than a block, since the ritual that performs a
+   shape and the tag-message shape — both fixed in rule 6 precisely so
+   the early closes do not improvise them, and both therefore needing a
+   carrier here, since the ritual that would hold them is instantiated
+   only at step `002` and cites rather than restates what it finds. The
+   entry shape goes in as the open form in full and the
+   compacted-on-approval form as a single rule rather than a block, since the ritual that performs a
    close carries the detail and `CLAUDE.md` only has to state the
    invariant for the closes that happen before that ritual exists — and
    the
@@ -1350,6 +1367,16 @@ that directory. It audits `PLAN.md` against `SPECIFICATIONS.md`:
 - **premises** — any factual claim in the plan the specification does
   not state is flagged for verification, never trusted: training
   knowledge goes stale.
+
+Tell the reviewer which layer it is judging, or two of those lenses
+fire on decisions I have already made. The foundation steps, the
+harness, the tooling and the permission baseline are **prescribed by
+this prompt**, and the reviewer cannot see that — so **premises** and
+**proportion** run over the project plan, not over the workflow layer,
+and **coverage** maps the specification's sections. The other lenses
+keep the whole plan: granularity above all, since "this step is too big
+to judge in one gate" is a finding this review is explicitly invited to
+return about the foundation itself.
 
 One check the cold reviewer is structurally barred from — it may not
 read this prompt — runs beside it: spawn a **second subagent,
