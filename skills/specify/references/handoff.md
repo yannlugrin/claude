@@ -94,7 +94,31 @@ batch.
    `001` on, whichever language the entrypoints and tooling turn out to
    be, so a slot written around the entrypoint language leaves the most
    load-bearing file in the tree covered only by the catch-all above.
-   Carry its own exemptions forward with it as known configuration
+   A second family is standing for a different reason: **repository
+   hygiene and secret detection**, present from step `000`. It is not
+   indexed on an artifact class — trailing whitespace, missing final
+   newlines, mixed line endings, merge-conflict markers, accidental
+   large files, case collisions, broken symlinks, shebang-and-executable
+   disagreement, and above all a committed key or credential are
+   file-type-agnostic and apply from the first commit. Say so in the
+   slot, and say that **the never-ahead rule does not reach it**: that
+   rule governs per-artifact-class families, and an implementer holding
+   it beside rule 11's build-at-the-moment-of-need has a
+   doctrine-shaped reason to defer the one family that has nothing to
+   wait for. This is the boring standard tool by construction — the
+   stock hook collection of whichever runner `{{HOUSE_TOOLING}}` names,
+   pinned in one place, no code written — so rule 11 argues for it
+   rather than against. One split the slot decides rather than leaves
+   open: the **fixers** (whitespace, final newline, line endings)
+   belong to the commit hook, while *check* asserts rather than
+   repairs. A hook that rewrites the working tree as a side effect of
+   answering "is what is committed here well-formed?" is the
+   `git add --intent-to-add` prohibition of rule 2 one step milder, and
+   the rituals that read `git status --porcelain` for a clean tree are
+   downstream of both.
+
+   Back to the guard's own family:
+   carry its own exemptions forward with it as known configuration
    items of step `001`, and there are two, not one: a **lint-width**
    exemption **and** a **formatter exclusion** — a vendored file is
    never reflowed, and where the runner passes filenames explicitly
@@ -769,7 +793,13 @@ and every section matters.
 5. **Secrets never enter the repository.** Not in files, not in examples
    with real values, not in commit messages. The spec ({{SECRETS_SOURCE}})
    defines how secrets are sourced; follow it, and use obvious
-   placeholders in anything committed.
+   placeholders in anything committed. **This rule gets a mechanism,
+   not only your care:** key and credential detection runs in the
+   commit hooks from step `000`, with the repository-hygiene family of
+   rule 2. A must with nothing enforcing it is the guard on paper that
+   step `001` warns about — and this is the one rule here whose breach
+   cannot be undone by noticing it afterwards, since a committed secret
+   is a rotated secret.
 
 6. **Commits are small and traceable, and documentation ships inside
    them.** One coherent change per commit, subject prefixed with the step
