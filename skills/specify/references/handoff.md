@@ -649,9 +649,14 @@ and every section matters.
    whole history. Then tell me where we are before touching anything.
 
    **`CLAUDE.md` is loaded on every run, so it stays small** — under 220
-   lines, treated as a hard budget that yields to exactly one thing:
-   rule 9's boundary enumeration is carried whole, and the trimming
-   happens elsewhere. **It is written with headroom** — around 180 lines
+   lines, treated as a hard budget that yields to the **whole-carry
+   blocks** and nothing else: rule 9's boundary enumeration always, plus
+   any further block this prompt marks as carried whole — safety text a
+   project adds for its own reasons is safety text on the same footing.
+   They are carried entire and the trimming happens elsewhere. Say how
+   many there are rather than writing "exactly one thing": a project
+   that adds a second leaves that sentence contradicting its own rules,
+   and the agent that compacts this file reads it. **It is written with headroom** — around 180 lines
    when you first hand it over, not 219. A file at its cap forces the
    next session that must add one pointer to reflow the whole document
    before it can do its own work, and a budget check that warns from the
@@ -661,7 +666,7 @@ and every section matters.
    (`.claude/docs/`), then the temporary tooling-templates block once
    its directory is gone, then per-step detail the plan already
    carries — and, where the repository has tracks, per-track detail its
-   own plan carries. Rule 9's enumeration never leaves, and neither
+   own plan carries. No whole-carry block ever leaves, and neither
    does the current-step pointer. If the rules still cannot be restated
    inside the headroom after that, that is a finding to raise with me,
    not a file to pack — and one legitimate outcome of raising it is a

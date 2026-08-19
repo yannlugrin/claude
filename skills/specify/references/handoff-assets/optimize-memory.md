@@ -179,8 +179,13 @@ that looks wrong is reported to the operator, never corrected.
 ## CLAUDE.md
 
 Update "Current state" and remove pointers your changes made stale.
-Never compress, summarize, or relocate the action-boundary
-enumeration: it is safety text and stays whole in `CLAUDE.md`.
+Never compress, summarize or relocate a **whole-carry block** — the
+action-boundary enumeration always, plus anything else `CLAUDE.md`'s
+rule 3 names as carried whole. They are safety text and stay entire.
+Read that list from rule 3 rather than from this file: a project may
+carry more than one, and this instruction and the budget clause below
+are the two places the count appears, so they are extended together or
+not at all.
 If the handoff-assets block (the pointer to
 `.claude/spec-work/handoff/assets/`, the rule-1 exception, the list of
 templates not yet adopted) survives although no template remains
@@ -195,11 +200,11 @@ number, the default is a cap of 220 lines with compaction targeting
 **~180, not the cap**. Whatever the numbers, two things hold: the file is
 kept with **headroom**, so the next session that must add a pointer adds
 it instead of reflowing the document first — a compaction that lands just
-under the cap has restored nothing — and the budget yields to exactly one
-thing, the action-boundary enumeration, which is carried whole; if the
-two collide, the enumeration stays and the trimming happens elsewhere.
-Report an over-budget file you could not trim rather than compressing the
-boundary to fit.
+under the cap has restored nothing — and the budget yields to the
+whole-carry blocks rule 3 names, which are carried entire; if budget and
+block collide, the block stays and the trimming happens elsewhere.
+Report an over-budget file you could not trim rather than compressing a
+whole-carry block to fit.
 
 ## Verification, then report
 
