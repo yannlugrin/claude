@@ -1022,9 +1022,18 @@ yet — not a step gate.)
        gated in the guard's ground rules, and restating it as a prefix
        rule is the two-sources-of-truth case above, the weaker of which
        misses `git -C dir push`. What holds for a push wherever it is
-       expressed is the *tier*: it asks and is never denied — a denied
-       pattern cannot be approved in the very exchange rule 9 relies
-       on. `deny` stays reserved for what has no authorised use at all,
+       expressed is the *tier* — and the tier splits on
+       recoverability. The **ordinary** push asks and is never denied:
+       a denied pattern cannot be approved in the very exchange rule 9
+       relies on, and that push is the one rule 6's close ritual
+       attempts. The **unrecoverable spellings** — force, mirror and
+       ref deletion, however written — are denied, which is not an
+       exception to that claim but its boundary: the guard's own `GIT`
+       ground rules already deny them, and a doctrine asserting that
+       every push merely asks would be weakening ground rules it
+       forbids weakening two paragraphs earlier. State the split, or
+       the unscoped sentence collides with the guard shipped beside
+       it. `deny` stays reserved for what has no authorised use at all,
        each named in the proposal.
        **And the boundary protects its own files:** native file-tool
        rules at the **ask** tier gating edits to
@@ -1269,13 +1278,16 @@ yet — not a step gate.)
    interruptions most likely to happen early, the ones during the
    foundation steps themselves. It also carries the plan-step entry
    shape and the tag-message shape — both fixed in rule 6 precisely so
-   the early closes do not improvise them, and both therefore needing a
-   carrier here, since the ritual that would hold them is instantiated
-   only at step `002` and cites rather than restates what it finds. The
-   entry shape goes in as the open form in full and the
-   compacted-on-approval form as a single rule rather than a block, since the ritual that performs a
-   close carries the detail and `CLAUDE.md` only has to state the
-   invariant for the closes that happen before that ritual exists — and
+   the early closes do not improvise them, and both needing a carrier
+   here for two reasons that outlast each other: the first closes
+   happen before step `002` instantiates any ritual, and that ritual,
+   once it exists, **cites** these shapes rather than transcribing
+   them, so something has to be what it cites. `CLAUDE.md` is that
+   carrier — the open plan-entry form in full, the
+   compacted-on-approval form and the tag-message shape stated
+   completely enough to be pointed at — or the `.claude/docs/` file it
+   points at, should the budget later evict them there, in which case
+   the citation moves with them. And
    the
    boundary-crossing-cost rule from the plan instructions above: later
    sessions extend the plan and close its steps from `CLAUDE.md` alone,
@@ -1372,13 +1384,19 @@ that directory. It audits `PLAN.md` against `SPECIFICATIONS.md`:
   not state is flagged for verification, never trusted: training
   knowledge goes stale.
 
-Tell the reviewer which layer it is judging, or two of those lenses
-fire on decisions I have already made. The foundation steps, the
+Tell the reviewer which layer it is judging, or one of those lenses
+fires on decisions I have already made. The foundation steps, the
 harness, the tooling and the permission baseline are **prescribed by
-this prompt**, and the reviewer cannot see that — so **premises** and
-**proportion** run over the project plan, not over the workflow layer,
-and **coverage** maps the specification's sections. The other lenses
-keep the whole plan: granularity above all, since "this step is too big
+this prompt**, and the reviewer cannot see that — so **premises** runs
+over the project plan rather than the workflow layer, and **coverage**
+maps the specification's sections. Every other lens keeps the whole
+plan, **proportion included**: rule 11's founding measurement — six
+hundred lines of bespoke runner where a standard tool already
+existed — was itself a foundation-step failure, so a carve-out sparing
+the foundation from proportion would spare it from the lens its own
+evidence produced. A proportion finding against a prescribed step is
+one the operator rejects in a sentence; not receiving it costs more.
+Granularity above all, since "this step is too big
 to judge in one gate" is a finding this review is explicitly invited to
 return about the foundation itself.
 
