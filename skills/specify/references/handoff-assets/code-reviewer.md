@@ -19,6 +19,16 @@ tools: Read, Bash, Write
 > linter configuration files that define the floor; `{{CHECK_COMMAND}}`
 > and `{{TEST_COMMAND}}` — the local gates it may run.
 >
+> **Adapt the `description` to the handoff's `{{CODE_REVIEW}}` answer.**
+> It ships saying "on request only", which is right where that slot
+> leaves the review on request and wrong where it makes the review a
+> standing gate — and the `description` is what decides when this agent
+> is reached at all, so an on-request description on a standing gate is
+> a gate that never fires. Where the review is standing, say the trigger
+> (every code-bearing step, before handover), and check that the
+> ritual performing the handover names the invocation too: the
+> description alone is discoverability, not a carrier.
+>
 > **Add no `model:` key.** This agent inherits the invoking session's
 > model, which is correct here: what it buys is a cold context, which any
 > model gives — not a second opinion, which only a different model gives.

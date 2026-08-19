@@ -322,9 +322,8 @@ step-number namespace. That holds for most projects and should not be
 abandoned lightly — but a monorepo breaks it, and the usual trigger is a
 specification already split into a root document plus one per component
 (`structure.md`, "Multi-document specifications"). When it applies, the
-shape is **tracks**: the root track owns repository-wide work (the
-foundation and harness, CI, shared documentation) and each component
-directory owns one track.
+shape is **tracks**: the root track owns repository-wide work — its
+charter is drawn below — and each component directory owns one track.
 
 **Enumerate the tracks from what the repository ships, never from the
 documents that happen to exist.** The split is what suggests tracks, but
@@ -425,22 +424,17 @@ What changes, rule by rule — nothing else does:
 - **The first task** produces one plan and one log per track, plus the
   single `CLAUDE.md` and root `README.md`; the plans *together* must
   account for every section of every specification document. **The track
-  map is its own logged decision**, not a clause of the entry adopting the
-  workflow: every component considered, every deliverable the root track
-  owns named with the reason it is root-owned. The prompt proposes that
-  map; the implementer re-derives it against the three rules above and
-  logs what it concluded. A map transcribed without that entry is
+  map is its own logged decision**, not a clause of the entry adopting
+  the workflow — the first task's item 2 states what that entry
+  contains. The prompt proposes the map; the implementer re-derives it
+  against the three rules above and logs what it concluded. A map transcribed without that entry is
   unanswerable later — the question "why is this here?" has no reader, and
   the session that inherited the answer no longer exists.
-- **Every deliverable has a location, and the plans say so.** A track's
-  directory fixes it for the ordinary case; anything landing outside the
-  active track's directory names its path in the step's deliverables. A
-  path no plan states is a path the implementing session invents at the
-  moment it needs one, and two sessions invent differently — the observed
-  failure is a component whose files had no home in any document, where
-  the next session would have put a `Dockerfile` at the repository root
-  beside the task runner and made the contributor guide describe two
-  shapes.
+- **Every deliverable has an owning track as well as a location.** The
+  location rule is the template's own, in the per-step shape; what
+  tracks add is that a track's directory fixes it for the ordinary case,
+  so only what lands *outside* the active track's directory has to name
+  its path.
 - **The templates** are instantiated **once each**, and their governance
   placeholders resolve to the active track **at invocation** — from the
   track map and the `Current state` pointer — not to one literal path.
@@ -808,8 +802,11 @@ and every section matters.
    a state review and a memory compaction — is instantiated up front,
    because tooling created during the event it exists to handle arrives
    too late and gets improvised instead. Only a *conditional* trigger
-   justifies waiting: an agent that reviews code, or tests, in a
-   repository that has neither yet. Once none remains un-instantiated
+   justifies waiting, and `{{CODE_REVIEW}}` decides whether the review
+   pair has one: where that slot leaves the review on request, an agent
+   that reviews code, or tests, in a repository that has neither yet is
+   the standing example of waiting; where it makes the review a standing
+   gate, both are certainties like the rituals and wait for nothing. Once none remains un-instantiated
    (each adopted or explicitly dropped, logged), delete the assets
    directory and every pointer and exception referring to it in the same
    commit: git history keeps the templates, and rule 1's carve-out must
@@ -1333,9 +1330,12 @@ yet — not a step gate.)
    `optimize-memory` has no way to know it was ever offered. Kept
    deliberately small per rule 3: what applies always stays
    in, everything context-specific becomes a `.claude/docs/` file it
-   points to — and it lands **with headroom, around 180 lines, not at
-   the 220-line cap**, so the next session that must add a pointer adds
-   it instead of reflowing the file first. Two things the restatement
+   points to — and it lands **with headroom against the budget rule 3
+   states**, not at its cap, so the next session that must add a pointer
+   adds it instead of reflowing the file first. Do not restate the
+   numbers here: rule 3 carries them and a project may derive its own,
+   and a second copy is the drift U-050 already removed from the
+   compaction agent. Two things the restatement
    must not do, both observed: rule 9's enumeration is carried whole
    **including the qualifiers that bound its free side** — "installing
    pinned dependencies is free, fetching what is not pinned is not" is
