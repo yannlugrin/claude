@@ -367,9 +367,10 @@ what keeps old memory out of the session doing this work.
    never invented — and present them as a numbered batch with
    recommendations. The implementer's action boundary (what it may never run
    on its own initiative) is the one pure policy call: flag it as such.
-   Three slots have no source in the specification and are **asked for**
+   Four slots have no source in the specification and are **asked for**
    in the same batch rather than derived: the boundary,
-   `{{HOUSE_TOOLING}}` and `{{REFERENCES}}` — see their entries in
+   `{{CODE_REVIEW}}`, `{{HOUSE_TOOLING}}` and `{{REFERENCES}}` — see
+   their entries in
    `handoff.md`, which carry why each is asked and what goes wrong when
    it is not. The user rules; only then write.
 2. **Write and commit.** `PROMPT.md`, and the

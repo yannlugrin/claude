@@ -22,11 +22,12 @@ user's rulings on the batch below — never invented, and never from the
 spec-phase decision log or remembered spec-phase discussion: the
 specification must be self-sufficient for the implementer, so a slot it
 cannot fill is a finding against the document, not a gap to fill from
-memory. **Three are exempt by construction**, and raising them as
+memory. **Four are exempt by construction**, and raising them as
 findings against a finalized specification is the mistake this sentence
-otherwise invites: `{{BOUNDARY}}` is a policy call, `{{REFERENCES}}` and
+otherwise invites: `{{BOUNDARY}}` and `{{CODE_REVIEW}}` are policy
+calls, `{{REFERENCES}}` and
 `{{HOUSE_TOOLING}}` are the user's own context. None has a source in the
-specification, all three are asked for in the batch, and not finding
+specification, all four are asked for in the batch, and not finding
 them there is not a finding.
 
 Present the filled values to the user as a numbered batch before writing
@@ -290,6 +291,29 @@ batch.
     name into commands (`make`, `npm run`, `task`), not only for
     `just`, and the step that builds the permission baseline records it
     as a rule of that baseline.
+14. `{{CODE_REVIEW}}` — **how much review the code itself gets, and a
+    policy call like the boundary; ask it in the batch.** Two questions
+    in one: is a cold code review a *standing* gate on every
+    code-bearing step, or spawned on request when the implementer
+    judges it worth it — and where it is standing, which **foci** does
+    it carry? Recommend standing wherever the project ships code that
+    runs in somebody else's environment, and read the foci off the
+    specification's own risk statements rather than inventing them:
+    permission-path code wants security, anything with a stated latency
+    budget wants performance, and code quality is the one that travels.
+    The answer decides four places at once — rule 2's text, step
+    `002`'s adoption list, the `handover-step` sequence that carries
+    the gate past bootstrap, and whether `code-reviewer` and
+    `test-reviewer` are conditional adoptions at all — which is why it
+    belongs in the batch rather than in the implementer's latitude.
+    Ask the test half separately: a suite-bearing step is not the same
+    trigger as a code-bearing one, and a project may want the first
+    without the second. Measured: a run that left this to the
+    implementer had the operator volunteer it after the batch was
+    ruled, and it then took four review rounds to integrate — one to
+    find it had no carrier past bootstrap, two more to stop the
+    test-review clause reading as a deferral. Asked up front it is one
+    decision; asked late it is a rewrite of the four places above.
 
 ## Monorepo and multi-track projects
 
@@ -628,7 +652,8 @@ and every section matters.
    too. A fast form
    of *check* narrowed to what changed is legitimate mid-step; the commit
    that receives a `step-NNN` tag runs the full one — that commit is the
-   state every later session treats as known-good. My gate exists to
+   state every later session treats as known-good. {{CODE_REVIEW}}
+   My gate exists to
    judge behaviour against the real world, not to catch typos.
 
 3. **All memory lives in files**, because your sessions do not persist:
@@ -1531,9 +1556,15 @@ milestones, and it needs two passes — the state review and the memory
 compaction — so both agents are instantiated with the rituals rather than
 at the boundary they serve; deferring them only guarantees that the first
 milestone close improvises what it cannot find. `code-reviewer` and
-`test-reviewer` are the genuinely conditional pair: each reviews something
-the repository may never contain, and an agent reviewing code that does
-not exist is unreviewed weight. `bash_guard.py` lands a step earlier than
+`test-reviewer` are the pair whose default `{{CODE_REVIEW}}` decides:
+where that slot makes the review a standing gate they are certainties
+like the rituals, adopted at `002` and carried by `handover-step`;
+where it leaves the review on request they are genuinely conditional,
+since each then reviews something the repository may never contain and
+an agent reviewing code that does not exist is unreviewed weight. The
+table's "conditional" is the on-request default, not a fixed property —
+and the two halves answer separately, since a suite is a later
+certainty than code in most plans. `bash_guard.py` lands a step earlier than
 the rest because the baseline it belongs to is step `001`'s whole subject.
 
 Shared conventions the templates carry, worth preserving at instantiation:

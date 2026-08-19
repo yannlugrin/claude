@@ -24,7 +24,7 @@ like "adopted through U-021" resolves. What follows is what accumulated
 since; it empties again when the last project running an older doctrine has
 been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-062**. One
+Ids are permanent and never reused, so the next entry is **U-063**. One
 revision section per date:
 
 ```text
@@ -44,6 +44,7 @@ revision section per date:
 | U-059 | running     | Repository hygiene and secret detection are a standing check family |
 | U-060 | bootstrap   | The prompt is checked against the template it came from |
 | U-061 | running     | Publish-or-strip covers the references directory, ruled separately |
+| U-062 | bootstrap   | How much review the code gets is asked, not left to the implementer |
 
 ### [2026-08-17](updates/2026-08-17.md) — handoff findings from one project's third handoff iteration, another project's specification-run review, and the operator's review of the first project's bootstrap output
 
