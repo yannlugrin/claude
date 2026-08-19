@@ -381,7 +381,18 @@ what keeps old memory out of the session doing this work.
    a guard that cannot execute fails open and says nothing.
 3. **Cold review.** Spawn per "Spawning reviews" with the **handoff** lens
    from [references/reviewer.md](references/reviewer.md); triage, apply,
-   repeat until quiet — phase 4 rules apply unchanged. Propose at least
+   repeat until quiet — phase 4 rules apply unchanged, and two of them
+   need restating here rather than inheriting, because a rule imported
+   by reference is read once at the top of a phase and not again while
+   the loop runs: **weigh what each finding costs against what it buys**,
+   and **report the delta in every triage commit — cumulatively against
+   the prompt as first written, not only for the round**. Per round the
+   number is unremarkable by construction (+70, then +65); the running
+   total is the one that asks a question ("1102 → 1237, +12%, twenty-two
+   findings applied, none removed"), and it is the only form that
+   arrives while answering it is still cheap. Measured: a run whose
+   triage commits carried no figure at all, in a session that had said
+   it would report one. Propose at least
    one round on a strong model *different from the session's*: measured
    on identical inputs, each model shipped defects past its own reviews
    that the other model's review caught, and "quiet" arrives earlier on

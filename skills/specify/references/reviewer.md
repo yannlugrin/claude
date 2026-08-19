@@ -170,7 +170,18 @@ needs: a rule whose wording mandates a bespoke tool (it cannot then be
 deleted without amending the rule), an obligation to cover artifacts the
 repository does not yet contain, a "mechanism of your choice" where the
 operator plainly has a standard one, a first step too large for a single
-gate. For the summary-back, describe what the implementer
+gate. **And the prompt's own length is in scope, not only the
+implementation's.** This document is restated by the bootstrap session
+into a `CLAUDE.md` under a line budget, so a clause that does not earn
+its lines costs something concrete downstream: a rule too tangled to
+restate is a rule that loses a clause there. Say where it is redundant,
+where two rules say one thing, where a qualifier has accreted over a
+sentence that was already clear — ranked with the defects, because
+review rounds append and nothing else in this process removes. Two
+things are exempt and proposing cuts to them is a false positive: the
+action boundary of rule 9 is safety text and is never shortened, and
+neither is anything the prompt itself marks as carried whole. For the
+summary-back, describe what the implementer
 would do in its first session, step by step — mismatches with the intended
 bootstrap are findings.
 ```
