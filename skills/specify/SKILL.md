@@ -400,13 +400,40 @@ what keeps old memory out of the session doing this work.
    exemption — the action boundary of rule 9 is safety text and is never
    shortened. Wording only. Anything that would change meaning stops and
    goes to the user as a finding.
-5. **Auto-memory residue check.** The setting has been off since workspace
+5. **Template fidelity check — mechanical, then judged.** Nothing else
+   in this process compares the prompt against the template it came
+   from. The cold review holds the specification, the prompt and the
+   assets, never this doctrine; the bootstrap fidelity subagent holds
+   the prompt and what the first task produced. So the chain
+   doctrine → prompt → plan → `CLAUDE.md` has every link checked but
+   the first, and a clause dropped in transcription is invisible for
+   the life of the project. Two halves, both mechanical:
+   `diff -r` the copied assets against
+   [references/handoff-assets/](references/handoff-assets/) — byte-identical,
+   or every difference already recorded in step 7's file; and a
+   text diff of the prompt's fixed text against the template block in
+   `handoff.md`. **Produce the candidate list mechanically and classify
+   it by hand** — slot fill, deliberate project adaptation, or loss.
+   Do not delegate the comparison itself to a model: asking one to find
+   *absent* text across two long documents fails silently, and a
+   reviewer that misses a missing clause reports nothing and reads as
+   clean. Measured on two runs of one project: the first shipped assets
+   eight doctrine entries stale, which one `diff -r` would have caught
+   in a second and no review round did; and both runs dropped the same
+   budget clause from rule 3, which no lens could reach. It runs
+   **here, after compression** rather than earlier: the rounds append
+   clauses, a triage rewrite can drop a neighbouring one, and the
+   compression pass is the one most likely to shed a qualifier while
+   reporting itself as wording-only. Losses are restored, not
+   re-argued; anything that turns out to be a deliberate adaptation is
+   worth a line in step 7.
+6. **Auto-memory residue check.** The setting has been off since workspace
    setup, but memory may predate it: look under
    `~/.claude/projects/<project-path-with-slashes-as-dashes>/memory/`. If
    anything is there, report it for the user's review — deleting is their
    call (it is machine-local and may hold things they want), but it must not
    reach the bootstrap session unreviewed.
-6. **Upstream findings.** Write
+7. **Upstream findings.** Write
    `.claude/spec-work/handoff/upstream-findings.md`: every fix applied
    during this phase that was *not* project-specific — a defect in a
    copied template, an edit to the prompt's fixed text that would be
@@ -424,7 +451,7 @@ what keeps old memory out of the session doing this work.
    name it in the closing message beside this one — never merge the two: a
    fresh handoff session cannot vouch for a run it did not sit through, and
    the two files answer different questions.
-7. **History squash — gated, clean cut.** Propose collapsing the whole
+8. **History squash — gated, clean cut.** Propose collapsing the whole
    history into a single `initial commit` so the implementer's "before the
    first step tag, the range is the whole history" re-orientation sees only
    bootstrap work. Preconditions: the history is purely spec work (the skill
@@ -433,7 +460,7 @@ what keeps old memory out of the session doing this work.
    squash then implies a force-push on the user's side. Only on the user's
    explicit confirmation in that exchange: squash, no archive branch,
    history rewriting is never within latitude.
-8. **Hand over the one-liner:** open a fresh Claude Code session at the
+9. **Hand over the one-liner:** open a fresh Claude Code session at the
    repository root and say *"Read `.claude/spec-work/handoff/PROMPT.md` in
    full and do what it says."*
 

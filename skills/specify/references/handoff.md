@@ -521,9 +521,11 @@ and every section matters.
    resolves has been built and regretted: it is a false-positive machine
    that grows worse as the repository does, and once mandated by a rule
    it cannot be deleted without amending the rule.
-   One more is exact enough to earn its place once the repository has
-   several `.claude/docs/` files: **a `§N` pointer checked against the
-   target document's headings.** A citation naming the section *title*
+   One more is exact enough to be worth doing, on the same *should*
+   footing as its neighbours above and never as a new requirement —
+   the sentence before this one is why, and it applies here too — once
+   the repository has several `.claude/docs/` files: **a `§N` pointer
+   checked against the target document's headings.** A citation naming the section *title*
    is checked exactly; a bare number can only be checked for existence,
    which is why the title is worth requiring in the one class where a
    pointer is followed by a session that will not re-read the target —
@@ -990,7 +992,12 @@ yet — not a step gate.)
        entry: `--selftest` fails on a rule no case reaches, which is
        what keeps the intent executable rather than remembered.
        **Then the settings**, per the docstring's pairing: one broad
-       allow per registry tool, no `ask` rule for anything the guard
+       allow per *rule- or grant-bearing* tool — never for the shell
+       wrapper layer, because a broad allow on a command-runner is a
+       broad allow on everything it runs the moment the guard is dead,
+       and never for a tool registered deny-everything, whose broad
+       allow buys nothing while the guard lives and is pure liability
+       when it dies — no `ask` rule for anything the guard
        gates (a matching `ask` prompts even where the guard says allow,
        so it cancels every carve-out), no prefix rule restating a guard
        decision — a prefix is strictly weaker and gives you two sources
@@ -1126,12 +1133,19 @@ yet — not a step gate.)
        external prerequisites needed *at bootstrap* — not late, which is
        where a cost-ordered plan would put them — and treat the workflow
        as unverified until I authorise that push and the run comes back
-       green. One deliverable is a decision, not an artifact: whether
-       `.claude/spec-work/` — the specification phase's history, its
-       review reports, and any template still sitting in it — goes
-       public with the repository or is stripped before the first push.
-       Logged, put to me, and made before the push it becomes
-       irreversible at.
+       green. One deliverable is a decision, not an artifact: what of
+       `.claude/` goes public with the repository, decided before the
+       first push it becomes irreversible at, logged and put to me.
+       **Two directories, ruled separately, because they are not the
+       same question.** `.claude/spec-work/` is the specification
+       phase's history, its review reports and any template still
+       sitting in it — nobody's reading material under rule 1, so
+       publishing it is a choice about transparency. `.claude/refs/` is
+       *my* supplied material, whose authority lives elsewhere: some of
+       it may be nobody's business outside this machine, and some of it
+       is the project's own yardstick that later steps still consume,
+       which a blanket strip would delete out from under them. A single
+       ruling covering both reliably gets one of them wrong.
        Its test: I authorise the push and watch the run.
      Nothing here is exempt from the small-step rule. If one of the
      four is still too big for a single test — or cut in the wrong
@@ -1375,7 +1389,7 @@ exception has a
 channel: when a cold review round finds a defect in a copied template
 itself — generic, nothing project-specific in the fix — correct the local
 copy during triage, and record it in the upstream findings file (phase 7,
-step 6) so the template is fixed at its source too. Each markdown template
+step 7) so the template is fixed at its source too. Each markdown template
 states its target path and placeholders in a header comment.
 
 `bash_guard.py` is the one that is not a markdown template: it is working
