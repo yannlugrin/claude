@@ -525,7 +525,19 @@ alternative is what this phase exists to repair.
   that committed files were untracked — so **state the truth positively
   as well**: an authoritative line in the context block ("at this `HEAD`,
   these files are tracked: …"), which leaves nothing to infer and has
-  held in every round since.
+  held in every round since. **And measure that line as you write it,
+  rather than recalling it.** The two instructions above route every
+  repository fact the reviewer may use *into* this block, which makes the
+  block the one place an unverified claim reaches a whole round
+  unchallenged — and it is written by the session most confident about a
+  repository it has been working in all along. Measured: a phase-7 run
+  put "there is no remote" in six consecutive context blocks without ever
+  running `git remote -v`; the remote existed, was public, and carried
+  history that run was about to reason over. So run the commands while
+  writing the block — `git rev-parse HEAD`, `git remote -v`,
+  `git ls-remote` where the remote bears on the review, `git ls-files`
+  for the tracked list — and write down what they return. A fact the
+  reviewer is forbidden to derive is a fact the spawner owes it.
 - Model choice per spawn: inheriting the session model is the default and
   needs no approval. Any divergence from it — up or down — is proposed to
   the user with its reason and spawned only once they approve: model choice
