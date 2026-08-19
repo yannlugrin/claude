@@ -8,7 +8,8 @@ tools: Read, Bash
 
 > Instantiate as `.claude/agents/step-reviewer.md`. Placeholders:
 > `{{PLAN}}`, `{{DECISIONS}}` and `{{SPEC}}` — the plan, decision log
-> and specification document governing the work this file performs.>
+> and specification document governing the work this file performs.
+>
 > **In a multi-track repository these resolve at invocation, not to one
 > path.** Instantiate the placeholder as a small table — one row per
 > track, naming that track's plan, log and specification, with the note

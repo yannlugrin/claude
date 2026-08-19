@@ -54,7 +54,12 @@ batch.
    (linters, syntax checks, template rendering against fixtures, type
    checks, schema validation…), derived from the spec's technology facts.
    Families, not tool invocations — choosing tools is the implementer's
-   job. Fill the slot as a short bulleted list (it stands alone in the
+   job. **YAML is present from step `000` in the default stack, and the
+   slot must name it**: the hook runner's own configuration is the
+   first artifact of any class this repository gets, with CI's workflow
+   following at `003`. The one family guaranteed to exist from step one
+   is the one an expected-instance list drawn from the product's own
+   languages reliably omits. Fill the slot as a short bulleted list (it stands alone in the
    template), never a semicolon chain: review rounds append clauses, and
    chained prose stops being parseable. Three rules the list must
    respect:
@@ -89,8 +94,14 @@ batch.
    `001` on, whichever language the entrypoints and tooling turn out to
    be, so a slot written around the entrypoint language leaves the most
    load-bearing file in the tree covered only by the catch-all above.
-   Carry its own width exemption forward with it (the docstring names
-   the rule and the path) as a known configuration item of step `001`.
+   Carry its own exemptions forward with it as known configuration
+   items of step `001`, and there are two, not one: a **lint-width**
+   exemption **and** a **formatter exclusion** — a vendored file is
+   never reflowed, and where the runner passes filenames explicitly
+   (`pre-commit` does), the formatter needs its `force-exclude` wrinkle
+   on top. The docstring names the rules and the path; a slot that says
+   "width exemption" leaves the format run to reflow the file on its
+   first pass.
 5. `{{IGNORE_ITEMS}}` — what this stack and project leak into the working
    tree that must never be committed (credential files, local environment
    files, tool caches). The fixed text already carries the three that
@@ -614,8 +625,9 @@ and every section matters.
    things leave in this order, and the order is not yours to reshuffle:
    first anything context-specific that a read-trigger can reach
    (`.claude/docs/`), then the temporary tooling-templates block once
-   its directory is gone, then per-track detail that the track's own
-   plan already carries. Rule 9's enumeration never leaves, and neither
+   its directory is gone, then per-step detail the plan already
+   carries — and, where the repository has tracks, per-track detail its
+   own plan carries. Rule 9's enumeration never leaves, and neither
    does the current-step pointer. If the rules still cannot be restated
    inside the headroom after that, that is a finding to raise with me,
    not a file to pack — and one legitimate outcome of raising it is a
@@ -716,10 +728,12 @@ and every section matters.
    work it performs. A template arrives with those as placeholders on
    purpose: a leftover one is visible, while a plausible wrong filename
    is not. A placeholder whose referent does not exist yet at
-   instantiation — the state reviewer's architecture vocabulary and
-   inspection commands, in a repository where nothing is built — is
+   instantiation — **a general rule, not one file's exemption** — is
    seeded from the specification's own vocabulary and kept current under
-   rule 6 as the system materializes; "fill every placeholder with real
+   rule 6 as the system materializes. The standing examples: the state
+   reviewer's architecture vocabulary and inspection commands, and
+   `resume-step`'s world-state checks, both in a repository where
+   nothing is built yet. "Fill every placeholder with real
    commands and paths" is otherwise unsatisfiable for anything
    instantiated up front. Where a template's own enumeration of a routine is narrower
    than the rule it claims to execute, the rule wins and the
@@ -792,6 +806,8 @@ and every section matters.
    with one standing exception: **at a step close, attempt the push** —
    that is when I want the commit and its tag published and when I forget
    to say so, and the permission gate is there to put the question to me.
+   Where no remote exists yet, say so in the close summary instead of
+   attempting anything.
    It stays an exception to be cited, never a pattern to extend: nowhere
    else do you attempt a gated act because something downstream might
    catch it.
@@ -816,7 +832,11 @@ and every section matters.
    documented setup command included; fetching anything *not* pinned in
    the repository is not local. {{BOUNDARY}} happens only when I
    explicitly ask for or allow
-   it in that exchange, never on your own initiative — a boundary the
+   it in that exchange, never on your own initiative — with rule 6's
+   step-close push attempt as the one standing exception, named here
+   because this enumeration is carried whole into `CLAUDE.md`, and a
+   faithful carry that omits it lands two rules that contradict each
+   other — a boundary the
    settings baseline of step `001` also enforces mechanically. The
    enumeration above is safety text: `CLAUDE.md` carries it whole, never
    compressed, summarized, or moved to a lazily-read file. When you
@@ -958,6 +978,16 @@ yet — not a step gate.)
        pattern cannot be approved in the very exchange rule 9 relies
        on. `deny` stays reserved for what has no authorised use at all,
        each named in the proposal.
+       **And the boundary protects its own files:** native file-tool
+       rules at the **ask** tier gating edits to
+       `.claude/settings.json` and `.claude/hooks/`, landed inside this
+       same proposal. Ask, not deny: a deny would end the guard's own
+       maintenance channel, and the baseline's own evolution, with no
+       unlock path. Under a mode that auto-accepts file edits, one
+       silent, well-formed settings edit that drops the push gate turns
+       the close ritual's standing push attempt into an unprompted
+       publish — and the governance family's parse and hook-path checks
+       catch malformation, never a well-formed loosening.
        Auto memory is already off — keep it off.
        **A hook fails open**, so it is gated twice in this same step,
        and the two gates ask different questions.
@@ -974,7 +1004,11 @@ yet — not a step gate.)
        surface than a narrow allow list ever was, and the `deny`
        backstop exists exactly there.
        **Then measure, and write down what you measured.** Rule 2's
-       probes for this step's mechanisms run here; their results land
+       probes for this step's mechanisms run here — and settings and
+       hook changes may be picked up only at session start, so a probe
+       run in the session that made the edit can report a false "not
+       enforced": the probe method includes the restart, and the
+       recorded re-measure recipe says so. Their results land
        in a `.claude/docs/` file — every claim a measurement with the
        version it was taken on, the method, and a short re-measure
        recipe to re-run after a Claude Code update — plus a liveness
@@ -997,7 +1031,8 @@ yet — not a step gate.)
        it decides how much the rest has to carry. **This prompt names
        no modes and asserts no mode behavior — deliberately**: the
        mode set and what each mode does to an unmatched command are
-       properties of the installed version (modes exist that prompt,
+       properties of the installed version (illustration only, to be
+       re-derived from the running version: modes exist that prompt,
        that auto-approve, and that judge by classifier and can deny
        outright — three different answers to what backs the guard's
        silence), so take the list from the running version and **probe
@@ -1006,10 +1041,14 @@ yet — not a step gate.)
        like the rest: the close ritual attempts its push in reliance on
        it, and a gate that has stopped gating says nothing about it.
        Set the mode rather than working
-       around it — a mode that auto-accepts file edits is what removes
+       around it — if, for illustration, a mode auto-accepts file
+       edits, that is what removes
        the need for a blanket
        `Edit(/**)` allowance — and let it decide whether the
-       mode-disabling keys belong in the baseline at all. Its test: my
+       mode-disabling keys belong in the baseline at all. A mid-step
+       session restart is expected here — the probes are trustworthy
+       only after one — so the step's test instructions say where the
+       restart falls. Its test: my
        review of the proposal, the
        probe results, and `--selftest` green.
      - **`002` — the workflow tooling**, instantiated from
@@ -1026,8 +1065,16 @@ yet — not a step gate.)
        a ritual that silently skips a step. One carve-out: a name that
        sits on `CLAUDE.md`'s not-yet-adopted list is not dangling — it
        is the documented fallback the milestone ritual relies on. Its
-       test: I invoke each ritual and see it do what it claims —
-       note that a new skill or agent may only be picked up at session
+       test: I invoke each ritual and see it do what it claims — real
+       invocations for the session-start, resume and handover rituals,
+       while the close ritual proves itself at this very step's close
+       (its trigger is any step approval, and `002`'s is the first
+       after it exists); and for the agents whose only true trigger
+       arrives with the milestone close, a smoke test (spawn, report
+       shape, the model-override plumbing), their real proof deferred
+       to that close with the step's test instructions saying so. A
+       test that waits on a trigger the step cannot fire is not a test.
+       Note that a new skill or agent may only be picked up at session
        start, so say whether a restart is part of the test.
      - **`003` — the same harness on the forge**, and the step that
        finishes the bootstrap. The workflow **reuses `000`'s entry
@@ -1035,24 +1082,39 @@ yet — not a step gate.)
        runners must never be able to disagree about what "green" means
        — splits check and test into separate jobs once both exist,
        caches the toolchain, and keeps a way of proving a fresh setup
-       still works, which may ride a scheduled job the specification
-       already requires rather than becoming a second scheduled workflow
-       of its own. Ask me which forge the repository will live on if the
+       still works — riding a scheduled workflow the specification
+       already requires, where it requires one, rather than becoming a
+       second; where it requires none, this rides the CI triggers that
+       already exist, and a scheduled workflow of its own is built only
+       if a real need appears, as a logged decision. Naming a schedule
+       the specification never asked for invents a requirement, and
+       sets the first task's two reviewers up to contradict each other.
+       Ask me which forge the repository will live on if the
        specification does not settle it. This is the one foundation step
        nothing local can exercise, so **its gate is a real run**: name
        the forge, the remote and my authorisation of the first push as
        external prerequisites needed *at bootstrap* — not late, which is
        where a cost-ordered plan would put them — and treat the workflow
        as unverified until I authorise that push and the run comes back
-       green. Its test: I authorise the push and watch the run.
+       green. One deliverable is a decision, not an artifact: whether
+       `.claude/spec-work/` — the specification phase's history, its
+       review reports, and any template still sitting in it — goes
+       public with the repository or is stripped before the first push.
+       Logged, put to me, and made before the push it becomes
+       irreversible at.
+       Its test: I authorise the push and watch the run.
      Nothing here is exempt from the small-step rule. If one of the
      four is still too big for a single test — or cut in the wrong
      place for this project — say so, and split it further in the plan
      you present; the cold review below is invited to find exactly that.
      And the four foundation entries carry this prompt's per-step
-     prescriptions **in full** — the permission classifier and its
-     traps, the probe duties, the CI reuse rule and its prerequisites,
-     the instantiation list — as their deliverables and test content:
+     prescriptions **in full** — the guard instantiation and its
+     registry discipline, the settings-tier traps (`ask` cancels every
+     carve-out, the deny backstop, the push tier), the mode probing,
+     the probe duties and their restart caveat, the baseline's
+     self-protection rules, the CI reuse rule and its prerequisites,
+     the publish-or-strip decision, the instantiation list — as their
+     deliverables and test content:
      this prompt is consumed once at bootstrap, and a session resuming
      onto the plan must find that detail in the plan, not remember it.
    - Steps carry three-digit identifiers per rule 6 — `000` to `003`,
@@ -1247,9 +1309,20 @@ that directory. It audits `PLAN.md` against `SPECIFICATIONS.md`:
 
 One check the cold reviewer is structurally barred from — it may not
 read this prompt — runs beside it: spawn a **second subagent,
-deliberately not cold**, that reads only this prompt's foundation-step
-prescriptions (`000`–`003` above) and the plan, and reports every
-prescription the four foundation entries dropped or weakened. It judges
+deliberately not cold**, that reads this prompt in full — the ground
+rules and the "Your first task" section — plus the plan, the
+`CLAUDE.md` and the `README.md` you have just written. It reports
+every kind of loss: every prescription the plan dropped or weakened —
+the four foundation entries above all, but also the consumed-once
+rest: the non-code-deliverable step contents, the
+milestone-grouping-or-say-so requirement, the boundary-crossing cost
+statements — and every ground rule `CLAUDE.md`'s restatement dropped,
+weakened, or left citing a clause the file does not contain (item 3's
+two observed failure modes included): `CLAUDE.md` is the rules' sole
+carrier after this session, and the cold reviewer is structurally
+barred from checking it — and item 4's prescriptions in `README.md`
+(descriptive only, the For-reviewers frame two standing rituals read),
+checked the same way. It judges
 transcription fidelity, nothing else — this prompt is consumed once,
 and a dropped clause in the plan is invisible later, not wrong. Its
 findings join the same triage.

@@ -104,9 +104,11 @@ This guard gates, and grants in exactly one place (see WHERE THE GUARD GRANTS).
 It cannot loosen a `deny` or `ask` rule, so those remain yours alone. Pair it
 accordingly:
 
-1.  **Allow the tool broadly; let the guard claw back.** For every tool in the
-    registry, add a broad allow — `Bash(git:*)`, and one line per tool the
-    project adds. Prefix rules respect word boundaries, so `Bash(git:*)` does
+1.  **Allow the tool broadly; let the guard claw back.** For every rule- or
+    grant-bearing tool, add a broad allow — `Bash(git:*)`, and one line per
+    such tool the project adds. Never for the SHELL_WRAPPERS layer: a broad
+    allow on a command-runner is a broad allow on everything it runs when
+    the guard is dead. Prefix rules respect word boundaries, so `Bash(git:*)` does
     not leak to `git-crypt`. This is the whole point: broad allow plus a narrow
     hook is what replaces a long, brittle allow list. A gated tool with no
     allow line is pointless — it would prompt on everything anyway, and its
@@ -1054,8 +1056,10 @@ def decide_bash(
 # The project-specific part. This is the only section to edit — and no rule
 # here changes without the operator's agreement. See CHANGING THE RULES.
 #
-# Pair every tool here with a broad allow in settings.json, and never with an
-# `ask` rule — see WHAT MUST LAND IN settings.json in the module docstring.
+# Pair every rule- or grant-bearing tool here with a broad allow in
+# settings.json — never the SHELL_WRAPPERS below, whose names get no allow
+# lines — and never with an `ask` rule — see WHAT MUST LAND IN settings.json
+# in the module docstring.
 #
 # Tools a project adds go after GIT. For the shape of a gated entry — grants,
 # known_flags, value_flags, and how a rule ranks against a grant — read the

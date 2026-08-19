@@ -28,7 +28,8 @@ description: Post-interruption verification — run after work ended
 > unlike the two before it. This
 > ritual's verify-only discipline is prose, below; what actually binds
 > lives in `.claude/settings.json` and the guard hook. Re-probe before
-> reintroducing any of them.>
+> reintroducing any of them.
+>
 > **Once this project has measured that for itself, this block becomes a
 > one-line pointer** at the `.claude/docs/` file holding the measurement,
 > naming its section — the reasoning is a fact about the installed

@@ -43,7 +43,8 @@ description: Post-approval close of the current step — run only when the
 > defines. That last one is a precaution, not a measurement,
 > unlike the two before it. What
 > actually binds lives in `.claude/settings.json` and the guard hook.
-> Re-probe before reintroducing any of them.>
+> Re-probe before reintroducing any of them.
+>
 > **Once this project has measured that for itself, this block becomes a
 > one-line pointer** at the `.claude/docs/` file holding the measurement,
 > naming its section — the reasoning is a fact about the installed
@@ -142,6 +143,12 @@ In order:
    independent. This applies to these two passes only — the
    pre-handover review of `/handover-step` buys a cold context, which
    any model gives, and may run on yours.
+   When the passes edit the memory files, review their edits and land
+   them as a `meta:` commit **before step 6** — or discard them,
+   saying so in the report. The ritual must not end with an
+   uncommitted tree it never mentions: step 6's push would otherwise
+   publish the close while the compaction waits, unpublished, for the
+   next close.
 6. **Report, then attempt the push.** Show the step summary and what
    the close commit and tag contain — with `CLAUDE.md`'s line count and
    its change since the last close, so growth is visible at the moment

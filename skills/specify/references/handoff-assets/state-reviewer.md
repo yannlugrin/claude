@@ -20,7 +20,8 @@ tools: Read, Bash, Write
 > plus
 > `{{ARCHITECTURE_VOCABULARY}}` — this project's own component
 > vocabulary once it exists; `{{INSPECTION_COMMANDS}}` — the read-only
-> introspection commands the stack offers.>
+> introspection commands the stack offers.
+>
 > **In a multi-track repository these resolve at invocation, not to one
 > path**: instantiate the placeholder as a one-row-per-track table. This
 > pass is the exception to resolving from the pointer — when it runs as

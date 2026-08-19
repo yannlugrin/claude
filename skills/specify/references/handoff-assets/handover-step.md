@@ -13,9 +13,9 @@ description: Pre-test handover sequence — run when the current step's
 > the work this file performs; `{{STEP_ID}}` — the step identifier form
 > used in commit subjects and tag names (`step-NNN`, unless this
 > repository qualifies it per track);
-> `{{VERIFY_COMMAND}}`, `{{CHECK_COMMAND}}`, `{{TEST_COMMAND}}` — the
-> repository's rule-2 harness entry points (e.g. `make verify`,
-> `npm run check`, `rake test`).
+> `{{VERIFY_COMMAND}}` — the repository's rule-2 verification entry
+> point, the one that runs both check and test (e.g. `make verify`,
+> `just verify`).
 > Frontmatter carries `name` and `description` only, deliberately: a
 > skill's `allowed-tools` list restricts nothing (probed live, Claude
 > Code 2.1.231 — a `Write` and a plain `ls` both ran while a read-only
@@ -30,7 +30,8 @@ description: Pre-test handover sequence — run when the current step's
 > makes allowlists bind, the list must keep the subagent-invocation tool
 > (`Agent` in Claude Code; verify the name in the version you run),
 > since step 3 invokes the `step-reviewer` agent and a missing entry
-> would make that review silently not happen.>
+> would make that review silently not happen.
+>
 > **Once this project has measured that for itself, this block becomes a
 > one-line pointer** at the `.claude/docs/` file holding the measurement,
 > naming its section — the reasoning is a fact about the installed

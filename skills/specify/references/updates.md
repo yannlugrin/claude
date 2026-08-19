@@ -24,7 +24,7 @@ like "adopted through U-021" resolves. What follows is what accumulated
 since; it empties again when the last project running an older doctrine has
 been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-057**. One
+Ids are permanent and never reused, so the next entry is **U-059**. One
 revision section per date:
 
 ```text
@@ -34,6 +34,13 @@ revision section per date:
 | ----- | ---------- | ----- |
 | U-0NN | running    | …     |
 ```
+
+### [2026-08-19](updates/2026-08-19.md) — one handoff's own review rounds, banked at source
+
+| Id    | Applies to  | Title |
+| ----- | ----------- | ----- |
+| U-057 | bootstrap   | The handoff prompt's fourteen review-round fixes |
+| U-058 | running     | Three template defects a real handoff's review rounds found |
 
 ### [2026-08-17](updates/2026-08-17.md) — handoff findings from one project's third handoff iteration, another project's specification-run review, and the operator's review of the first project's bootstrap output
 
