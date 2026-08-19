@@ -1074,9 +1074,13 @@ yet — not a step gate.)
        runs. Report in the
        step summary what each mechanism actually did, including the
        ones that turned out to enforce nothing. Name the permission
-       mode you expect me to work in — it is a committed setting
-       (`permissions.defaultMode`), not only a per-session choice, and
-       it decides how much the rest has to carry. **This prompt names
+       mode you expect me to work in — it is a committed setting, not
+       only a per-session choice, and it decides how much the rest has
+       to carry. (`permissions.defaultMode` is the key at the time of
+       writing: illustration, verified by the same probe as the mode
+       list. A settings key is a version-stamped fact exactly as a mode
+       name is, and this paragraph renounces asserting those two
+       sentences later.) **This prompt names
        no modes and asserts no mode behavior — deliberately**: the
        mode set and what each mode does to an unmatched command are
        properties of the installed version (illustration only, to be
@@ -1381,8 +1385,9 @@ return about the foundation itself.
 One check the cold reviewer is structurally barred from — it may not
 read this prompt — runs beside it: spawn a **second subagent,
 deliberately not cold**, that reads this prompt in full — the ground
-rules and the "Your first task" section — plus the plan, the
-`CLAUDE.md` and the `README.md` you have just written. It reports
+rules and the "Your first task" section — plus **all four files** you
+have just written: the plan, `DECISIONS.md`, the `CLAUDE.md` and the
+`README.md`. It reports
 every kind of loss: every prescription the plan dropped or weakened —
 the four foundation entries above all, but also the consumed-once
 rest: the non-code-deliverable step contents, the
@@ -1393,7 +1398,10 @@ two observed failure modes included): `CLAUDE.md` is the rules' sole
 carrier after this session, and the cold reviewer is structurally
 barred from checking it — and item 4's prescriptions in `README.md`
 (descriptive only, the For-reviewers frame two standing rituals read),
-checked the same way. It judges
+checked the same way; and item 2's in `DECISIONS.md`, which the cold
+reviewer does not read either — a thin file at bootstrap, but its entry
+format is the one every later entry copies, so a defect there is
+inherited rather than noticed. It judges
 transcription fidelity, nothing else — this prompt is consumed once,
 and a dropped clause in the plan is invisible later, not wrong. Its
 findings join the same triage.
