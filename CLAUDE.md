@@ -24,3 +24,4 @@ Legacy slash commands (`commands/<name>.md`) are deprecated in favor of skills: 
 
 - New assets go in the directory matching their type; use kebab-case names.
 - The `.gitkeep` files exist only so git tracks the empty directories — remove one when its directory gains real content.
+- **This repository is public; the projects it draws on are not.** Never write another project's name — which may be, or may carry, a client's — into an asset, a document or a commit message. Cite provenance by what the work was ("one project's handoff run", "a completed specification run"), never by whose it was.

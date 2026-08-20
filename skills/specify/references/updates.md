@@ -122,6 +122,15 @@ first entry of a revision. Each entry states:
   first" is a test; "the project's amendment flow is outdated" is not.
 - **Remedy** — what to change, and where the user's approval is required.
 
+**No entry names the project it came from.** This repository is public and
+the projects that feed it are not — a project name can be, or can carry, a
+client's. Cite provenance by what the work *was*: a handoff iteration, a
+completed specification run, a bootstrap's output. Where one revision draws
+on two sources, tell them apart by position ("one project's…", "the first
+project's…"), and name the kind of work only where the kind is what makes
+the finding mean something. The rule binds every file here and every commit
+message.
+
 **Size the entry to what a reader must do about it, and say when one is
 not warranted.** Every change to this doctrine gets an index row — that
 is what the index is — but the apparatus below it is not free: a *Detect*
