@@ -541,10 +541,23 @@ and every section matters.
    never loads; and the settings file is the enforcement mechanism
    itself, so malforming it after step `001`'s one-time probe fails
    exactly as quietly. Those two parse checks are cheap and exact, and
-   they are the whole of what this rule requires. The frontmatter parse
-   has no standard ecosystem tool, so a few-line custom check is
-   **sanctioned** here — rule 11's question was asked, and the silent
-   failure it guards against earns the exception. Checking further —
+   they are the whole of what this rule requires. A small custom check is
+   **sanctioned** here, and **the sanction covers the check's existence,
+   never its size or its shape** — rule 2's put-it-to-me-before-it-is-built
+   gate is not waived by it, so anything reaching past the parse question
+   goes to me before it is written. Measured: a project read this
+   paragraph as blanket pre-approval and shipped a hundred and seventy
+   lines with an eighteen-case suite, against a plan line capping it at
+   "a few".
+   **Measure the ecosystem rather than inheriting this paragraph's
+   answer.** `claude plugin validate --strict <dir>` is the tool to try
+   first; on Claude Code 2.1.238 it flagged a missing `description` and
+   passed silently — "Validation passed", exit zero — on both cases that
+   matter here: a `name` disagreeing with the path the loader reads it
+   from, and frontmatter that does not parse, which it skips without a
+   word. The check earns its place on that measurement, and a version
+   that closes the gap retires it, so re-measure before believing either
+   half. Checking further —
    that a command, path or agent a file names actually resolves — is a
    *should*: worth doing where it is exact (an agent name against
    `.claude/agents/`, a path against the tree), and worth refusing where
@@ -645,14 +658,20 @@ and every section matters.
    their clean-tree preconditions — and letting the next `git commit -a`
    sweep that file into an unrelated commit. That glue is one line, not
    a bespoke runner. Then a *verify* entry point
-   running both. **The mechanism behind those commands is configured,
+   running both, **check before test**. **The mechanism behind those commands is configured,
    not written** — rule 11 applied to the harness itself. Use what I
    already use: {{HOUSE_TOOLING}}. Where I have no preference, take the
    standard tool of the ecosystem; where nothing standard fits, the
    runner, installer or test driver you write is a decision logged with
    the alternatives you rejected and put to me *before* it is built.
    Whatever the mechanism: documented, kept green, and runnable by me
-   too. A fast form
+   too. **A check that runs on the real tree ahead of every test run
+   does not also need a test suite.** *Verify* runs *check* first, so
+   everything in that half is executed against the repository itself on
+   every invocation; a suite re-proving it afterwards is a regression
+   harness for scaffolding, and it arrives with the fixture roots, root
+   arguments and deliberately-malformed trees that exist only to feed
+   it. Test what the project ships, not what watches over it. A fast form
    of *check* narrowed to what changed is legitimate mid-step; the commit
    that receives a `step-NNN` tag runs the full one — that commit is the
    state every later session treats as known-good. {{CODE_REVIEW}}
