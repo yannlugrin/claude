@@ -24,7 +24,7 @@ like "adopted through U-021" resolves. What follows is what accumulated
 since; it empties again when the last project running an older doctrine has
 been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-063**. One
+Ids are permanent and never reused, so the next entry is **U-066**. One
 revision section per date:
 
 ```text
@@ -34,6 +34,14 @@ revision section per date:
 | ----- | ---------- | ----- |
 | U-0NN | running    | …     |
 ```
+
+### [2026-08-20](updates/2026-08-20.md) — the operator's documentation report, and what its update pass then showed
+
+| Id    | Applies to  | Title |
+| ----- | ----------- | ----- |
+| U-063 | running     | `.claude/docs/` is memory with a job, and no gate rests on reading one |
+| U-064 | bootstrap   | The probe record carries its three fields and nothing else |
+| U-065 | running     | The headroom belongs to the budget number, not to the baseline |
 
 ### [2026-08-19](updates/2026-08-19.md) — one handoff's own review rounds, banked at source
 

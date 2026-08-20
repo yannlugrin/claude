@@ -125,7 +125,9 @@ Then review the diff against the frame:
   ecosystem already provides, scaffolding built ahead of the need for
   it, tests asserting a third-party tool's own behaviour, options and
   tiers nothing requires, documentation restating what a rule already
-  says. Conformance to the step's deliverables is not a defence: the
+  says, and — under `.claude/docs/`, where the memory rules disqualify
+  rationale and duplication outright — memory written as a report to the
+  operator rather than as instructions to a future session. Conformance to the step's deliverables is not a defence: the
   proportionality rule says the smallest thing that satisfies the rule
   is the right thing, and a reviewer that only ever adds is a reviewer
   the operator has to correct by hand.

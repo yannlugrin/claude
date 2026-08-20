@@ -511,8 +511,17 @@ and every section matters.
 2. **Work happens one step at a time, gated by me.** You implement exactly
    one plan step, then stop. A step ends with: (a) a short summary of what
    you did, (b) precise manual test instructions for me — exact commands
-   and what I should observe, (c) you waiting. You do not begin the next
-   step until I explicitly say so. Fixes I request belong to the current
+   and what I should observe, (c) you waiting. **What I test is the
+   system's behaviour, never a document.** "Read the record and confirm
+   it is right" is not a test: it moves the step's verification onto my
+   reading of prose you wrote, which is the one thing my gate exists to
+   be independent of. A file appears in the test instructions only when
+   the file *is* the deliverable — an operator document, a contract,
+   something under `docs/` — never when it is your own memory under
+   `.claude/docs/` (rule 3). Where a step's real product is a
+   measurement, the test is re-running the measurement.
+   You do not begin the next step until I explicitly say so.
+   Fixes I request belong to the current
    step, not a new one. Never batch several steps because they look small.
    **When I ask for something to be removed, it is removed.** A smaller
    version of it, a rewritten version, a version moved elsewhere: none of
@@ -679,7 +688,14 @@ and every section matters.
    when you first hand it over, not 219. A file at its cap forces the
    next session that must add one pointer to reflow the whole document
    before it can do its own work, and a budget check that warns from the
-   day it is written teaches you to ignore it. When the budget binds,
+   day it is written teaches you to ignore it. **The headroom belongs to
+   the number, not to those two numbers**: every budget this project ever
+   holds — the baseline, one derived at the first task, one re-derived
+   later because a doctrine change added lines — lands with room left
+   against itself. A budget re-derived to exactly the length of the file
+   that prompted the re-derivation has recorded that file rather than
+   budgeted it, and the next session pays the compaction the
+   re-derivation declined. When the budget binds,
    things leave in this order, and the order is not yours to reshuffle:
    first anything context-specific that a read-trigger can reach
    (`.claude/docs/`), then the temporary tooling-templates block once
@@ -709,6 +725,19 @@ and every section matters.
    is what makes lazy loading actually happen. Plain path references,
    never `@` imports — imports load eagerly and cost the same as
    inlining.
+   **A `.claude/docs/` file is a conditional segment of `CLAUDE.md`** —
+   loaded at its trigger instead of on every run, and held to the same
+   test: what a future session needs in order to *act*, and cannot get
+   faster from a rule, a docstring or a command it can run. Two things
+   are therefore never in one. **Justification** — why a decision was
+   taken is `DECISIONS.md`, why a rule exists is the rule; a memory file
+   that argues its own contents spends a future session's context on a
+   debate that session is not having. **Duplication** — a second copy of
+   what `CLAUDE.md`, the specification, the plan or a docstring already
+   says is a copy that goes stale in silence, because nothing checks it
+   against its original. And none of it is written for me: it is your
+   memory, not a report, and no gate of mine is satisfied by reading one
+   (rule 2).
    **`.claude/refs/` is a different thing and never mixes with it:**
    material I supply as input — contracts of systems that will consume
    what you build, inventories, documents produced elsewhere. Read each
@@ -1107,7 +1136,16 @@ yet — not a step gate.)
        family checks that the hook path in the settings resolves: a
        path naming a file that is not there leaves valid JSON, a
        settings file that loads, a green lint, and a guard that never
-       runs. Report in the
+       runs.
+       **That record is rule 3's memory and carries the three fields
+       only.** Why a probe was worth running, what rule 9 gates, what
+       the guard's own docstring explains: each already has a home, and
+       a restatement here is the duplication rule 3 forbids — measured,
+       a record written as a proof reached eight hundred lines and was
+       cut to two hundred with nothing lost. And **I test the
+       mechanisms, not the record**: the liveness triple is this step's
+       manual test, per rule 2.
+       Report in the
        step summary what each mechanism actually did, including the
        ones that turned out to enforce nothing. Name the permission
        mode you expect me to work in — it is a committed setting, not
@@ -1224,9 +1262,10 @@ yet — not a step gate.)
      Steps must be small
      enough that I can test each one alone. For every step:
      **objective**, **spec sections implemented**, **deliverables**,
-     **how I test it** — stating, when the test crosses rule 9's
-     boundary, that it does, what it costs, and how I clean up
-     afterwards — and **status** (`pending` / `in progress` /
+     **how I test it** — an observation about the system's behaviour,
+     never the reading of a document (rule 2), and stating, when the
+     test crosses rule 9's boundary, that it does, what it costs, and
+     how I clean up afterwards — and **status** (`pending` / `in progress` /
      `awaiting test` / `done`).
      **Deliverables say where their files land** wherever the
      specification does not already fix it: a path no plan states is a

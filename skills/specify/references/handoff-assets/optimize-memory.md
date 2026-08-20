@@ -165,6 +165,14 @@ For every file under `.claude/docs/`, ask three questions:
   longer used.
 - **Is it still true?** Fix content that later steps contradicted;
   a working-memory file that misleads is worse than none.
+- **Does each block earn its place?** The three above judge the file;
+  this one judges its contents, and a file passes all three while most
+  of it should go. Section by section, ask what a future session would
+  be unable to *do* without it. Rationale, restatements of `CLAUDE.md`
+  or of the specification, and anything a session could obtain by
+  running a command are the standing answers to "nothing" — the two
+  disqualifiers of the memory rules. What this question produces is a
+  live file made smaller, not a consumed one deleted.
 
 Two directories are out of scope, for opposite reasons. `docs/` holds
 human deliverables: maintained by the same-commit rule, not by this
