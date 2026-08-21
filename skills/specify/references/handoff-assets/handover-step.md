@@ -62,7 +62,13 @@ Hand the current step over for operator testing. In order:
 3. **Review:** run the `step-reviewer` agent over the step's diff
    (last `step-*` tag → HEAD). The diff shows committed work only, so
    the step's work and the sweep must be in commits before it runs.
-   Address or explicitly rebut each finding before handover.
+   Address or explicitly rebut each finding before handover. **A
+   finding is true of the tree the reviewer read**, and fixes move that
+   tree — so before applying one, check it still holds against the tree
+   you now have, changes made answering the same review included. Any
+   finding whose justification is *nothing needs this* gets that claim
+   re-derived rather than inherited: a deletion argued on absence of
+   need is the finding most likely to have expired.
 4. **Tree clean:** everything above — the step's work, the sweep, the
    review fixes — is already in small, coherent commits with
    `{{STEP_ID}}:` subjects (committed as the work happened, not batched

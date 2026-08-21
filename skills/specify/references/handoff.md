@@ -71,7 +71,18 @@ batch.
      can read, **that pin and record is the whole coverage
      obligation**. Say so in the slot: "covered like anything else
      shipped", left undefined, invites invented verification
-     machinery around someone else's executable. *Ships*
+     machinery around someone else's executable. **That pin is half a
+     mechanism, and the other half is what bumps it** — not more
+     coverage, the rest of the same decision. A version a human reads
+     (`pre-commit==4.4.0`) may be bumped by a human. A digest a human
+     cannot read — an action SHA, an image digest, a lock file — takes
+     its automated bump (whatever the forge offers: Dependabot,
+     Renovate) in the step that takes the pin, or the pin is not taken:
+     an unbumped digest fails more quietly than the floating tag it
+     replaced, turning a dependency that silently stays current into
+     one that silently rots while looking more deliberate. Where the
+     forge offers no bot, the pin still names its bump trigger, logged
+     at the pin — the two halves land together either way. *Ships*
      is present tense, and the slot must say so: **a family arrives
      with the first file of its class, in the step that lands it** —
      never ahead of it. A family (and its fixtures) for an artifact
@@ -771,7 +782,22 @@ and every section matters.
    wrong, stale or contradicted by what you observe is *reported to me*,
    and I supply the correction. What you learned that made you doubt it
    belongs in `.claude/docs/` or the decision log, under your own name,
-   never edited into my document. {{REFERENCES}}
+   never edited into my document.
+   **Read-only also means it does not flow the other way**: what you
+   take from a reference is its shape, never its text. Shape is a
+   decision you could have reached yourself — two parallel jobs, a
+   cache keyed on the file that decides its contents; text is the
+   sentence explaining the decision, whatever its subject. That
+   boundary is invisible while writing, because prose read an hour ago
+   comes back as fluent recall, so it is not a matter of judgement but
+   a step: **read the reference, close it, write the artifact without
+   it open, and before committing compare the two — any sentence they
+   share is text and comes out.** Shape survives paraphrase; text is
+   what you would have had to quote. This matters beyond style: a
+   reference is someone else's material, and step `003` may well have
+   ruled it stripped from what the repository publishes — prose
+   surviving in a shipped file defeats that ruling silently.
+   {{REFERENCES}}
    *Instructions* tied to one part of the tree may instead be path-scoped
    rules in `.claude/rules/` with a `paths` frontmatter, which load
    themselves exactly when you work on matching files — but never an
@@ -983,6 +1009,11 @@ and every section matters.
       check family for a file type the repository does not contain, an
       abstraction over one case, a warning tier nothing needs: each is
       scaffolding that must be maintained and eventually deleted.
+      **This applies to things that are separable.** Before deferring
+      half of a mechanism, ask what the shipped half does alone: if it
+      is worse than what preceded it, the two halves are one decision
+      and both land now. Deferring the half with the worse failure mode
+      is not proportion, and it arrives wearing this rule's words.
     - **Deletion is a legitimate outcome of a review, and of a step.**
       When you review, or when a reviewer reports to you, "this could be
       removed" and "this could be replaced by something standard" rank
@@ -1237,7 +1268,30 @@ yet — not a step gate.)
        the specification never asked for invents a requirement, and
        sets the first task's two reviewers up to contradict each other.
        Ask me which forge the repository will live on if the
-       specification does not settle it. This is the one foundation step
+       specification does not settle it.
+       **The workflow's own third-party steps are pinned by digest, and
+       the pin brings its bump bot into this same step** — the general
+       rule is in the check-family clause above, and this is where it
+       bites: a forge's actions are published behind mutable major
+       tags, so what CI ran is recorded by no diff in the repository,
+       and a SHA that nothing bumps rots instead. Take both halves or
+       neither. **A bump bot is also a CI producer**, which is the
+       third part of the same mechanism: it opens pull requests and
+       force-pushes their branches as it rebases them, so superseded
+       runs stop being a hypothetical the moment it exists, and the
+       workflow bounds them — queued runs per ref collapse to the
+       latest, **except on the branch whose green run is the record
+       that an approved step passed**, which is never cancelled. That
+       split is the part to state; a bound that cancels the step-close
+       run destroys the evidence rule 6 closes on, which is worse than
+       no bound at all. State it as behaviour and take the spelling
+       from the forge you run (GitHub's `concurrency:` key at the time
+       of writing — illustration, like every version-stamped fact
+       here). And note *why* it lands now rather than earlier: without
+       the bot, a single-operator repository whose pushes are approved
+       steps supersedes almost nothing, and a bound written ahead of
+       the bot is rule 11's anticipation. The bot is what dates the
+       need. This is the one foundation step
        nothing local can exercise, so **its gate is a real run**: name
        the forge, the remote and my authorisation of the first push as
        external prerequisites needed *at bootstrap* — not late, which is
