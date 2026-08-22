@@ -24,7 +24,7 @@ like "adopted through U-021" resolves. What follows is what accumulated
 since; it empties again when the last project running an older doctrine has
 been brought current, never before.
 
-Ids are permanent and never reused, so the next entry is **U-071**. One
+Ids are permanent and never reused, so the next entry is **U-072**. One
 revision section per date:
 
 ```text
@@ -35,7 +35,7 @@ revision section per date:
 | U-0NN | running    | …     |
 ```
 
-### [2026-08-21](updates/2026-08-21.md) — one bootstrap's CI step: a pin missing its other half, and a correct finding applied to a tree that had moved
+### [2026-08-21](updates/2026-08-21.md) — one bootstrap's CI step: a pin missing its other half, a correct finding applied to a tree that had moved; and one project's tests-first gate, generalised
 
 | Id    | Applies to  | Title |
 | ----- | ----------- | ----- |
@@ -43,6 +43,7 @@ revision section per date:
 | U-068 | running     | Deferring half a mechanism is not proportion |
 | U-069 | running     | A reference's shape is taken, its text never is (projects with references) |
 | U-070 | running     | A review's findings are true of the tree it read |
+| U-071 | bootstrap   | Whether behaviour is pinned before it is built is asked, and scoped by contract |
 
 ### [2026-08-20](updates/2026-08-20.md) — three findings from one day of one project: its documentation report, its update pass, and its first over-built check
 

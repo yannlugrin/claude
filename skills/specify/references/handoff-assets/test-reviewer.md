@@ -26,6 +26,14 @@ tools: Read, Bash, Write
 > ritual performing the handover names the invocation too: the
 > description alone is discoverability, not a carrier.
 >
+> **A test gate settles that answer.** Where `{{TEST_GATE}}` puts a gate
+> on the plan, this review is standing on every gated step whatever
+> `{{CODE_REVIEW}}`'s test half said, and the description names both
+> triggers: the gate (cases alone, no implementation) and the ordinary
+> handover. Keep the body section "At a test gate" below where a gate
+> exists; delete it where none does, rather than leaving a mode this
+> project never enters.
+>
 > **Add no `model:` key.** This agent inherits the invoking session's
 > model, which is correct here: what it buys is a cold context, which any
 > model gives — not a second opinion, which only a different model gives.
@@ -78,6 +86,35 @@ The operator's bar, in order:
 3. **Style — only where it hides a defect.** The operator does not
    care that test code is pretty, only that it works and stays cheap.
    Raise readability only when it obscures what a test proves.
+
+**At a test gate there is no implementation, and question 1 changes.**
+On a gated step the cases are written before the code and handed over on
+their own, with the suite deliberately **red**. "Does the suite prove
+what it claims" cannot be asked of an implementation there, so ask it of
+the specification and of each case's own declared source:
+
+- A **transcribed** case cites a specification section. Does it state
+  what that section requires, and would it fail for the reason it names?
+- A **decided** case fixes a contract the specification left open. Is it
+  declared as a decision rather than presented as required, is it inside
+  the implementer's latitude or escalated, and is it logged? A case that
+  decides is not a finding; a case that decides while reading as
+  transcribed is.
+- Is the red run red **on the cases** — not on an import error, a
+  fixture typo, or a suite that never ran?
+
+Where a reference the specification defers to disagrees with the
+specification, the specification wins and the conflict is reported.
+Report also what the cases pin that nothing asked for: approval freezes
+them, so an unchosen requirement becomes expensive to undo, and
+over-specification is this gate's own failure mode. Question 2, economy,
+is unchanged.
+
+**At the implementation handover of a gated step, read the diff against
+the approved cases.** Additions are allowed there and changes are not, so
+the finding to look for is a change wearing an addition's clothes: a new
+case that narrows, contradicts or carves an exception out of an approved
+one.
 
 Out of scope: the implementation code the tests exercise — though a
 test failure

@@ -80,7 +80,12 @@ In order:
    were written by the same interrupted session, so a mismatch
    is a finding, never something to reconcile silently — a status of
    `awaiting test` over a half-delivered diff is precisely what you
-   are looking for.
+   are looking for. Where the plan gates any step's tests, two more
+   have that shape: `awaiting case approval` over a diff that already
+   contains implementation, and `awaiting test` over a gated step whose
+   cases were never approved. Both mean the step's phase and its status
+   have come apart, and which one you are in decides what happens
+   next.
 3. **Working-tree forensics.** Examine uncommitted changes for
    half-written work (a file edited where its counterpart was not, a
    reference to something that does not exist yet). Run

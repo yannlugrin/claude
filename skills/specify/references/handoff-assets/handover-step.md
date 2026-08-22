@@ -1,7 +1,8 @@
 ---
 name: handover-step
 description: Pre-test handover sequence — run when the current step's
-  implementation is complete and ready for operator testing, or when the
+  implementation is complete and ready for operator testing, when a
+  gated step's cases are written and ready for approval, or when the
   operator asks for the handover. Checks, staleness sweep, review, then
   hand the step to the operator.
 ---
@@ -15,7 +16,11 @@ description: Pre-test handover sequence — run when the current step's
 > repository qualifies it per track);
 > `{{VERIFY_COMMAND}}` — the repository's rule-2 verification entry
 > point, the one that runs both check and test (e.g. `make verify`,
-> `just verify`).
+> `just verify`); `{{TEST_GATE}}` — whether the plan gates any step's
+> tests, which decides whether the two-handover clause below and the
+> closing section survive instantiation. Where the plan has no gate,
+> delete both and drop the gated-step clause from the `description`,
+> rather than shipping a mode this project never enters.
 > Frontmatter carries `name` and `description` only, deliberately: a
 > skill's `allowed-tools` list restricts nothing (probed live, Claude
 > Code 2.1.231 — a `Write` and a plain `ls` both ran while a read-only
@@ -46,6 +51,13 @@ description: Pre-test handover sequence — run when the current step's
 operator's manual test, or when they ask for the handover. The
 post-approval close is `/approve-step`, not this.
 
+**A gated step hands over twice.** `{{PLAN}}` says which steps are gated:
+there the cases are handed over first, on their own, and the
+implementation does not start until the operator has approved them. Run
+this skill both times — once at the **test gate**, once at the ordinary
+handover — and read the closing section for what differs at the first.
+Every other step has one handover.
+
 Hand the current step over for operator testing. In order:
 
 1. **Checks green:** run `{{VERIFY_COMMAND}}` (the verification rule:
@@ -55,7 +67,8 @@ Hand the current step over for operator testing. In order:
 2. **Staleness sweep (the same-commit rule):** update in the same
    commit(s) as the
    work everything the step made stale — `{{PLAN}}` step status (to
-   `awaiting test`) and any renumber references, `CLAUDE.md`'s
+   `awaiting test`, or to `awaiting case approval` at a test gate) and
+   any renumber references, `CLAUDE.md`'s
    current-step pointer and file map, `README.md`'s map, `docs/`
    deliverables, `{{DECISIONS}}` entries, and any `.claude/docs/`
    lesson worth keeping for future sessions.
@@ -79,3 +92,42 @@ Hand the current step over for operator testing. In order:
    operator should observe, including cost and cleanup if the test
    crosses the action boundary; (c) state that you are waiting for
    the operator's verdict. Do not begin the next step.
+
+## At the test gate, five things differ
+
+- **Step 1 inverts.** The check half must be green — the cases are code
+  and are held to it — while the test half must be **red**, failing on
+  the new cases and on nothing else. Quote the failing output and trace
+  each failure to the assertion it comes from: an import error, a fixture
+  typo and a suite that never ran are all red, and none of them is a
+  case.
+- **Every case declares its source.** *Transcribed* from a specification
+  section, cited; or *decided*, fixing something the specification left
+  open — logged where it is within your latitude, put to the operator
+  before the gate closes where it is not. A case that decides is fine. A
+  case that decides while presenting itself as required is the defect
+  this handover exists to catch. Where a case settles a fact the
+  specification ordered settled during implementation, the amendment
+  lands under rule 1 once the operator approves.
+- **Step 3 runs `test-reviewer` alone**, and its question is different:
+  do these cases state what the specification requires or declare what
+  they decide, and would each fail for the reason it names. The reviewers
+  that read an implementation wait for the second handover.
+- **Step 5 asks for approval of the cases, not a manual test.** There is
+  nothing to run yet but the red run itself. Name what the cases pin,
+  what they deliberately leave open, and what is *not* covered.
+- **The status is `awaiting case approval`, never `awaiting test`.**
+  There is no implementation to test, and `/approve-step` closes a step
+  in `awaiting test` — so the wrong status here lets an approval of the
+  cases close, compact and tag a step that was never built. Approval
+  moves the step back to `in progress` for the implementation; it does
+  not advance it.
+- **Approved cases are frozen, and say so in the handover.** Adding a
+  case during implementation is free. Changing or deleting one comes back
+  to the operator as a change — and so does a new case that narrows or
+  contradicts an approved one, which is a change whatever operation
+  performs it.
+
+At the second handover everything above returns to normal, with one
+addition: **the summary names every case added since the gate**, and
+which of them decided anything.

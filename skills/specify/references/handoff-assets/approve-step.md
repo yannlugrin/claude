@@ -68,6 +68,14 @@ In order:
 
 1. **Confirm scope:** the step being closed is the one in `awaiting
    test`; its number has been frozen since it entered `in progress`.
+   **A step in `awaiting case approval` is not closeable here** (where
+   the plan gates any step's tests): the operator has approved that
+   step's *cases*, not the step, and there is no implementation to close
+   over. That approval returns the step to `in progress` and this ritual
+   waits for the second handover. Stop and say so — the two approvals
+   read alike in an exchange, and this is the one place the difference
+   is unrecoverable, since closing compacts the entry and tags the
+   commit.
 2. **Compact the step entry — replace it, do not annotate it.** The
    entry described a plan; the step is now history, so everything that
    was a plan goes: objective, spec sections, dependencies,

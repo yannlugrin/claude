@@ -22,12 +22,12 @@ user's rulings on the batch below — never invented, and never from the
 spec-phase decision log or remembered spec-phase discussion: the
 specification must be self-sufficient for the implementer, so a slot it
 cannot fill is a finding against the document, not a gap to fill from
-memory. **Four are exempt by construction**, and raising them as
+memory. **Five are exempt by construction**, and raising them as
 findings against a finalized specification is the mistake this sentence
-otherwise invites: `{{BOUNDARY}}` and `{{CODE_REVIEW}}` are policy
-calls, `{{REFERENCES}}` and
+otherwise invites: `{{BOUNDARY}}`, `{{CODE_REVIEW}}` and `{{TEST_GATE}}`
+are policy calls, `{{REFERENCES}}` and
 `{{HOUSE_TOOLING}}` are the user's own context. None has a source in the
-specification, all four are asked for in the batch, and not finding
+specification, all five are asked for in the batch, and not finding
 them there is not a finding.
 
 Present the filled values to the user as a numbered batch before writing
@@ -319,12 +319,148 @@ batch.
     belongs in the batch rather than in the implementer's latitude.
     Ask the test half separately: a suite-bearing step is not the same
     trigger as a code-bearing one, and a project may want the first
-    without the second. Measured: a run that left this to the
+    without the second — unless `{{TEST_GATE}}` below is answered on,
+    which settles that half rather than leaving it open. Measured: a run that left this to the
     implementer had the operator volunteer it after the batch was
     ruled, and it then took four review rounds to integrate — one to
     find it had no carrier past bootstrap, two more to stop the
     test-review clause reading as a deferral. Asked up front it is one
     decision; asked late it is a rewrite of the four places above.
+15. `{{TEST_GATE}}` — **whether a step's behaviour is pinned by its cases
+    before it is implemented, and on which steps; a policy call like the
+    boundary, asked in the batch.** Where the gate is on, a gated step's
+    cases are written, committed and approved *before* its implementation
+    exists, so that step has two gates rather than one. Where it is off,
+    nothing else in the template changes and the slot renders empty.
+
+    **Scope by contract, not by how well specified the step is.** The
+    criterion is whether the step creates something later work depends
+    on — an API, a CLI surface, a file format, an output stream, a wire
+    shape. Where it does, the gate earns its place whether or not the
+    specification fixes that contract, and it earns most where the
+    specification deliberately left it open. Where it does not — packaging,
+    a README, a measurement pass — cases are ceremony however well
+    specified the step is, and **a gate that gets rubber-stamped teaches
+    the next one to be**. Propose the criterion and the classification it
+    produces together: the plan then carries the answer per step, so "is
+    this step gated?" is settled once at planning time instead of becoming
+    a question at the start of every step.
+
+    **A case has two possible sources, and they are not the same act.**
+    *Transcribed* — the specification fixes the behaviour and the case
+    restates it, citing the section. *Decided* — the specification left it
+    open and the case **is** the decision, fixing the surface before
+    anything is built on it. The second is not the lesser case; it is the
+    reason to run a gate on a project whose specification does not define
+    everything. The alternative to a decided case is not the absence of a
+    decision — it is a decision made silently by the implementation and
+    met at handover as a fait accompli, where the user must overrule a
+    defence rather than choose between options. So a decided case takes
+    the route any decision takes: within latitude, logged under rule 4;
+    the user's call, asked before the gate closes. **A case that decides
+    is not a defect. A case that decides while presenting itself as
+    required is.**
+
+    **Approved cases are frozen, and the freeze names an act rather than
+    an operation.** Changing or deleting an approved case retracts what
+    the user approved, and comes back to them as a change; **adding** a
+    case during implementation is free, since it retracts nothing. But
+    narrowing, contradicting or carving an exception out of an approved
+    case **is a change whatever operation performs it** — a new case
+    reading "…except with this flag" has amended an approved one without
+    editing it, and without this sentence the addition allowance is a
+    documented bypass. Freezing is not detachable from the gate: without
+    it, tests-first degrades into writing the tests twice, and the
+    contract the gate fixed is renegotiated by whatever the implementation
+    found convenient.
+
+    The transcribed/decided fork governs those additions too, and settles
+    three questions with one distinction. Apply it at both moments:
+
+    |                  | decides nothing              | decides something         |
+    | ---------------- | ---------------------------- | ------------------------- |
+    | Approval         | autonomous                   | logged, or asked          |
+    | Reviewed against | the specification            | its declaration and the log |
+    | Red before green | no — a regression case is green by nature | yes, as at the gate |
+
+    **The gate's test is the red run, not the reading of the case file.**
+    Say so in rule 2 where the gate lands, because the gate otherwise
+    contradicts that rule's strongest sentence — what the user tests is
+    behaviour, never a document. At the gate the check half is green (the
+    cases are code and are held to it) while the test half is **red**,
+    failing on the new cases and on nothing else, its output quoted in the
+    handover with each failure traced to the assertion it comes from: an
+    import error, a fixture typo and a suite that never ran are all red,
+    and none of them is a case.
+
+    **The handover names what the cases pin, what they deliberately leave
+    open, and what is not covered.** That reads like coverage honesty and
+    is in fact the main safeguard against this gate's own failure mode,
+    **over-specification by test**: a case written before the code can pin
+    an exact error string, an internal call order or one plausible data
+    shape among several, and frozen, those become requirements nobody
+    chose and the freeze makes them expensive to undo.
+
+    **A gated step needs a fifth status, and the plan's vocabulary gains
+    it.** `awaiting test` names the state where the user owes the step a
+    test; at the gate the user owes an approval of the cases instead, and
+    reusing one name for both is the confusion this slot otherwise ships.
+    Two costs, and the second is a trap: a session resuming mid-step
+    cannot tell from the plan whether the cases or the implementation are
+    on the table, and `approve-step` — whose precondition is a step in
+    `awaiting test` — would close, compact and tag a step that has no
+    implementation, on the strength of an approval that was only ever
+    about its cases. So add **`awaiting case approval`**. The gated
+    lifecycle is `pending` → `in progress` (cases) → `awaiting case
+    approval` → `in progress` (implementation) → `awaiting test` →
+    `done`, and the transition worth stating is the one that looks
+    backwards: **approving the cases returns the step to `in progress`**,
+    it does not advance it.
+
+    **Answering this slot constrains `{{CODE_REVIEW}}`'s test half — they
+    are one policy area, and belong in the batch together.** A gate
+    freezes cases, and freezing unreviewed cases is worse than no gate: it
+    makes a wrong contract immutable. So a gate obliges a cold review of
+    the cases *at* the gate on every gated step, and `test-reviewer` stops
+    being a conditional adoption. Presented separately, the batch will
+    happily return "gate on, test review on request", which is the failure
+    mode wearing the shape of an answer.
+
+    Three consequences to carry, none of them visible at the moment the
+    slot is answered:
+    - **The gate commits a tree whose test half fails.** The known-good
+      state is the tagged commit, not every commit, so a red mid-step
+      commit breaks no invariant — but a project that pushes per commit,
+      or whose CI runs on every push to a step's branch, turns the gate
+      into a red CI run. Say where the red commit is allowed to live.
+    - **The user approved one suite and will be handed another.** The
+      implementation handover owes a diff against the approved set — what
+      was added, and under which of the two headings — and the review at
+      that handover is told to read it. That is where
+      contradiction-by-addition is caught, or nowhere.
+    - **A case that settles an open fact is that channel firing.** Where
+      the specification ordered a fact settled during implementation and a
+      gated step's case settles it, the case pins it, the user approves,
+      and the amendment lands under rule 1 in the same commit. Say so, or
+      two mechanisms resolve the same question at different moments with
+      no rule for which goes first.
+
+    The answer reaches rule 2's text, the plan's status vocabulary and
+    per-step fields, three of the four rituals (`handover-step`'s
+    sequence, `approve-step`'s precondition, `resume-step`'s
+    mismatch rule), `test-reviewer`'s brief and `description`, and step
+    `002`'s adoption list. Recommend the gate
+    wherever the plan has contract-bearing steps at all. Its cost is a
+    round-trip per gated step, paid by the user — but on the steps where
+    the specification is least complete that is not new cost: those
+    questions were going to be asked anyway, later, against code that had
+    already answered them. Measured: one project adopted the gate
+    mid-implementation, after a suite written *after* its code encoded the
+    code's behaviour rather than the contract — the runner merged the
+    output streams, so every assertion about which stream carried what
+    passed either way, and only the operator's eye caught it. A case
+    written from the specification first would have had to name the
+    channel.
 
 ## Monorepo and multi-track projects
 
@@ -539,6 +675,8 @@ and every section matters.
    those is compliance, and each costs a round to detect. If you believe
    the removal is a mistake, say so in one sentence and do it anyway —
    or ask, before acting, which of the two I meant.
+
+   {{TEST_GATE}}
 
    **You hand nothing over unverified by yourself.** Before asking me to
    test, every check that applies to what you changed passes:
@@ -1339,7 +1477,15 @@ yet — not a step gate.)
      never the reading of a document (rule 2), and stating, when the
      test crosses rule 9's boundary, that it does, what it costs, and
      how I clean up afterwards — and **status** (`pending` / `in progress` /
-     `awaiting test` / `done`).
+     `awaiting test` / `done`, plus `awaiting case approval` where
+     `{{TEST_GATE}}` puts a gate on the plan).
+     Where `{{TEST_GATE}}` puts a gate on this plan, each entry also says
+     **whether the step is gated**, decided against that slot's contract
+     criterion. State the criterion once in the plan's reading
+     conventions and the answer per step in the entry: a step whose entry
+     is silent still has an answer, and a criterion re-applied at the
+     start of each step is the per-step question the gate was scoped to
+     avoid.
      **Deliverables say where their files land** wherever the
      specification does not already fix it: a path no plan states is a
      path a later session invents at the moment it needs one, and two
@@ -1676,7 +1822,11 @@ since each then reviews something the repository may never contain and
 an agent reviewing code that does not exist is unreviewed weight. The
 table's "conditional" is the on-request default, not a fixed property —
 and the two halves answer separately, since a suite is a later
-certainty than code in most plans. `bash_guard.py` lands a step earlier than
+certainty than code in most plans. Where `{{TEST_GATE}}` puts a gate on
+the plan, `test-reviewer` stops being conditional whatever that test half
+would otherwise have said: the gate freezes cases, and cases frozen
+without a cold review are a wrong contract made immutable. `handover-step`
+is then run twice on a gated step, which its own template carries. `bash_guard.py` lands a step earlier than
 the rest because the baseline it belongs to is step `001`'s whole subject.
 
 Shared conventions the templates carry, worth preserving at instantiation:
